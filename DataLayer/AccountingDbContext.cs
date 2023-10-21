@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Entities;
+namespace DataLayer;
 
 public partial class AccountingDbContext : DbContext
 {
