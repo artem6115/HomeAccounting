@@ -1,13 +1,99 @@
+@font-face {
+    font-family: HeadText;
+    src: url(/fonts/IMFellDoublePicaSC-Regular.ttf);
+}
+
+@font-face {
+    font-family: ArtText;
+    src: url(/fonts/Aubrey-Regular.ttf);
+}
+
+@font-face {
+    font-family: UsualText;
+    src: url(/fonts/Krub-Italic.ttf);
+}
+
 html {
-  font-size: 14px;
+    overflow-x: hidden;
+    font-family: sans-serif;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.HeaderText {
+    font-family: HeadText;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.ArtText {
+    font-family: ArtText;
+}
+
+.UsualText {
+    font-family: UsualText;
+}
+
+.link:hover {
+    background-color: darkgray;
+    color: black;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+    font-family: 'Segoe UI';
+    padding-left: 5px;
+    font-weight: normal;
+}
+.linkUsualText {
+    text-decoration: none;
+    color: black;
+    font-family: UsualText;
+    padding-left: 5px;
+    font-weight: normal;
+}
+.linkForEu {
+    text-decoration: none;
+    color: black;
+    font-family: UsualText;
+    padding-left: 5px;
+    font-weight: normal;
+}
+
+
+th a {
+    font-size: 15px;
+    font-family: 'Segoe UI';
+    text-decoration: none;
+    color: black;
+    padding-left: 5px;
+}
+
+.my-nav-link {
+    font-size: 17px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.my-nav-item:hover {
+    background-color: rgb(42,47,54);
+}
+
+.td-edit {
+    width: 60px;
+}
+
+.AccountName {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+}
+
+.AccountBalance {
+    text-align: center;
+}
+
+label {
+    margin-top: 25px;
+}
+
+form-control {
+    width: 100px;
 }

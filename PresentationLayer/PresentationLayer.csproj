@@ -14,10 +14,19 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\Aubrey-Regular.ttf" />
+    <None Include="wwwroot\fonts\IMFellDoublePicaSC-Regular.ttf" />
+    <None Include="wwwroot\fonts\Krub-Italic.ttf" />
+    <None Include="wwwroot\fonts\Krub-Light.ttf" />
   </ItemGroup>
 
   <ItemGroup>

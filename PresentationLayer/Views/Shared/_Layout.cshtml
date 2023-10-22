@@ -1,49 +1,84 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PresentationLayer</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PresentationLayer.styles.css" asp-append-version="true" />
+    <partial name="_metaPartial.cshtml" />
+    <title>@ViewData["Title"]</title>
+    <partial name="_linkPartial.cshtml" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PresentationLayer</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand HeadText my-nav-brand" asp-page="/Pages/Index.cshtml">HomeAccounting</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-label="Toggle navigation" aria-expanded="true" aria-controls="navbarContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ">
+                        <li class="nav-item my-nav-item">
+                            <a class="nav-link my-nav-link">Бухгалтерия</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item my-nav-item dropdown">
+                            <a href="" class="nav-link my-nav-link  dropdown-toggle" data-bs-toggle="dropdown">Счета</a>
+                            <ul class="dropdown-menu ">
+                                <li class="link">
+                                    <img src="/images/allcard.png" alt="" width="30" height="30" />
+                                    <a  class="link">Мои счета</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="link">
+                                    <img src="/images/addcard.png" alt="" width="30" height="30" />
+
+                                    <a  class="link">Создать счет</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item my-nav-item">
+                            <a href="" class="nav-link my-nav-link">Статистика</a>
+                        </li>
+                        <li class="nav-item my-nav-item">
+                            <a href="" class="nav-link my-nav-link">Баланс</a>
+                        </li>
+                        <li class="nav-item my-nav-item dropdown">
+                            <a href="" class="nav-link my-nav-link  dropdown-toggle" data-bs-toggle="dropdown">О нас</a>
+                            <ul class="dropdown-menu ">
+                                <li class="link">
+                                    <img src="/images/vk.png" class="" width="30" height="30" />
+                                    <a href="https://vk.com/mikov2003" class="linkUsualText">Vcontacte</a>
+                                </li>
+                                <li class="link">
+                                    <img src="/images/tg.png" class="" width="30" height="30" />
+                                    <a href="https://t.me/Artem6115" class="linkUsualText">Telegram</a>
+                                </li>
+                                <li class="link">
+                                    <img src="/images/git.png" class="" width="30" height="30" />
+                                    <a href="https://github.com/artem6115/HomeAccounting" class="linkUsualText">GitHub</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item my-nav-item">
+                            <a href="" class="nav-link my-nav-link">Настройки</a>
+                        </li>
+
+                    </ul>
+                    <ul class="navbar-nav ms-auto ">
+                        <li class="nav-item my-nav-item ">
+                            <a href="" class="nav-link my-nav-link  ">Миков Артём</a>
+                        </li>
+                        <li class="nav-item  ">
+                            <a href=""><img src="/images/nologin.png" class="mt-1" width="35" height="35" /></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - PresentationLayer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderBody()
 </body>
+<!-- Footer -->
+<footer class="bg-dark text-center text-white">
+    @RenderSection("Footer")
+</footer>
+<partial name="_scriptsPartial.cshtml" />
 </html>

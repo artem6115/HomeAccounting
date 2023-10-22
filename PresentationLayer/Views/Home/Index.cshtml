@@ -1,8 +1,91 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Бухгалтерия";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-12 justify-content-center mx-auto mt-5 mb-5">
+            <h1 class="h1-info"> О программе</h1>
+            <p class="p-info">
+                Данная программа предназначена ведения учета пользовательских рассходов. Программа хранит все созданые записи и обрабатывает их.
+                Пользоватюся программой можно, через веб-приложение, приложение (windows x64) и через телеграм бота.
+                Для пользования продуктом необходимо зарегистрироваться.
+            </p>
+            <hr />
+            <h1 class="h1-info">Возможности программы</h1>
+            <ul class="list-group">
+                <li class="list-group-item">Вести учет рассходов</li>
+                <li class="list-group-item">Переключаться между счетами</li>
+                <li class="list-group-item">Формировать статистику и графики</li>
+                <li class="list-group-item">Сортировать и фильтровать записи</li>
+                <li class="list-group-item">Расчет баланса</li>
+                <li class="list-group-item">Экспортировать данные и диаграммы в excel и pdf</li>
+                <li class="list-group-item">Осуществлять подключение через Telegram-бота</li>
+
+            </ul>
+            <hr />
+            <h1 class="h1-info">Цель разработки</h1>
+            <p class="p-info">
+                Целью разработки было создание удобно для пользования сервса, который был бы в должной мере практичным.
+                Сервис предоставляет удобную и структурированую информацию.
+            </p>
+            <hr />
+
+        </div>
+    </div>
 </div>
+
+
+@section Footer{
+
+<div class="container p-4">
+        <!-- Section: Social media -->
+        <section class="mb-4">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <img src="/images/vk.png" />
+            </a>
+
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <img src="/images/tg.png" />
+            </a>
+
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <img src="/images/git.png" />
+            </a>
+
+
+        </section>
+
+        <section class="mb-4">
+            <div class="row ">
+                <div class="col-6 mx-auto ">
+                    <p>
+
+                        Данный сервис предназначен для бесплатного пользования.
+                        Записывайте полную информацию об операциях.
+                        Изучайте полученую статистику. Редактируйте и экспортируйте данные.
+
+
+
+                    </p>
+                    Начните пользоваться прямо сейчас -
+                    <button class="btn btn-success mb-2">Зарегистрироваться</button>
+                    <br />
+                    Используйте Telegram-бота  -
+                    <button class="btn btn-info">AccountingBot</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+        </section>
+
+    </div>
+<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2023 Copyright: Миков А.А.
+</div>
+}
