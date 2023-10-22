@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ namespace DataLayer.Repository
             Context = context;
             Log = logger;
         }
-        public Transaction Add(Transaction transaction)
+        public async Task<Transaction> Add(Transaction transaction)
         {
-            var entity = Context.Transactions.Add(transaction).Entity;
+            var entity =(await Context.Transactions.AddAsync(transaction)).Entity;
             Log.LogDebug($"Добавлена новая транзакция{entity.Id}");
             return transaction;
         }
@@ -39,11 +40,11 @@ namespace DataLayer.Repository
 
         }
 
-        public Transaction Get(long id)=>Context.Transactions.Single(x=>x.Id == id);
+        public async Task<Transaction> Get(long id)=>await Context.Transactions.SingleAsync(x=>x.Id == id);
 
-        public IEnumerable<Transaction> GetAll() => Context.Transactions.ToList();
+        public async Task<IEnumerable<Transaction>> GetAll() =>await Context.Transactions.ToListAsync();
 
-        public IEnumerable<Transaction> GetAllforAccount(Account account)
-            =>Context.Transactions.Where(x=>x.AccountId==account.Id).ToList();
+        public async Task<IEnumerable<Transaction>> GetAllforAccount(Account account)
+            =>await Context.Transactions.Where(x=>x.AccountId==account.Id).ToListAsync();
     }
 }

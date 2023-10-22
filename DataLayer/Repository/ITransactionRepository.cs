@@ -10,11 +10,11 @@ namespace DataLayer.Repository
     public interface ITransactionRepository
     {
        
-        Transaction Add(Transaction account);
+        Task<Transaction> Add(Transaction account);
         void Edit(Transaction account);
         void Delete(Transaction account);
-        Transaction Get(long id);
-        IEnumerable<Transaction> GetAll();
-        IEnumerable<Transaction> GetAllforAccount(Account account);
+        Task<Transaction> Get(long id);
+        Task<IEnumerable<Transaction>> GetAll();
+        Task<IEnumerable<Transaction>> GetAllforAccount(Account account);
     }
 }

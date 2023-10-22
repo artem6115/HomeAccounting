@@ -9,11 +9,11 @@ namespace DataLayer.Repository
 {
     public interface ICategoryRepository
     {
-        Category Add(Category account);
+        Task<Category> Add(Category account);
         void Edit(Category account);
         void Delete(Category account);
-        Category Get(long id);
-        IEnumerable<Category> GetAll();
+        Task<Category>Get(long id);
+        Task<IEnumerable<Category>> GetAll();
 
     }
 }

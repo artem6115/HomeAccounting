@@ -9,11 +9,11 @@ namespace DataLayer.Repository
 {
     public interface IAccountRepository
     {
-        Account Add(Account account);
+        Task<Account> Add(Account account);
         void Edit(Account account);
         void Delete(Account account);
-        Account Get(long id);
-        IEnumerable<Account> GetAlly();
+        Task<Account> Get(long id);
+        Task<IEnumerable<Account>> GetAlly();
 
        
 

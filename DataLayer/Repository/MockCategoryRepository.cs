@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,9 @@ namespace DataLayer.Repository
             Log = logger;
         }
 
-        public Category Add(Category category)
+        public async Task<Category> Add(Category category)
         {
-            var entity = Context.Categories.Add(category).Entity;
+            var entity =(await Context.Categories.AddAsync(category)).Entity;
             Log.LogDebug($"Добавлена новая категория{entity.Id}");
             return entity;
         }
@@ -39,8 +40,8 @@ namespace DataLayer.Repository
 
         }
 
-        public Category Get(long id)=>Context.Categories.Single(x=>x.Id == id);
+        public async Task<Category> Get(long id)=>await Context.Categories.SingleAsync(x=>x.Id == id);
 
-        public IEnumerable<Category> GetAll() => Context.Categories.ToList();
+        public async Task<IEnumerable<Category>> GetAll() =>await Context.Categories.ToListAsync();
     }
 }

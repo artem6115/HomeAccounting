@@ -1,4 +1,5 @@
 ﻿using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,12 @@ namespace DataLayer.Repository
             Context = context;
             Log = logger;
         }
-        public Account Add(Account account)
-        {
-            var entity = Context.Accounts.Add(account).Entity;
+         public async Task<Account> Add(Account account)
+          {
+            var entity = (await Context.Accounts.AddAsync(account)).Entity;
             Log.LogDebug($"Добавлен новый счёт {entity.Id}");
             return entity;
-        }
+          }
 
         public void Delete(Account account)
         {
@@ -37,8 +38,8 @@ namespace DataLayer.Repository
             Log.LogDebug($"Название счёта изменено {entity.Id}");
         }
 
-        public Account Get(long id)=>Context.Accounts.Single(x=>x.Id==id);
+        public async Task<Account> Get(long id)=> await Context.Accounts.SingleAsync(x=>x.Id==id);
 
-        public IEnumerable<Account> GetAlly() => Context.Accounts.ToList();
+        public async Task<IEnumerable<Account>> GetAlly() =>await Context.Accounts.ToListAsync();
     }
 }
