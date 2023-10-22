@@ -1,6 +1,6 @@
 ﻿namespace DataLayer
 {
-    public class Pattern
+    public class PatternModel
     {
 
     }
