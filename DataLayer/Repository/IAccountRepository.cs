@@ -13,9 +13,11 @@ namespace DataLayer.Repository
         void Edit(Account account);
         void Delete(Account account);
         Task<Account> Get(long id);
-        Task<IEnumerable<Account>> GetAlly();
+        Task<IEnumerable<Account>> GetAll();
+        Task<bool> CheckExistName(string name);
 
-       
+
+
 
     }
 }

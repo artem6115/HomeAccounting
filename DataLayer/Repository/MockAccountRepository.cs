@@ -40,6 +40,10 @@ namespace DataLayer.Repository
 
         public async Task<Account> Get(long id)=> await Context.Accounts.SingleAsync(x=>x.Id==id);
 
-        public async Task<IEnumerable<Account>> GetAlly() =>await Context.Accounts.ToListAsync();
+        public async Task<IEnumerable<Account>> GetAll() =>await Context.Accounts.ToListAsync();
+        public async Task<bool> CheckExistName (string name)
+        {
+            return await Context.Accounts.AnyAsync(x=>x.Name == name);
+        }
     }
 }
