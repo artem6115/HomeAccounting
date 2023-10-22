@@ -12,6 +12,7 @@ public partial class Transaction
     public long? CategoryId { get; set; }
 
     public double Value { get; set; }
+    public bool  IsIncom { get; set; }
 
     public DateTime Date { get; set; }
 
