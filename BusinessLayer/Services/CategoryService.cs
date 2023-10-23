@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services
 {
-    public class CategorySrevice
+    public class CategoryService
     {
         private readonly ILogger<AccountService> logger;
         private readonly ICategoryRepository Repository;
-        public CategorySrevice(ILogger<AccountService> log, ICategoryRepository rep)
+        public CategoryService(ILogger<AccountService> log, ICategoryRepository rep)
         {
             logger = log;
             Repository = rep;

@@ -1,3 +1,7 @@
+using DataLayer;
+using DataLayer.Repository;
+using Microsoft.EntityFrameworkCore;
+using BusinessLayer.Services;
 namespace PresentationLayer
 {
     public class Program
@@ -8,6 +12,18 @@ namespace PresentationLayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<AccountingDbContext>(option
+                => option.UseSqlite(builder.Configuration.GetConnectionString("ConnectionString")));
+
+            builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+            builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+
+            builder.Services.AddTransient<TransactionService>();
+            builder.Services.AddTransient<CategoryService>();
+            builder.Services.AddTransient<AccountService>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
