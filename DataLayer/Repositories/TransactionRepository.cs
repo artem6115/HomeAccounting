@@ -46,5 +46,30 @@ namespace DataLayer.Repository
 
         public  Task<List<Transaction>> GetAllforAccount(Account account)
             => Context.Transactions.Where(x=>x.AccountId==account.Id).ToListAsync();
+
+        public async Task<List<Transaction>> GetByFilter(Filter filter)
+        {
+            IQueryable<Transaction> data = Context.Transactions;
+
+            if (filter.Value is not null)
+                data = data.Where(x => x.Value == filter.Value);
+            if (filter.Date is not null)
+                data = data.Where(x => x.Date == filter.Date);
+            if (filter.AccountId is not null)
+                data = data.Where(x => x.AccountId == filter.AccountId);
+            if (filter.CategoryId is not null)
+                data = data.Where(x => x.CategoryId == filter.CategoryId);
+            Log.LogDebug("Фильтрация выполнена");
+            if (filter.PropetryForSorting is null) return await data.ToListAsync();
+            switch (filter.PropetryForSorting)
+            {
+                case "Value":data =  (filter.IsForward)? data.OrderBy(x=>x.Value):data.OrderByDescending(x => x.Value); break;
+                case "Category": data = (filter.IsForward) ? data.OrderBy(x => x.Category.Name) : data.OrderByDescending(x => x.Category.Name); break;
+                case "Date": data = (filter.IsForward) ? data.OrderBy(x => x.Date) : data.OrderByDescending(x => x.Date); break;
+            }
+            Log.LogDebug("Сортировка выполнена");
+
+            return await data.ToListAsync();
+        }
     }
 }
