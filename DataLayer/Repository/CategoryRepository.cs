@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    public class MockCategoryRepository: ICategoryRepository
+    public class CategoryRepository: ICategoryRepository
     {
-        public readonly AccountingDbContext Context;
-        public readonly ILogger<IAccountRepository> Log;
+        private readonly AccountingDbContext Context;
+        private readonly ILogger<IAccountRepository> Log;
 
-        public MockCategoryRepository(AccountingDbContext context, ILogger<IAccountRepository> logger)
+        public CategoryRepository(AccountingDbContext context, ILogger<IAccountRepository> logger)
         {
             Context = context;
             Log = logger;
@@ -23,25 +23,25 @@ namespace DataLayer.Repository
         public async Task<Category> Add(Category category)
         {
             var entity =(await Context.Categories.AddAsync(category)).Entity;
-            Log.LogDebug($"Добавлена новая категория{entity.Id}");
+            Log.LogDebug($"Добавлена новая категория{entity.Name}");
             return entity;
         }
 
         public void Delete(Category category)
         {
             Context.Categories.Remove(category);
-            Log.LogDebug($"Категория удалена{category.Id}");
+            Log.LogDebug($"Категория удалена{category.Name}");
         }
 
         public void Edit(Category category)
         {
             Context.Categories.Update(category);
-            Log.LogDebug($"Категория периименована{category.Id}");
+            Log.LogDebug($"Категория периименована{category.Name}");
 
         }
 
-        public async Task<Category> Get(long id)=>await Context.Categories.SingleAsync(x=>x.Id == id);
+        public  Task<Category> Get(long id)=> Context.Categories.SingleAsync(x=>x.Id == id);
 
-        public async Task<IEnumerable<Category>> GetAll() =>await Context.Categories.ToListAsync();
+        public  Task<List<Category>> GetAll() => Context.Categories.ToListAsync();
     }
 }

@@ -13,7 +13,7 @@ namespace DataLayer.Repository
         void Edit(Category account);
         void Delete(Category account);
         Task<Category>Get(long id);
-        Task<IEnumerable<Category>> GetAll();
+        Task<List<Category>> GetAll();
 
     }
 }

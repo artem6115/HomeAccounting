@@ -14,7 +14,7 @@ namespace DataLayer.Repository
         void Edit(Transaction account);
         void Delete(Transaction account);
         Task<Transaction> Get(long id);
-        Task<IEnumerable<Transaction>> GetAll();
-        Task<IEnumerable<Transaction>> GetAllforAccount(Account account);
+        Task<List<Transaction>> GetAll();
+        Task<List<Transaction>> GetAllforAccount(Account account);
     }
 }

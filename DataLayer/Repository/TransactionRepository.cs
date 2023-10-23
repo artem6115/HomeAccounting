@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    public class MockTransactionRepository : ITransactionRepository
+    public class TransactionRepository : ITransactionRepository
     {
-        public readonly AccountingDbContext Context;
-        public readonly ILogger<IAccountRepository> Log;
+        private readonly AccountingDbContext Context;
+        private readonly ILogger<IAccountRepository> Log;
 
-        public MockTransactionRepository(AccountingDbContext context, ILogger<IAccountRepository> logger)
+        public TransactionRepository(AccountingDbContext context, ILogger<IAccountRepository> logger)
         {
             Context = context;
             Log = logger;
@@ -40,11 +40,11 @@ namespace DataLayer.Repository
 
         }
 
-        public async Task<Transaction> Get(long id)=>await Context.Transactions.SingleAsync(x=>x.Id == id);
+        public  Task<Transaction> Get(long id)=> Context.Transactions.SingleAsync(x=>x.Id == id);
 
-        public async Task<IEnumerable<Transaction>> GetAll() =>await Context.Transactions.ToListAsync();
+        public  Task<List<Transaction>> GetAll() => Context.Transactions.ToListAsync();
 
-        public async Task<IEnumerable<Transaction>> GetAllforAccount(Account account)
-            =>await Context.Transactions.Where(x=>x.AccountId==account.Id).ToListAsync();
+        public  Task<List<Transaction>> GetAllforAccount(Account account)
+            => Context.Transactions.Where(x=>x.AccountId==account.Id).ToListAsync();
     }
 }
