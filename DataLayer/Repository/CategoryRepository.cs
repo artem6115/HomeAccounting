@@ -43,5 +43,6 @@ namespace DataLayer.Repository
         public  Task<Category> Get(long id)=> Context.Categories.SingleAsync(x=>x.Id == id);
 
         public  Task<List<Category>> GetAll() => Context.Categories.ToListAsync();
+        public Task<bool> CheckExistName (string name)=>Context.Categories.AnyAsync(x=>x.Name == name);
     }
 }

@@ -14,6 +14,6 @@ namespace DataLayer.Repository
         void Delete(Category account);
         Task<Category>Get(long id);
         Task<List<Category>> GetAll();
-
+        Task<bool> CheckExistName(string name);
     }
 }
