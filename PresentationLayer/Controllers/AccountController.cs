@@ -41,7 +41,7 @@ public class AccountController : Controller
             //else accountService.Edit(_Mapper.Map<AccountEditModel, Account>(model));
             if (!model.Id.HasValue) await accountService.Add(new Account() { Name=model.Name});
             else accountService.Edit(new Account() { Name = model.Name,Id=model.Id.Value });
-            return View("Accounts", await accountService.GetAll());
+            return RedirectToAction("Get");
         }
         TempData["Messange"] = "Не корректные данные";
         return View("AccountEdit",model);
@@ -50,6 +50,6 @@ public class AccountController : Controller
     public async Task<IActionResult> Delete(long id) {
         accountService.Delete(id);
         TempData["Messange"] = "Счёт удален";
-        return View("Accounts", await accountService.GetAll());
+        return RedirectToAction("Get");
     }
 }
