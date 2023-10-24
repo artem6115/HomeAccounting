@@ -97,3 +97,7 @@ label {
 form-control {
     width: 100px;
 }
+.validationError{
+    color:red;
+    font-size:15px;
+}

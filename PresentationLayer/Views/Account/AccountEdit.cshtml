@@ -18,8 +18,8 @@
 
                 <label class="form-label">Название счета:</label>
                 <input asp-for=Name value=@Model?.Name class="form-control" />
-
-                <div class="row justify-content-center mt-3 ">
+                <span asp-validation-for=Name class="validationError"></span>
+                <div class="row justify-content-center mt-4 ">
                     <div class="col-9 ">
                         <button type="submit" class="btn btn-success">Сохранить</button>
                         <a asp-controller="Account" asp-action="Get" class="btn btn-secondary">Отменить</a>
