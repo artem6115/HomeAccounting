@@ -11,8 +11,9 @@ namespace BusinessLayer.Models
     {
         public long? Id { get; set; }
 
-        [Required]
-        [MaxLength(30)]
+        [Required(ErrorMessage = "Название счета обязательное поле")]
+        [MaxLength(30, ErrorMessage = "Максимальная длина - 30")]
+        [RegularExpression(@"/^\w+$/",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
         public string Name { get; set; }
     }
 }

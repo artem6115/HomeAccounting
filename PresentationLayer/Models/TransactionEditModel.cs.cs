@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Models
@@ -11,18 +12,17 @@ namespace BusinessLayer.Models
     {
         public long? Id { get; set; }
 
-        [Required]
-        [MaxLength(30)]
-        public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Название счета обязательно поле")]
         public long AccountId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Обязательно укажите тип операции")]
         public bool IsIncom { get; set; }
         public long? CategoryId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Величина операции обязательно поле")]
+        [RegularExpression(@"/ ^\d + (\.\d\d)?$/",ErrorMessage ="Число должно содержать не более 2 знаков после запятой")]
+        [Range(1,double.MaxValue,ErrorMessage ="Число должно быть больше 1")]
         public double? Value { get; set; }
-        [Required]
-        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Дата обязательно поле")]
+        [DataType(DataType.Date,ErrorMessage ="Дата задана не корректно")]
         public DateTime Date { get; set; }
         public string? Comment { get; set; }
 
