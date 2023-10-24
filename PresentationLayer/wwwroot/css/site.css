@@ -101,3 +101,12 @@ form-control {
     color:red;
     font-size:15px;
 }
+.notifyInfo {
+    width =100%;
+    height =100px;
+    background-color: lawngreen;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    text-align:center;
+    font-size:15px;
+}

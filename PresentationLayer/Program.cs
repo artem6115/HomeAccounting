@@ -14,8 +14,12 @@ namespace PresentationLayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AccountingDbContext>(option
-                => option.UseSqlite(builder.Configuration.GetConnectionString("ConnectionString")));
+            builder.Services.AddDbContext<AccountingDbContext>(
+                option => {
+                    option.EnableSensitiveDataLogging(true);
+                    option.UseSqlite(builder.Configuration.GetConnectionString("ConnectionString"));
+                    }
+                );
 
             builder.Services.AddTransient<IAccountRepository, AccountRepository>();
             builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -25,7 +29,7 @@ namespace PresentationLayer
             builder.Services.AddTransient<CategoryService>();
             builder.Services.AddTransient<AccountService>();
 
-            builder.Services.AddAutoMapper(typeof(Profile));
+            builder.Services.AddAutoMapper(typeof(MappintProfile));
 
             var app = builder.Build();
 
@@ -34,7 +38,7 @@ namespace PresentationLayer
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+               
             }
 
             app.UseHttpsRedirection();

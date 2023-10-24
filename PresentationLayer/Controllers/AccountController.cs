@@ -30,7 +30,7 @@ public class AccountController : Controller
     {
         if (id == null) return View("AccountEdit",null);
         var entity = await accountService.Get(id.Value);
-        return  View("AccountEdit", new AccountEditModel() {Id=entity.Id,Name=entity.Name });
+        return  View("AccountEdit", _Mapper.Map<AccountEditModel>(entity));
      }
 
     
@@ -46,9 +46,10 @@ public class AccountController : Controller
                 await accountService.Add(new Account() { Name = model.Name }); 
                 }
             else accountService.Edit(new Account() { Name = model.Name, Id = model.Id.Value });
+            TempData["Message"] = "Данные добавлены/отредактированы";
             return RedirectToAction("Get");
         }
-        TempData["Messange"] = "Не корректные данные";
+        
         return View("AccountEdit",model);
     }
     [HttpGet]

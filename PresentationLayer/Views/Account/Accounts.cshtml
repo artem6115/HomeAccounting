@@ -3,6 +3,11 @@
 @model List<Account>
 @{
     ViewData["Title"] = "Счета";
+    string? message = TempData["Message"]?.ToString();
+}
+@if(message is not null && message != "")
+{
+    <div class="notifyInfo">@message</div>
 }
 
 <div class="container">

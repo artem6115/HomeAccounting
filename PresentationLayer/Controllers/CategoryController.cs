@@ -18,13 +18,14 @@ namespace PresentationLayer.Controllers
             _Mapper = maper;
             Log = log;
         }
+        public bool CheckExistName(string name) => !categoryService.CheckExistName(name);
         [HttpGet]
-        public async Task<IActionResult> Get()=> View("Categories",await categoryService.GetAll());
+        public async Task<IActionResult> Get()=> View("Categories");
 
         [HttpGet]
         public async Task<IActionResult> Delete(long id) {
             categoryService.Delete(id);
-            return RedirectToAction("Get", await categoryService.GetAll()); 
+            return RedirectToAction("Get"); 
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -34,7 +35,7 @@ namespace PresentationLayer.Controllers
             {
                 await categoryService.Add(new Category() { Name = model.Name });
             }
-            return RedirectToAction("Get", await categoryService.GetAll());
+            return RedirectToAction("Get");
         }
 
 
