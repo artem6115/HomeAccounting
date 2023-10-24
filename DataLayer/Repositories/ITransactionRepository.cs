@@ -12,7 +12,7 @@ namespace DataLayer.Repository
        
         Task<Transaction> Add(Transaction account);
         void Edit(Transaction account);
-        void Delete(Transaction account);
+        void Delete(long id);
         Task<Transaction> Get(long id);
         Task<List<Transaction>> GetAll();
         Task<List<Transaction>> GetAllforAccount(Account account);

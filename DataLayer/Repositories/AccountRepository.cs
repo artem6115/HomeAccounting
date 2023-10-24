@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,8 +27,9 @@ namespace DataLayer.Repository
             return entity;
           }
 
-        public void Delete(Account account)
+        public async void Delete(long id)
         {
+            var account = await Get(id);
             Context.Accounts.Remove(account);
             Log.LogDebug($"Удален счёт {account.Name}");
         }

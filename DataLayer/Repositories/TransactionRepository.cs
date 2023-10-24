@@ -26,8 +26,9 @@ namespace DataLayer.Repository
             return transaction;
         }
 
-        public void Delete(Transaction transaction)
+        public async void Delete(long id)
         {
+            var transaction = await Get(id);
             Context.Transactions.Remove(transaction);
             Log.LogDebug($"Транзакция удалена{transaction.Id}");
 

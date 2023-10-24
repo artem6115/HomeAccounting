@@ -21,7 +21,7 @@ namespace BusinessLayer.Services
         public Task<bool> CheckExistName(string name) => Repository.CheckExistName(name);
         public Task<Category> Add(Category model) => Repository.Add(model);
         public void Edit(Category model) => Repository.Edit(model);
-        public void Delete(Category model) => Repository.Delete(model);
+        public void Delete(long id) => Repository.Delete(id);
         public Task<List<Category>> GetAll() => Repository.GetAll();
         public Task<Category> Get(long id) => Repository.Get(id);
     }

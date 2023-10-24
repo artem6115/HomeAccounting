@@ -27,8 +27,9 @@ namespace DataLayer.Repository
             return entity;
         }
 
-        public void Delete(Category category)
+        public async void Delete(long id)
         {
+            var category = await Get(id);
             Context.Categories.Remove(category);
             Log.LogDebug($"Категория удалена{category.Name}");
         }
