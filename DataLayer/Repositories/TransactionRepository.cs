@@ -40,12 +40,12 @@ namespace DataLayer.Repository
 
         }
 
-        public  Task<Transaction> Get(long id)=> Context.Transactions.SingleAsync(x=>x.Id == id);
+        public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).SingleAsync(x=>x.Id == id);
 
-        public  Task<List<Transaction>> GetAll() => Context.Transactions.ToListAsync();
+        public  Task<List<Transaction>> GetAll() => Context.Transactions.Include(x => x.Account).Include(x => x.Category).ToListAsync();
 
         public  Task<List<Transaction>> GetAllforAccount(Account account)
-            => Context.Transactions.Where(x=>x.AccountId==account.Id).ToListAsync();
+            => Context.Transactions.Where(x=>x.AccountId==account.Id).Include(x => x.Account).Include(x => x.Category).ToListAsync();
 
         public async Task<List<Transaction>> GetByFilter(Filter filter)
         {
@@ -60,7 +60,7 @@ namespace DataLayer.Repository
             if (filter.CategoryId is not null)
                 data = data.Where(x => x.CategoryId == filter.CategoryId);
             Log.LogDebug("Фильтрация выполнена");
-            if (filter.PropetryForSorting is null) return await data.ToListAsync();
+            if (filter.PropetryForSorting is null) return await data.Include(x => x.Account).Include(x => x.Category).ToListAsync();
             switch (filter.PropetryForSorting)
             {
                 case "Value":data =  (filter.IsForward)? data.OrderBy(x=>x.Value):data.OrderByDescending(x => x.Value); break;
@@ -69,7 +69,7 @@ namespace DataLayer.Repository
             }
             Log.LogDebug("Сортировка выполнена");
 
-            return await data.ToListAsync();
+            return await data.Include(x=>x.Account).Include(x=>x.Category).ToListAsync();
         }
     }
 }
