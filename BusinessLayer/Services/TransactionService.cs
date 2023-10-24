@@ -19,6 +19,7 @@ namespace BusinessLayer.Services
             logger = log;
             Repository = rep;
         }
+        public bool CheckValueHasMoreTwoNumber (double value)=> (value.ToString().Split(',')).Last().Length > 2;
         public Task<Transaction> Add(Transaction model) => Repository.Add(model);
         public void Edit(Transaction model) => Repository.Edit(model);
         public void Delete(Transaction model) => Repository.Delete(model);
