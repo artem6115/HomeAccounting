@@ -14,7 +14,7 @@ namespace DataLayer.Repository
         void Delete(long id);
         Task<Account> Get(long id);
         Task<List<Account>> GetAll();
-        Task<bool> CheckExistName(string name);
+        bool CheckExistName(string name);
 
 
 

@@ -47,7 +47,7 @@ namespace DataLayer.Repository
         public Task<Account> Get(long id) => Context.Accounts.SingleAsync(x => x.Id == id);
 
         public  Task<List<Account>> GetAll() =>  Context.Accounts.ToListAsync();
-        public Task<bool> CheckExistName (string name)=> Context.Accounts.AnyAsync(x=>x.Name == name);
+        public bool CheckExistName (string name)=> Context.Accounts.Where(x=>x.Name == name).Count()>0;
 
     }
 }

@@ -18,7 +18,7 @@ namespace BusinessLayer.Services
             logger = log;
             Repository = rep;
         }
-        public Task<bool> CheckExistName(string name)=> Repository.CheckExistName(name);
+        public bool CheckExistName(string name)=> Repository.CheckExistName(name);
         public  Task<Account> Add(Account model)=> Repository.Add(model);
         public void Edit(Account model) => Repository.Edit(model);
         public void Delete(long id) => Repository.Delete(id);

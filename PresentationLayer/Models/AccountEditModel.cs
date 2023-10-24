@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +15,8 @@ namespace PresentationLayer.Models
 
         [Required(ErrorMessage = "Название счета обязательное поле")]
         [MaxLength(30, ErrorMessage = "Максимальная длина - 30")]
-        [RegularExpression(@".*\w.*",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
+        [RegularExpression(@".*[a-zA-Zа-яА-Я0-9_].*",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
+        [Remote(action:"CheckExistName",controller:"Account",ErrorMessage ="Такое название счета уже существует")]
         public string Name { get; set; }
     }
 }

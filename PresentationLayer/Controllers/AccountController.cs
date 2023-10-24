@@ -20,6 +20,9 @@ public class AccountController : Controller
         _Mapper=maper;
         Log = log;
     }
+
+    public  bool CheckExistName(string name)=> !accountService.CheckExistName(name);
+
     [HttpGet]
     public async Task<IActionResult> Get() =>View("Accounts",await accountService.GetAll());
     [HttpGet]
@@ -39,8 +42,10 @@ public class AccountController : Controller
         if (ModelState.IsValid) {
             //if (!model.Id.HasValue)await accountService.Add(_Mapper.Map<AccountEditModel,Account>(model));
             //else accountService.Edit(_Mapper.Map<AccountEditModel, Account>(model));
-            if (!model.Id.HasValue) await accountService.Add(new Account() { Name=model.Name});
-            else accountService.Edit(new Account() { Name = model.Name,Id=model.Id.Value });
+            if (!model.Id.HasValue) { 
+                await accountService.Add(new Account() { Name = model.Name }); 
+                }
+            else accountService.Edit(new Account() { Name = model.Name, Id = model.Id.Value });
             return RedirectToAction("Get");
         }
         TempData["Messange"] = "Не корректные данные";
