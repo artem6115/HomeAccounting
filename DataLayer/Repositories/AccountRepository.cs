@@ -24,6 +24,7 @@ namespace DataLayer.Repository
           {
             var entity = (await Context.Accounts.AddAsync(account)).Entity;
             Log.LogDebug($"Добавлен новый счёт {entity.Name}");
+            await Context.SaveChangesAsync();
             return entity;
           }
 
@@ -32,12 +33,15 @@ namespace DataLayer.Repository
             var account = await Get(id);
             Context.Accounts.Remove(account);
             Log.LogDebug($"Удален счёт {account.Name}");
+            Context.SaveChangesAsync();
+
         }
 
         public void Edit(Account account)
         {
             var entity = Context.Accounts.Update(account).Entity;
             Log.LogDebug($"Название счёта изменено {entity.Name}");
+            Context.SaveChangesAsync();
         }
 
         public Task<Account> Get(long id) => Context.Accounts.SingleAsync(x => x.Id == id);

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.Models
+namespace PresentationLayer.Models
 {
     public class AccountEditModel
     {
@@ -13,7 +13,7 @@ namespace BusinessLayer.Models
 
         [Required(ErrorMessage = "Название счета обязательное поле")]
         [MaxLength(30, ErrorMessage = "Максимальная длина - 30")]
-        [RegularExpression(@"\w+",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
+        [RegularExpression(@".*\w.*",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
         public string Name { get; set; }
     }
 }

@@ -9,7 +9,7 @@
     <div class="row">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand HeadText my-nav-brand" asp-page="/Pages/Index.cshtml">HomeAccounting</a>
+                <a class="navbar-brand HeadText my-nav-brand"asp-action="Index" asp-controller="Home">HomeAccounting</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-label="Toggle navigation" aria-expanded="true" aria-controls="navbarContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -23,13 +23,13 @@
                             <ul class="dropdown-menu ">
                                 <li class="link">
                                     <img src="/images/allcard.png" alt="" width="30" height="30" />
-                                    <a  class="link">Мои счета</a>
+                                    <a asp-controller="Account" asp-action="Get" class="link">Мои счета</a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li class="link">
                                     <img src="/images/addcard.png" alt="" width="30" height="30" />
 
-                                    <a  class="link">Создать счет</a>
+                                    <a asp-controller="Account" asp-action="GetToEdit" class="link">Создать счет</a>
                                 </li>
                             </ul>
                         </li>
@@ -77,8 +77,5 @@
     @RenderBody()
 </body>
 <!-- Footer -->
-<footer class="bg-dark text-center text-white">
-    @RenderSection("Footer")
-</footer>
 <partial name="_scriptsPartial.cshtml" />
 </html>

@@ -1,0 +1,29 @@
+﻿@using System.Collections.Generic;
+@using DataLayer.Entities;
+@model List<Account>
+@{
+    ViewData["Title"] = "Счета";
+}
+
+<div class="container">
+    <div class="row  justify-content-center mt-5">
+        @foreach (var item in Model)
+        {     
+            <div class="col-lg-3 col-md-4 col-sm-12 mb-4">
+            <div class="row justify-content-center">
+                <div class="col-5">
+                    <img src="/images/account.png" width="100px" height="100px" class="mb-4" />
+                </div>
+            </div>
+            <p class="AccountName">@item.Name</p>
+            <p class="AccountBalance">Баланс : -</p>
+            <div class="row justify-content-center">
+                <div class="col-9">
+                        <a asp-controller="Account" asp-action="GetToEdit" asp-route-Id=@item.Id class="btn btn-info">Изменить</a>
+                        <a class="btn btn-danger" asp-controller="Account" asp-action="Delete" asp-route-id=@item.Id>Удалить</a>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

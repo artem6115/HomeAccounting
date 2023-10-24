@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BusinessLayer.Models;
 using DataLayer.Entities;
 
 namespace PresentationLayer.Models
@@ -8,9 +7,9 @@ namespace PresentationLayer.Models
     {
         public MappintProfile()
         {
-            CreateMap<AccountEditModel, Account>();
-            CreateMap<CategoryEditModel, Category>();
-            CreateMap<TransactionEditModel, Transaction>();
+            CreateMap<AccountEditModel, Account>().ReverseMap();
+            CreateMap<CategoryEditModel, Category>().ReverseMap();
+            CreateMap<TransactionEditModel, Transaction>().ReverseMap();
 
         }
     }

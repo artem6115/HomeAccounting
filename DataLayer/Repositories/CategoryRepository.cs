@@ -24,6 +24,7 @@ namespace DataLayer.Repository
         {
             var entity =(await Context.Categories.AddAsync(category)).Entity;
             Log.LogDebug($"Добавлена новая категория{entity.Name}");
+            await Context.SaveChangesAsync();
             return entity;
         }
 
@@ -32,12 +33,16 @@ namespace DataLayer.Repository
             var category = await Get(id);
             Context.Categories.Remove(category);
             Log.LogDebug($"Категория удалена{category.Name}");
+            Context.SaveChangesAsync();
+
         }
 
         public void Edit(Category category)
         {
             Context.Categories.Update(category);
             Log.LogDebug($"Категория периименована{category.Name}");
+            Context.SaveChangesAsync();
+
 
         }
 

@@ -2,6 +2,8 @@ using DataLayer;
 using DataLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 using BusinessLayer.Services;
+using AutoMapper;
+using PresentationLayer.Models;
 namespace PresentationLayer
 {
     public class Program
@@ -23,6 +25,7 @@ namespace PresentationLayer
             builder.Services.AddTransient<CategoryService>();
             builder.Services.AddTransient<AccountService>();
 
+            builder.Services.AddAutoMapper(typeof(Profile));
 
             var app = builder.Build();
 
