@@ -1,0 +1,58 @@
+﻿@using BusinessLayer.Services;
+@{
+    ViewData["Title"] = "Транзакции";
+}
+@inject AccountService Accounts
+@inject CategoryService Categories
+
+
+<script>
+    function MoveToolBar (){
+        document.getElementById("ToolBar").classList.toggle("ActiveBar");
+        alert("dd");
+    }
+</script>
+
+<div class="ToolBar" id="ToolBar">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="col-12">
+                <form method="get">
+                    <div class="row justify-content-center mt-1">
+                        <div class="col-2">
+                            <input class="form-control" hidden="hidden" />
+                            <select class="form-select">
+                                <option value="1">First</option>
+                            </select>
+                        </div>
+                        <div class="col-2"><input class="form-control" placeholder="Стоимость" /></div>
+                        <div class="col-2"><input class="form-control" type="date" placeholder="Дата" /></div>
+                        <div class="col-1 mt-1"><a href=""><img src="filtr.png" /></a></div>
+                        <div class="col-2 ">
+                            <input class="form-control" placeholder="Что искать..." />
+
+                        </div>
+                        <div class="col-1 mt-1 ">
+                            <a href=""><img src="find.png" /></a>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-2">
+                            <input class="form-control" hidden="hidden" />
+                            <select class="form-select">
+                                <option value="1">First</option>
+                            </select>
+                        </div>
+                        <div class="col-2"><input class="form-control" placeholder="Стоимость" /></div>
+                    </div>
+
+                </form>
+            </div>
+        </nav>
+    </div>
+    <div class="menuButton">
+       <button class="btn" onclick="MoveToolBar">
+           <img asp-append-version=true src="/images/filtr.png" width="50px" height="50px"/>
+       </button>
+    </div>
+</div>
