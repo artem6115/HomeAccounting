@@ -12,10 +12,10 @@ namespace PresentationLayer.Controllers
         private readonly ILogger<CategoryController> Log;
         private readonly IMapper _Mapper;
 
-        public CategoryController(ILogger<CategoryController> log, CategoryService rep, IMapper maper)
+        public CategoryController(ILogger<CategoryController> log, CategoryService rep, IMapper mapper)
         {
             categoryService = rep;
-            _Mapper = maper;
+            _Mapper = mapper;
             Log = log;
         }
         public bool CheckExistName(string name) => !categoryService.CheckExistName(name);
@@ -33,7 +33,7 @@ namespace PresentationLayer.Controllers
         {
             if (ModelState.IsValid)
             {
-                await categoryService.Add(new Category() { Name = model.Name });
+                await categoryService.Add(_Mapper.Map<Category>(model));
             }
             return RedirectToAction("Get");
         }

@@ -14,10 +14,10 @@ public class AccountController : Controller
     private readonly ILogger<AccountController> Log;
     private readonly IMapper _Mapper;
 
-    public AccountController(ILogger<AccountController> log,AccountService rep, IMapper maper)
+    public AccountController(ILogger<AccountController> log,AccountService rep, IMapper mapper)
     {
         accountService = rep;
-        _Mapper=maper;
+        _Mapper=mapper;
         Log = log;
     }
 
@@ -26,7 +26,7 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Get() =>View("Accounts",await accountService.GetAll());
     [HttpGet]
-    public async Task<IActionResult> GetToEdit(long? id = null!)
+    public async Task<IActionResult> EditPage(long? id = null!)
     {
         if (id == null) return View("AccountEdit",null);
         var entity = await accountService.Get(id.Value);
@@ -40,22 +40,21 @@ public class AccountController : Controller
     public async Task<IActionResult> Edit(AccountEditModel model)
     {
         if (ModelState.IsValid) {
-            //if (!model.Id.HasValue)await accountService.Add(_Mapper.Map<AccountEditModel,Account>(model));
-            //else accountService.Edit(_Mapper.Map<AccountEditModel, Account>(model));
-            if (!model.Id.HasValue) { 
-                await accountService.Add(new Account() { Name = model.Name }); 
-                }
-            else accountService.Edit(new Account() { Name = model.Name, Id = model.Id.Value });
+            if (!model.Id.HasValue)
+                await accountService.Add(_Mapper.Map<Account>(model)); 
+            else accountService.Edit(_Mapper.Map<Account>(model));
             TempData["Message"] = "Данные добавлены/отредактированы";
+            TempData["MessageStyle"] = "alert-success";
             return RedirectToAction("Get");
         }
         
         return View("AccountEdit",model);
     }
     [HttpGet]
-    public async Task<IActionResult> Delete(long id) {
+    public IActionResult Delete(long id) {
         accountService.Delete(id);
-        TempData["Messange"] = "Счёт удален";
+        TempData["Message"] = "Счёт удален";
+        TempData["MessageStyle"] = "alert-danger";
         return RedirectToAction("Get");
     }
 }

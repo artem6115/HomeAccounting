@@ -22,7 +22,7 @@ namespace DataLayer.Repository
         public async Task<Transaction> Add(Transaction transaction)
         {
             var entity =(await Context.Transactions.AddAsync(transaction)).Entity;
-            Log.LogDebug($"Добавлена новая транзакция{entity.Id}");
+            Log.LogDebug($"Добавлена новая транзакция - {entity.Id}");
             await Context.SaveChangesAsync();
             return transaction;
         }
@@ -31,7 +31,7 @@ namespace DataLayer.Repository
         {
             var transaction = await Get(id);
             Context.Transactions.Remove(transaction);
-            Log.LogDebug($"Транзакция удалена{transaction.Id}");
+            Log.LogDebug($"Транзакция удалена - {transaction.Id}");
             Context.SaveChangesAsync();
 
         }
@@ -39,7 +39,7 @@ namespace DataLayer.Repository
         public void Edit(Transaction transaction)
         {
             Context.Transactions.Update(transaction);
-            Log.LogDebug($"Транзакция изменена{transaction.Id}");
+            Log.LogDebug($"Транзакция изменена - {transaction.Id}");
             Context.SaveChangesAsync();
 
         }

@@ -24,13 +24,7 @@ namespace DataLayer.Repository
           {
             account.Name = account.Name.Trim();
             var entity = (await Context.Accounts.AddAsync(account)).Entity;
-            Log.LogDebug($"Добавлен новый счёт {entity.Name}");
-            Log.LogInformation($"Добавлен новый счёт {entity.Name}");
-            Log.LogError($"Добавлен новый счёт {entity.Name}");
-            Log.LogCritical($"Добавлен новый счёт {entity.Name}");
-            Log.LogTrace($"Добавлен новый счёт {entity.Name}");
-
-
+            Log.LogInformation($"Добавлен новый счёт - {entity.Name}");
             await Context.SaveChangesAsync();
             return entity;
           }
@@ -39,7 +33,7 @@ namespace DataLayer.Repository
         {
             var account = await Get(id);
             Context.Accounts.Remove(account);
-            Log.LogError($"Удален счёт {account.Name}");
+            Log.LogInformation($"Удален счёт - {account.Name}");
             Context.SaveChangesAsync();
 
         }
@@ -48,7 +42,7 @@ namespace DataLayer.Repository
         {
             account.Name = account.Name.Trim();
             var entity = Context.Accounts.Update(account).Entity;
-            Log.LogInformation($"Название счёта изменено {entity.Name}");
+            Log.LogInformation($"Название счёта изменено - {entity.Name}");
             Context.SaveChangesAsync();
         }
 
@@ -56,9 +50,7 @@ namespace DataLayer.Repository
 
         public  Task<List<Account>> GetAll() =>  Context.Accounts.ToListAsync();
         public bool CheckExistName(string name)
-        {
-            return Context.Accounts.AsEnumerable().Any(x => x.Name.ToLower() == name.Trim().ToLower());
-            //Context.Accounts.Any(x => x.Name.ToLower() == name.Trim().ToLower()); }
-        }
+             => Context.Accounts.AsEnumerable().Any(x => x.Name.Equals(name.Trim(),StringComparison.OrdinalIgnoreCase));
+        
     }
 }

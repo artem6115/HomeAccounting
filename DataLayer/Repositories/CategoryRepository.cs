@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DataLayer.Repository
 {
@@ -25,7 +26,7 @@ namespace DataLayer.Repository
         {
             category.Name = category.Name.Trim();
             var entity =(await Context.Categories.AddAsync(category)).Entity;
-            Log.LogDebug($"Добавлена новая категория{entity.Name}");
+            Log.LogInformation($"Добавлена новая категория - {entity.Name}");
             await Context.SaveChangesAsync();
             return entity;
         }
@@ -34,7 +35,7 @@ namespace DataLayer.Repository
         {
             var category = await Get(id);
             Context.Categories.Remove(category);
-            Log.LogDebug($"Категория удалена{category.Name}");
+            Log.LogInformation($"Категория удалена - {category.Name}");
             Context.SaveChangesAsync();
 
         }
@@ -43,7 +44,7 @@ namespace DataLayer.Repository
         {
             category.Name = category.Name.Trim();
             Context.Categories.Update(category);
-            Log.LogDebug($"Категория периименована{category.Name}");
+            Log.LogInformation($"Категория периименована - {category.Name}");
             Context.SaveChangesAsync();
 
 
@@ -52,6 +53,7 @@ namespace DataLayer.Repository
         public  Task<Category> Get(long id)=> Context.Categories.SingleAsync(x=>x.Id == id);
 
         public  Task<List<Category>> GetAll() => Context.Categories.ToListAsync();
-        public bool CheckExistName (string name)=>Context.Categories.Any(x=>x.Name.ToLower() == name.Trim().ToLower());
+        public bool CheckExistName (string name)
+            => Context.Categories.AsEnumerable().Any(x => x.Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase));
     }
 }

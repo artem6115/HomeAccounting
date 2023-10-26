@@ -4,10 +4,12 @@
 @{
     ViewData["Title"] = "Счета";
     string? message = TempData["Message"]?.ToString();
+    string messageStyle = TempData["MessageStyle"]?.ToString()!;
+
 }
 @if(message is not null && message != "")
 {
-    <div class="notifyInfo">@message</div>
+    <div class="alert @messageStyle mt-3 mb-3 text-center">@message</div>
 }
 
 <div class="container">
@@ -24,7 +26,7 @@
             <p class="AccountBalance">Баланс : -</p>
             <div class="row justify-content-center">
                 <div class="col-9">
-                        <a asp-controller="Account" asp-action="GetToEdit" asp-route-Id=@item.Id class="btn btn-info">Изменить</a>
+                        <a asp-controller="Account" asp-action="EditPage" asp-route-Id=@item.Id class="btn btn-info">Изменить</a>
                         <a class="btn btn-danger" asp-controller="Account" asp-action="Delete" asp-route-id=@item.Id>Удалить</a>
                 </div>
             </div>

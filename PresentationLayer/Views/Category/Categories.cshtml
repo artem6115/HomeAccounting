@@ -5,7 +5,13 @@
 @inject CategoryService service
 @{
     ViewData["Title"] = "Категории";
+    string? message = TempData["Message"]?.ToString();
+    string messageStyle = TempData["MessageStyle"]?.ToString()!;
     List<Category> categories =await service.GetAll();
+}
+@if (message is not null && message != "")
+{
+    <div class="alert @messageStyle mt-3 mb-3 text-center">@message</div>
 }
 <form method="post" asp-controller="Category" asp-action="Add">
     <div class="row justify-content-center mt-3">
