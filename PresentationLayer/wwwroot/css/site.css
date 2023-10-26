@@ -16,6 +16,7 @@
 html {
     overflow-x: hidden;
     font-family: sans-serif;
+
 }
 
 .HeaderText {
@@ -113,7 +114,9 @@ form-control {
 .ToolBar {
     z-index: 0;
     border-top: 2px solid blue;
-    
+    transition: all 600ms;
+    -moz-transition: all 600ms;
+    -webkit-transition: all 600ms;
 }
 .menuButton{
     position:absolute;
@@ -121,7 +124,12 @@ form-control {
     left:20px;
 }
 .ActiveBar {
+    z-index: 0;
+    border-top: 2px solid blue;
     position: fixed;
-    margin-top: -100px;
-    
+    width: 100%;
+    margin-top: -200px;
+    transition: all 600ms;
+    -moz-transition: all 600ms;
+    -webkit-transition: all 600ms;
 }
