@@ -9,9 +9,17 @@
 }
 @if(message is not null && message != "")
 {
+
     <div class="alert @messageStyle mt-3 mb-3 text-center">@message</div>
 }
-
+<script>
+    function deleteCommand (id){
+        var url = "delete/"+id;
+        if (confirm("Вы уверены, что хотите удалить счет?\nПосле удаления все транзакции будут потеряны")) {
+            window.location.replace(url);
+        }
+    }
+</script>
 <div class="container">
     <div class="row  justify-content-center mt-5">
         @foreach (var item in Model)
@@ -27,7 +35,7 @@
             <div class="row justify-content-center">
                 <div class="col-9">
                         <a asp-controller="Account" asp-action="EditPage" asp-route-Id=@item.Id class="btn btn-info">Изменить</a>
-                        <a class="btn btn-danger" asp-controller="Account" asp-action="Delete" asp-route-id=@item.Id>Удалить</a>
+                        <button class="btn btn-danger" onclick="deleteCommand(@item.Id)">Удалить</button>
                 </div>
             </div>
         </div>

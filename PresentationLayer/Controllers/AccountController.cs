@@ -41,9 +41,15 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid) {
             if (!model.Id.HasValue)
-                await accountService.Add(_Mapper.Map<Account>(model)); 
-            else accountService.Edit(_Mapper.Map<Account>(model));
-            TempData["Message"] = "Данные добавлены/отредактированы";
+            {
+                await accountService.Add(_Mapper.Map<Account>(model));
+                TempData["Message"] = "Новый счет добавлен";
+            }
+            else {
+                TempData["Message"] = "Название счета изменено";
+                accountService.Edit(_Mapper.Map<Account>(model));
+             }
+           
             TempData["MessageStyle"] = "alert-success";
             return RedirectToAction("Get");
         }
@@ -51,7 +57,7 @@ public class AccountController : Controller
         return View("AccountEdit",model);
     }
     [HttpGet]
-    public IActionResult Delete(long id) {
+    public async Task<IActionResult> Delete(long id) {
         accountService.Delete(id);
         TempData["Message"] = "Счёт удален";
         TempData["MessageStyle"] = "alert-danger";

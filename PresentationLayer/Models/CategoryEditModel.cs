@@ -13,7 +13,7 @@ namespace PresentationLayer.Models
         public long? Id { get; set; }
 
         [Required(ErrorMessage = "Название категории обязательное поле")]
-        [MaxLength(15, ErrorMessage = "Максимальная длина - 15")]
+        [MaxLength(20, ErrorMessage = "Максимальная длина - 20")]
         [RegularExpression(@".*[a-zA-Zа-яА-Я0-9_].*", ErrorMessage = "Строка пустая, либо содержит не корректные символы")]
         [Remote(action: "CheckExistName", controller: "Category", ErrorMessage = "Такое название категории уже существует")]
 

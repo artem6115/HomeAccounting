@@ -1,0 +1,92 @@
+﻿@using BusinessLayer.Services;
+@using DataLayer.Entities;
+@using DataLayer;
+@using PresentationLayer.Models;
+@model TransactionEditModel
+@{
+    ViewData["Title"] = "Создание/редактирование транзакции";
+    List<Account> Accounts = AccountService.GetAll().Result;
+    List<Category> Categories = CategoryService.GetAll().Result;
+}
+@inject AccountService AccountService
+@inject CategoryService CategoryService
+
+
+<div class="row justify-content-center ">
+    <div class="col-lg-8 col-11">
+        <form method="post" asp-asp-controller="Transaction" asp-action="Edit">
+            <div class="row justify-content-center mt-4">
+                <h1>@(Model is not null?"Редактирование транзакции":"Добавление транзакции")</h1>
+                <div class="col-lg-6 col-12 ">
+
+                    <input asp-for=Id hidden="hidden"/>
+                    <label class="form-label">Выберите счет</label>
+                    <select asp-for=AccountId class="form-select">
+                        @foreach (var item in Accounts)
+                        {
+                            <option value=@item.Id>@item.Name</option>
+                        }
+                
+                    </select>
+                    <a asp-controller="Account" asp-action="EditPage" class="link"><span asp-validation-for=AccountId class="validationError"></span></a>
+
+
+                    <br />
+                    <label class="form-label">Укажите стоимость</label>
+                    
+                  
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Доход</span>
+                        <div class="input-group-text">
+                            <input type="checkbox" asp-for=IsIncome class="form-check-input" />
+                        </div>
+                        <input asp-for=Value class="form-control" />
+                        
+                    </div>
+                    <span asp-validation-for=Value class="validationError"></span>
+
+  @*                   <div class="input-group">
+                        <div class="input-group-prepend">
+                            <h5 class="input-grop-text mt-3">Доход  </h5>
+                        </div>
+                        <input type="checkbox" asp-for=IsIncom class="form-check-input m-lg-2 mt-2" />
+                        <span asp-validation-for=IsIncom class="validationError"></span>
+
+                    </div> *@
+                    
+
+                </div>
+                <div class="col-lg-6 col-12">
+                    <label class="form-label">Выберите категорию*</label>
+                    <select asp-for=CategoryId class="form-select">
+                        <option value="">-</option>
+
+                        @foreach (var item in Categories)
+                        {
+                            <option value=@item.Id>@item.Name</option>
+                        }
+                    </select>
+
+                    <br />
+                    <label class="form-label ">Укажите дату</label>
+                    <input asp-for=Date class="form-control" />
+                    <span asp-validation-for=Date class="validationError"></span>
+                    
+                    <br />
+                    <label class="form-label">Напишите коментарий*</label>
+                    <input asp-for=Comment class="form-control" />
+                </div>
+
+            </div>
+            <div class="row justify-content-center ">
+                <div class="col-lg-3 mt-5">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <a asp-controller="Transaction" asp-action="Get" class="btn btn-secondary">Отменить</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
