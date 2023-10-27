@@ -6,6 +6,7 @@
 
 #My
 Html/
+План.txt
 Accounting.db
 # User-specific files
 *.rsuser
@@ -13,6 +14,7 @@ Accounting.db
 *.user
 *.userosscache
 *.sln.docstates
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
