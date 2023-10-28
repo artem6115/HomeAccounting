@@ -47,8 +47,15 @@ namespace DataLayer.Repository
         public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).SingleAsync(x=>x.Id == id);
 
         public  Task<List<Transaction>> GetAll() => Context.Transactions.Include(x => x.Account).Include(x => x.Category).ToListAsync();
+        public async Task<(int,List<Transaction>)> GetAllPartial(int page, int count)
+        {
+            var query =Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsEnumerable().Chunk(count).ToList();
 
-        public  Task<List<Transaction>> GetAllforAccount(Account account)
+            return (query.Count,query[page].ToList());
+         }
+
+
+        public Task<List<Transaction>> GetAllforAccount(Account account)
             => Context.Transactions.Where(x=>x.AccountId==account.Id).Include(x => x.Account).Include(x => x.Category).ToListAsync();
 
         public async Task<List<Transaction>> GetByFilter(Filter filter)

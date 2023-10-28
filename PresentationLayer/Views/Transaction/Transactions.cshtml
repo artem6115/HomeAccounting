@@ -3,10 +3,13 @@
 @using DataLayer;
 @model Filter
 @{
+    const int CounEntitytOnPage = 20;
     ViewData["Title"] = "Транзакции";
     List<Account> Accounts = AccountService.GetAll().Result;
     List<Category> Categories = CategoryService.GetAll().Result;
-    List<Transaction> Transactions = TransactionService.GetAll().Result;
+    var queryExecuted = TransactionService.GetAllPartial(Model.PageNumber, CounEntitytOnPage).Result;
+    List<Transaction> Transactions = queryExecuted.Item2;
+    int PageCount = queryExecuted.Item1;
     string? message = TempData["Message"]?.ToString();
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
 
@@ -154,7 +157,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for(int i = 0;i<1;i++){
                     @foreach(Transaction item in Transactions??new List<Transaction>(0)){
                         <tr>
                             <td>@item.Account.Name</td>
@@ -169,18 +171,42 @@
                                 <button class="btn" onclick="deleteCommand(@item.Id)"><img src="/images/delete.png" /></button>
                             </td>
                         </tr>
-                    }}
+                    }
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Счет</th>
-                        <th>Категория</th>
-                        <th>Стоимость</th>
-                        <th>Описание</th>
-                        <th>Дата</th>
-                    </tr>
-                </tfoot>
+                @if (Transactions is not null && Transactions.Count > 20)
+                {
+                    <tfoot>
+                        <tr>
+                            <th>Счет</th>
+                            <th>Категория</th>
+                            <th>Стоимость</th>
+                            <th>Описание</th>
+                            <th>Дата</th>
+                        </tr>
+                    </tfoot>
+                }
             </table>
         </div>
     </div>
 </div>
+@if (PageCount >1)
+{
+    <div class="row justify-content-center mb-4">
+        <div class="col-6 text-center">
+            @if (Model.PageNumber != 0)
+            {
+                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page="0">Первая страница</a>
+                <a asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.PageNumber-1)><img src="/images/back.png" /></a>
+            }
+            <span>@(Model.PageNumber+1)</span>
+            @if(Model.PageNumber != PageCount - 1)
+            {
+                <a asp-controller="Transaction"  asp-action="Get" asp-route-page=@(Model.PageNumber+1)><img src="/images/next.png" /></a>
+                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page=@(PageCount-1)> Последняя страница - @PageCount</a>
+            }
+
+                
+
+        </div>
+    </div>
+}

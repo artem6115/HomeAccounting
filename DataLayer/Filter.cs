@@ -10,6 +10,8 @@
         public bool IsForward {get;set;}
         public int? TypeTransaction { get; set; }
         public string? StringToFind { get; set; }
+        public int PageNumber { get; set; }
 
-    }   
+
+    }
 }

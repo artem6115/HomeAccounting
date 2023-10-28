@@ -17,5 +17,6 @@ namespace DataLayer.Repository
         Task<List<Transaction>> GetAll();
         Task<List<Transaction>> GetAllforAccount(Account account);
         Task<List<Transaction>> GetByFilter(Filter filter);
+        Task<(int,List<Transaction>)> GetAllPartial(int page, int count);
     }
 }

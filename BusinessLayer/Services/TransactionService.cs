@@ -24,6 +24,8 @@ namespace BusinessLayer.Services
         public void Edit(Transaction model) => Repository.Edit(model);
         public void Delete(long id) => Repository.Delete(id);
         public Task<List<Transaction>> GetAll() => Repository.GetAll();
+        public Task<(int,List<Transaction>)> GetAllPartial(int page,int count) => Repository.GetAllPartial(page,count);
+        
         public Task<List<Transaction>> GetByFilter(Filter filter) => Repository.GetByFilter(filter);
 
         public Task<Transaction> Get(long id) => Repository.Get(id);
