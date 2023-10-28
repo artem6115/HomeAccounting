@@ -17,7 +17,7 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Error()
         {
             return View();
         }
