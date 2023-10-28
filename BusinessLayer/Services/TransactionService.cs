@@ -29,5 +29,7 @@ namespace BusinessLayer.Services
         public Task<List<Transaction>> GetByFilter(Filter filter) => Repository.GetByFilter(filter);
 
         public Task<Transaction> Get(long id) => Repository.Get(id);
+
+        public Task<(List<Transaction>,int)> GetTransactionsWithFilterByPages(Filter filter) => Repository.GetTransactionsWithFilterByPages(filter);
     }
 }

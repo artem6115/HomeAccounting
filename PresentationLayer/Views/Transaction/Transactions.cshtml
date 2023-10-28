@@ -52,7 +52,7 @@
                             </div>
                          </div>
                         <div class="col-2"><input asp-for=@Model.Filter.Date class="form-control" type="date" placeholder="Дата" /></div>
-                        <div class="col-1 mt-1"><button type="submit"><img src="/images/filtr.png" /></a></div>
+                        <div class="col-1 mt-1"><button class="btn" type="submit"><img src="/images/filtr.png" /></a></div>
                         <div class="col-2 ">
                             <input asp-for=@Model.Filter.StringToFind class ="form-control" placeholder="Что искать..." />
 
@@ -184,14 +184,14 @@
         <div class="col-6 text-center">
             @if (Model.NumberOfPage != 0)
             {
-                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page="0">Первая страница</a>
-                <a asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.NumberOfPage-1)><img src="/images/back.png" /></a>
+                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page="0">Первая страница</a>
+                <a asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfPage-1)><img src="/images/back.png" /></a>
             }
             <span>@(Model.NumberOfPage + 1)</span>
             @if (Model.NumberOfPage != Model.NumberOfLastPage - 1)
             {
-                <a asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.NumberOfPage+1)><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.NumberOfLastPage-1)> Последняя страница - @Model.NumberOfLastPage</a>
+                <a asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfPage+1)><img src="/images/next.png" /></a>
+                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfLastPage-1)> Последняя страница - @Model.NumberOfLastPage</a>
             }
 
         </div>

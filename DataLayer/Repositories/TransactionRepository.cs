@@ -13,6 +13,7 @@ namespace DataLayer.Repository
     {
         private readonly AccountingDbContext Context;
         private readonly ILogger<IAccountRepository> Log;
+        private readonly int MaxNoteOnPage = 40;
 
         public TransactionRepository(AccountingDbContext context, ILogger<IAccountRepository> logger)
         {
@@ -70,17 +71,38 @@ namespace DataLayer.Repository
                 data = data.Where(x => x.AccountId == filter.AccountId);
             if (filter.CategoryId is not null)
                 data = data.Where(x => x.CategoryId == filter.CategoryId);
-            Log.LogDebug("Фильтрация выполнена");
-            if (filter.PropetryForSorting is null) return await data.Include(x => x.Account).Include(x => x.Category).ToListAsync();
-            switch (filter.PropetryForSorting)
+            if (filter.TypeTransaction != 0)
             {
-                case "Value":data =  (filter.IsForward)? data.OrderBy(x=>x.Value):data.OrderByDescending(x => x.Value); break;
-                case "Category": data = (filter.IsForward) ? data.OrderBy(x => x.Category.Name) : data.OrderByDescending(x => x.Category.Name); break;
-                case "Date": data = (filter.IsForward) ? data.OrderBy(x => x.Date) : data.OrderByDescending(x => x.Date); break;
+                if(filter.TypeTransaction == 1)
+                    data = data.Where(x => x.IsIncome == true);
+                else
+                    data = data.Where(x => x.IsIncome == false);
             }
-            Log.LogDebug("Сортировка выполнена");
+            if(filter.StringToFind is not null)
+                data = data.Where(x => x.Comment.Contains(filter.StringToFind));
+            if(filter.PropetryForSorting is not null)
+            {
+                switch (filter.PropetryForSorting)
+                {
+                    case "data":data = (filter.IsForward) ? data.OrderBy(x => x.Date) : data.OrderByDescending(x => x.Date); break;
+                    case "account": data = (filter.IsForward) ? data.OrderBy(x => x.Account) : data.OrderByDescending(x => x.Account); break;
+                    case "category": data = (filter.IsForward) ? data.OrderBy(x => x.Category) : data.OrderByDescending(x => x.Category); break;
+                    case "value": data = (filter.IsForward) ? data.OrderBy(x => x.Value) : data.OrderByDescending(x => x.Value); break;
 
-            return await data.Include(x=>x.Account).Include(x=>x.Category).ToListAsync();
+                }
+            }
+
+            data = data.Include(x => x.Account).Include(x => x.Category);
+
+            return await data.ToListAsync();
+        }
+
+        public async Task<(List<Transaction>, int)> GetTransactionsWithFilterByPages(Filter filter)
+        {
+            var allTransactionWithFilter = await GetByFilter(filter);
+            var pages = allTransactionWithFilter.Chunk(MaxNoteOnPage).ToList();
+            if (pages.Count() == 0) return (new List<Transaction>(0),0);
+            return (pages[filter.PageNumber].ToList(),pages.Count());
         }
     }
 }

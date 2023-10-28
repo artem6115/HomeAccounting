@@ -9,18 +9,13 @@ namespace PresentationLayer.Controllers
     public class TransactionController : Controller
     {
         private readonly TransactionService _transactionService;
-        private readonly AccountService _accountService;
-        private readonly CategoryService _categoryService;
 
         private readonly ILogger<TransactionController> _log;
         private readonly IMapper _mapper;
-        private readonly int MaxNoteOnPage = 40;
 
-        public TransactionController(ILogger<TransactionController> log, TransactionService trs, AccountService acc, CategoryService cat, IMapper mapper)
+        public TransactionController(ILogger<TransactionController> log, TransactionService trs,IMapper mapper)
         {
             _transactionService = trs;
-            _accountService = acc;
-            _categoryService = cat;
             _mapper = mapper;
             _log = log;
         }
@@ -42,17 +37,19 @@ namespace PresentationLayer.Controllers
                 await _transactionService.Add(tr);
             }
         }
-        public async Task<IActionResult> Get(Filter filter,int page = 0) {
+        public async Task<IActionResult> Get([FromServices] AccountService _accountService, 
+            [FromServices]CategoryService _categoryService, 
+            Filter filter,int page = 0) {
             //AddRandomEntity(200);
             filter.PageNumber = page;
-            var QueryExecuted =await _transactionService.GetAllPartial(page,MaxNoteOnPage);
+            (List<Transaction>,int) QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
                 Categories = await _categoryService.GetAll(),
                 Filter=filter,
                 NumberOfPage=page,
-                Transactions = QueryExecuted.Item2,
-                NumberOfLastPage= QueryExecuted.Item1
+                Transactions = QueryExecuted.Item1,
+                NumberOfLastPage= QueryExecuted.Item2
             };
             return View("Transactions", model);
             }
