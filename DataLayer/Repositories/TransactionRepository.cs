@@ -50,7 +50,7 @@ namespace DataLayer.Repository
         public async Task<(int,List<Transaction>)> GetAllPartial(int page, int count)
         {
             var query =Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsEnumerable().Chunk(count).ToList();
-
+            if(query.Count==0) return (0,new List<Transaction>(0));
             return (query.Count,query[page].ToList());
          }
 

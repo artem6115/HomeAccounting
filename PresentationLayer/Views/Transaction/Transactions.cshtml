@@ -1,26 +1,15 @@
-﻿@using BusinessLayer.Services;
-@using DataLayer.Entities;
+﻿@using DataLayer.Entities;
 @using DataLayer;
-@model Filter
+@using PresentationLayer.Models;
+@model TransactionViewModel
 @{
-    const int CounEntitytOnPage = 20;
+
     ViewData["Title"] = "Транзакции";
-    List<Account> Accounts = AccountService.GetAll().Result;
-    List<Category> Categories = CategoryService.GetAll().Result;
-    var queryExecuted = TransactionService.GetAllPartial(Model.PageNumber, CounEntitytOnPage).Result;
-    List<Transaction> Transactions = queryExecuted.Item2;
-    int PageCount = queryExecuted.Item1;
     string? message = TempData["Message"]?.ToString();
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
 
 
 }
-@inject AccountService AccountService
-@inject CategoryService CategoryService
-@inject TransactionService TransactionService
-
-
-
 <script>
     function MoveToolBar (){
         document.getElementById("ToolBar").classList.toggle("ActiveBar");
@@ -41,10 +30,10 @@
                 <form method="get">
                     <div class="row justify-content-center mt-1">
                         <div class="col-2">
-                            <input class="form-control" hidden="hidden" />
-                            <select class="form-select">
+            
+                            <select asp-for=@Model.Filter.AccountId class="form-select">
                                 <option class="active" value="">Все счета</option>
-                                @foreach (Account item in Accounts)
+                                @foreach (Account item in Model.Accounts)
                                 {
                                     <option value=@item.Id>@item.Name</option>
                                 }
@@ -58,14 +47,14 @@
                                
                                 <span class="input-group-text">₽</span>
 
-                                <input asp-for=Value class="form-control"  placeholder="Стоимость"/>
+                                <input  asp-for=@Model.Filter.Value class="form-control"  placeholder="Стоимость"/>
 
                             </div>
                          </div>
-                        <div class="col-2"><input class="form-control" type="date" placeholder="Дата" /></div>
+                        <div class="col-2"><input asp-for=@Model.Filter.Date class="form-control" type="date" placeholder="Дата" /></div>
                         <div class="col-1 mt-1"><a href=""><img src="/images/filtr.png" /></a></div>
                         <div class="col-2 ">
-                            <input class="form-control" placeholder="Что искать..." />
+                            <input asp-for=@Model.Filter.StringToFind class ="form-control" placeholder="Что искать..." />
 
                         </div>
                         <div class="col-1 mt-1 ">
@@ -74,24 +63,24 @@
                     </div>
                     <div class="row justify-content-center mt-3">
                         <div class="col-2">
-                            <select  class="form-select">
+                            <select asp-for=@Model.Filter.CategoryId class="form-select">
                                 <option class="active" value="">Все категории</option>
 
-                                @foreach (Category item in Categories)
+                                @foreach (Category item in Model.Categories)
                                 {
                                     <option value=@item.Id>@item.Name</option>
                                 }
                             </select>
                         </div>
                         <div class="col-2">
-                            <select class="form-select" asp-for=TypeTransaction>
+                            <select  class="form-select" asp-for=@Model.Filter.TypeTransaction>
                                 <option value="0">Доходы/расходы</option>
                                 <option value="1">Доходы</option>
                                 <option value="-1">Расходы</option>
                             </select>
                         </div>
                         <div class="col-2">
-                            <select class="form-select" asp-for=StringToFind>
+                            <select class="form-select" asp-for=@Model.Filter.PropetryForSorting>
                                 <option value="">Без сортировки</option>
                                 <option value="date">Сортировка по дате</option>
                                 <option value="value">Сортировка по стоимости</option>
@@ -106,7 +95,7 @@
                                 <div class="input-group-prepend">
                                     <h5 style="color:white;" class="input-grop-text">В порядке возростания </h5>
                                 </div>
-                                <input type="checkbox" asp-for=IsForward class="form-check-input m-lg-2 mt-2" />
+                                <input type="checkbox" asp-for=@Model.Filter.IsForward class="form-check-input m-lg-2 mt-2" />
                             </div>
                         </div>
                     </div>
@@ -152,12 +141,12 @@
                             <p> Дата</p>
                         </th>
                         <th colspan="2">
-                            Редактирование
+                            <p>Редактирование</p>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(Transaction item in Transactions??new List<Transaction>(0)){
+                    @foreach(Transaction item in Model.Transactions){
                         <tr>
                             <td>@item.Account.Name</td>
                             <td>@item.Category?.Name</td>
@@ -173,7 +162,7 @@
                         </tr>
                     }
                 </tbody>
-                @if (Transactions is not null && Transactions.Count > 20)
+                @if (Model.Transactions.Count > 10)
                 {
                     <tfoot>
                         <tr>
@@ -189,23 +178,21 @@
         </div>
     </div>
 </div>
-@if (PageCount >1)
+@if (Model.NumberOfLastPage>1)
 {
     <div class="row justify-content-center mb-4">
         <div class="col-6 text-center">
-            @if (Model.PageNumber != 0)
+            @if (Model.NumberOfPage != 0)
             {
                 <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page="0">Первая страница</a>
-                <a asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.PageNumber-1)><img src="/images/back.png" /></a>
+                <a asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.NumberOfPage-1)><img src="/images/back.png" /></a>
             }
-            <span>@(Model.PageNumber+1)</span>
-            @if(Model.PageNumber != PageCount - 1)
+            <span>@(Model.NumberOfPage + 1)</span>
+            @if (Model.NumberOfPage != Model.NumberOfLastPage - 1)
             {
-                <a asp-controller="Transaction"  asp-action="Get" asp-route-page=@(Model.PageNumber+1)><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page=@(PageCount-1)> Последняя страница - @PageCount</a>
+                <a asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.NumberOfPage+1)><img src="/images/next.png" /></a>
+                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-page=@(Model.NumberOfLastPage-1)> Последняя страница - @Model.NumberOfLastPage</a>
             }
-
-                
 
         </div>
     </div>
