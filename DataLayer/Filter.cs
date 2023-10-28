@@ -8,7 +8,7 @@
         public long? CategoryId { get; set; }
         public double? Value { get; set; }
         public bool IsForward {get;set;}
-        public int? TypeTransaction { get; set; }
+        public int TypeTransaction { get; set; }
         public string? StringToFind { get; set; }
         public int PageNumber { get; set; }
 
