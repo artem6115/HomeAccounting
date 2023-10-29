@@ -64,7 +64,11 @@ namespace DataLayer.Repository
             IQueryable<Transaction> data = Context.Transactions;
 
             if (filter.Value is not null)
-                data = data.Where(x => x.Value == filter.Value);
+                if(filter.MoreValue)
+                    data = data.Where(x => x.Value >= filter.Value);
+                else
+                    data = data.Where(x => x.Value <= filter.Value);
+
             if (filter.Date is not null)
                 data = data.Where(x => x.Date == filter.Date);
             if (filter.AccountId is not null)

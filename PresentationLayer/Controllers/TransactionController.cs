@@ -41,13 +41,13 @@ namespace PresentationLayer.Controllers
             [FromServices]CategoryService _categoryService, 
             Filter filter,int page = 0) {
             //AddRandomEntity(200);
-            filter.PageNumber = page;
+            
             (List<Transaction>,int) QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
                 Categories = await _categoryService.GetAll(),
                 Filter=filter,
-                NumberOfPage=page,
+                NumberOfPage= filter.PageNumber,
                 Transactions = QueryExecuted.Item1,
                 NumberOfLastPage= QueryExecuted.Item2
             };

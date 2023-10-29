@@ -21,13 +21,23 @@
             window.location.replace(url);
         }
     }
+    function SendForm(page){
+        var value = document.querySelector("valueInput").value  ;
+        var selectedForm = document.getElementById("FilterForm");
+        selectedForm.submit();
+
+    }
+    function Log(){
+        var value = document.querySelector("valueInput").ariaValueText;
+        
+    }
 </script>
 
 <div class="ToolBar" id="ToolBar">  
     <div class="row">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="col-12">
-                <form method="get">
+                <form method="get" id="FilterForm">
                     <div class="row justify-content-center mt-1">
                         <div class="col-2">
             
@@ -44,10 +54,16 @@
 
 
                             <div class="input-group">
-                               
+
+
+                                <div class="input-group-prepend">
+                                    <input id="MoreValue" asp-for=@Model.Filter.MoreValue hidden="hidden"/>
+                                    <button id="btnValueFilter" class="btn btn-light" type="button" onclick="ChangeValue()">></button>
+                                </div>
+                                
+                                <input asp-for=@Model.Filter.Value class="form-control valueInput" placeholder="Стоимость" />
                                 <span class="input-group-text">₽</span>
 
-                                <input  asp-for=@Model.Filter.Value class="form-control"  placeholder="Стоимость"/>
 
                             </div>
                          </div>
@@ -63,7 +79,7 @@
                     </div>
                     <div class="row justify-content-center mt-3">
                         <div class="col-2">
-                            <select asp-for=@Model.Filter.CategoryId class="form-select">
+                            <select asp-for=@Model.Filter.CategoryId class="form-select" data-mdb-filter="true">
                                 <option class="active" value="">Все категории</option>
 
                                 @foreach (Category item in Model.Categories)
@@ -191,7 +207,9 @@
             @if (Model.NumberOfPage != Model.NumberOfLastPage - 1)
             {
                 <a asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfPage+1)><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfLastPage-1)> Последняя страница - @Model.NumberOfLastPage</a>
+                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-value="2000" asp-route-page=@(Model.NumberOfLastPage-1)> Последняя страница - @Model.NumberOfLastPage</a>
+                <button onclick="SendForm(5)" class="btn btn-danger"> Отправка формы</button>
+
             }
 
         </div>

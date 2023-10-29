@@ -18,10 +18,9 @@ namespace PresentationLayer.Models
         public bool IsIncome { get; set; }
         public long? CategoryId { get; set; }
         [Required(ErrorMessage = "Величина операции обязательно поле")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?", ErrorMessage ="Число должно быть положительным и содержать не более 2 знаков после запятой")]
-        [DataType(DataType.Currency)]
+        [RegularExpression(@"^\d+(,\d{1,2})?", ErrorMessage ="Число должно быть положительным и содержать не более 2 знаков после запятой")]
 
-        public double Value { get; set; }
+        public string Value { get; set; }
         [Required(ErrorMessage = "Дата обязательно поле")]
         [DataType(DataType.Date,ErrorMessage ="Дата задана не корректно")]
         public DateTime Date { get; set; }
