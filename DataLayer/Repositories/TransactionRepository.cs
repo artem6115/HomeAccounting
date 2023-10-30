@@ -70,7 +70,7 @@ namespace DataLayer.Repository
                     data = data.Where(x => x.Value <= filter.Value);
 
             if (filter.Date is not null)
-                data = data.Where(x => x.Date == filter.Date);
+                data = data.Where(x => x.Date== filter.Date);
             if (filter.AccountId is not null)
                 data = data.Where(x => x.AccountId == filter.AccountId);
             if (filter.CategoryId is not null)

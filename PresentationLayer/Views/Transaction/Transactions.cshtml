@@ -1,13 +1,15 @@
 ﻿@using DataLayer.Entities;
 @using DataLayer;
 @using PresentationLayer.Models;
+@using BusinessLayer.Services;
+
 @model TransactionViewModel
 @{
 
     ViewData["Title"] = "Транзакции";
     string? message = TempData["Message"]?.ToString();
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
-
+    string path = @ReflectionServies.GetQueryString(Model.Filter, ("PageNumber", $"{Model.NumberOfLastPage - 1}"));
 
 }
 <script>
@@ -58,6 +60,8 @@
 
                                 <div class="input-group-prepend">
                                     <input id="MoreValue" asp-for=@Model.Filter.MoreValue hidden="hidden"/>
+                                    <input asp-for=@Model.Filter.PageNumber value="0" hidden="hidden" />
+
                                     <button id="btnValueFilter" class="btn btn-light" type="button" onclick="ChangeValue()">></button>
                                 </div>
                                 
@@ -198,16 +202,16 @@
 {
     <div class="row justify-content-center mb-4">
         <div class="col-6 text-center">
-            @if (Model.NumberOfPage != 0)
+            @if (Model.Filter.PageNumber != 0)
             {
-                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page="0">Первая страница</a>
-                <a asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfPage-1)><img src="/images/back.png" /></a>
+                <a class="btn btn-secondary" asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber","0")))">Первая страница</a>
+                <a asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber-1}")))"><img src="/images/back.png" /></a>
             }
-            <span>@(Model.NumberOfPage + 1)</span>
-            @if (Model.NumberOfPage != Model.NumberOfLastPage - 1)
+            <span>@(Model.Filter.PageNumber + 1)</span>
+            @if (Model.Filter.PageNumber != Model.NumberOfLastPage - 1)
             {
-                <a asp-controller="Transaction" asp-action="Get" asp-route-filter=@Model.Filter asp-route-page=@(Model.NumberOfPage+1)><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" asp-controller="Transaction" asp-action="Get" asp-route-value="2000" asp-route-page=@(Model.NumberOfLastPage-1)> Последняя страница - @Model.NumberOfLastPage</a>
+                <a asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber  +1}")))"><img src="/images/next.png" /></a>
+                <a class="btn btn-secondary" asp-route="Transaction/Get?@path"> Последняя страница - @Model.NumberOfLastPage</a>
                 <button onclick="SendForm(5)" class="btn btn-danger"> Отправка формы</button>
 
             }

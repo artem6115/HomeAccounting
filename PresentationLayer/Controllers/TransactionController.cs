@@ -39,7 +39,7 @@ namespace PresentationLayer.Controllers
         }
         public async Task<IActionResult> Get([FromServices] AccountService _accountService, 
             [FromServices]CategoryService _categoryService, 
-            Filter filter,int page = 0) {
+            Filter filter) {
             //AddRandomEntity(200);
             
             (List<Transaction>,int) QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
@@ -47,7 +47,6 @@ namespace PresentationLayer.Controllers
                 Accounts = await _accountService.GetAll(),
                 Categories = await _categoryService.GetAll(),
                 Filter=filter,
-                NumberOfPage= filter.PageNumber,
                 Transactions = QueryExecuted.Item1,
                 NumberOfLastPage= QueryExecuted.Item2
             };
