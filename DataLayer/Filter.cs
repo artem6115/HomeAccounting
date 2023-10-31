@@ -1,4 +1,6 @@
-﻿namespace DataLayer
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataLayer
 {
     public class Filter
     {
@@ -6,7 +8,8 @@
         public DateTime? Date { get; set; }
         public long? AccountId { get; set; }
         public long? CategoryId { get; set; }
-        public double? Value { get; set; }
+        [RegularExpression(@"^([=<>])?\d+(,\d{1,2})?")]
+        public string Value { get; set; }
         public bool MoreValue { get; set; }
         public bool IsForward {get;set;}
         public int TypeTransaction { get; set; }

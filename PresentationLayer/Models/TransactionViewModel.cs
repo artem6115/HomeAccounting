@@ -11,5 +11,6 @@ namespace PresentationLayer.Models
         public Filter Filter { get; set; }
         public List<Transaction> Transactions { get; set; }
         public int NumberOfLastPage { get; set; }
+        public string Url { get; set; }
     }
 }

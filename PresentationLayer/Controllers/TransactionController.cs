@@ -4,6 +4,8 @@ using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
 using DataLayer;
+using Microsoft.AspNetCore.Http.Extensions;
+
 namespace PresentationLayer.Controllers
 {
     public class TransactionController : Controller
@@ -46,10 +48,15 @@ namespace PresentationLayer.Controllers
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
                 Categories = await _categoryService.GetAll(),
-                Filter=filter,
+                Filter = filter,
                 Transactions = QueryExecuted.Item1,
-                NumberOfLastPage= QueryExecuted.Item2
+                NumberOfLastPage = QueryExecuted.Item2,
+                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}"
             };
+
+
+
+
             return View("Transactions", model);
             }
         [HttpGet]

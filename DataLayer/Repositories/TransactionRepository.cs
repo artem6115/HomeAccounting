@@ -62,13 +62,25 @@ namespace DataLayer.Repository
         public async Task<List<Transaction>> GetByFilter(Filter filter)
         {
             IQueryable<Transaction> data = Context.Transactions;
-
-            if (filter.Value is not null)
-                if(filter.MoreValue)
-                    data = data.Where(x => x.Value >= filter.Value);
-                else
-                    data = data.Where(x => x.Value <= filter.Value);
-
+            string value = filter.Value;
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                char operation = '=';
+                if (new char[]{'<','>','=' }.Any(x=>x == value[0]))
+                { operation = value[0];
+                    value = value.Remove(0, 1);
+                }
+                value = value.Replace('.', ',');
+                if (double.TryParse(value, out var doubleValue))
+                {
+                    switch (operation)
+                    {
+                        case '=': data = data.Where(x => x.Value == doubleValue);break;
+                        case '>': data = data.Where(x => x.Value >= doubleValue); break;
+                        case '<': data = data.Where(x => x.Value <= doubleValue); break;
+                    }
+                }
+            }
             if (filter.Date is not null)
                 data = data.Where(x => x.Date== filter.Date);
             if (filter.AccountId is not null)

@@ -9,8 +9,6 @@
     ViewData["Title"] = "Транзакции";
     string? message = TempData["Message"]?.ToString();
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
-    string path = @ReflectionServies.GetQueryString(Model.Filter, ("PageNumber", $"{Model.NumberOfLastPage - 1}"));
-
 }
 <script>
     function MoveToolBar (){
@@ -62,10 +60,9 @@
                                     <input id="MoreValue" asp-for=@Model.Filter.MoreValue hidden="hidden"/>
                                     <input asp-for=@Model.Filter.PageNumber value="0" hidden="hidden" />
 
-                                    <button id="btnValueFilter" class="btn btn-light" type="button" onclick="ChangeValue()">></button>
                                 </div>
                                 
-                                <input asp-for=@Model.Filter.Value class="form-control valueInput" placeholder="Стоимость" />
+                                <input asp-for=@Model.Filter.Value class="form-control valueInput" placeholder="(>,<,=) Стоимость" />
                                 <span class="input-group-text">₽</span>
 
 
@@ -75,10 +72,11 @@
                         <div class="col-1 mt-1"><button class="btn" type="submit"><img src="/images/filtr.png" /></a></div>
                         <div class="col-2 ">
                             <input asp-for=@Model.Filter.StringToFind class ="form-control" placeholder="Что искать..." />
-
+                           <!-- <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
+                            -->
                         </div>
                         <div class="col-1 mt-1 ">
-                            <a href=""><img src="/images/find.png" /></a>
+                            <button class="btn" type ="submit" ><img src="/images/find.png" /></button>
                         </div>
                     </div>
                     <div class="row justify-content-center mt-3">
@@ -204,15 +202,17 @@
         <div class="col-6 text-center">
             @if (Model.Filter.PageNumber != 0)
             {
-                <a class="btn btn-secondary" asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber","0")))">Первая страница</a>
-                <a asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber-1}")))"><img src="/images/back.png" /></a>
+                <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber","0")))">Первая страница</a>
+                <a href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber-1}")))"><img src="/images/back.png" /></a>
             }
             <span>@(Model.Filter.PageNumber + 1)</span>
             @if (Model.Filter.PageNumber != Model.NumberOfLastPage - 1)
             {
-                <a asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber  +1}")))"><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" asp-route="Transaction/Get?@path"> Последняя страница - @Model.NumberOfLastPage</a>
-                <button onclick="SendForm(5)" class="btn btn-danger"> Отправка формы</button>
+                <a href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber  +1}")))"><img src="/images/next.png" /></a>
+                <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
+                <a class="btn btn-danger" asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница (старая версия)</a>
+
+            
 
             }
 
