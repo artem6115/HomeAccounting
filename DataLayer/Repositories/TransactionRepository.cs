@@ -120,5 +120,13 @@ namespace DataLayer.Repository
             if (pages.Count() == 0) return (new List<Transaction>(0),0);
             return (pages[filter.PageNumber].ToList(),pages.Count());
         }
+
+        public async Task<double> GetBalanceAfterDate(long accountId, DateTime date)
+        {
+            double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date>date)).SumAsync(x => x.Value);
+            double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date > date)).SumAsync(x => x.Value);
+            return income - expense;
+
+        }
     }
 }

@@ -21,12 +21,10 @@ namespace BusinessLayer.Services
                         queryString += $"{prop.Name}={keyValue.Item2}&";
                     else if(prop.GetValue(obj)!=null && prop.GetValue(obj).ToString() !="")
                         queryString += $"{prop.Name}={prop.GetValue(obj)}&";
-                    var x = prop.GetValue(obj);
                 }
                 if (queryString.Last() =='&') queryString=queryString.Remove(queryString.Count()-1);
 
             }
-            Console.WriteLine("query =  "+ queryString);
             return queryString;
         }
     }
