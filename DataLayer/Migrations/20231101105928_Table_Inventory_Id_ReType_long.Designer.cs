@@ -3,6 +3,7 @@ using System;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AccountingDbContext))]
-    partial class AccountingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231101105928_Table_Inventory_Id_ReType_long")]
+    partial class Table_Inventory_Id_ReType_long
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -64,8 +67,6 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.ToTable("Inventories");
                 });
 
@@ -102,17 +103,6 @@ namespace DataLayer.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Inventory", b =>
-                {
-                    b.HasOne("DataLayer.Entities.Account", "Account")
-                        .WithMany("Inventories")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
             modelBuilder.Entity("DataLayer.Entities.Transaction", b =>
                 {
                     b.HasOne("DataLayer.Entities.Account", "Account")
@@ -133,8 +123,6 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Entities.Account", b =>
                 {
-                    b.Navigation("Inventories");
-
                     b.Navigation("Transactions");
                 });
 

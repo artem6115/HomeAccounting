@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using DataLayer.Enum;
 namespace DataLayer.Repository
 {
     public class TransactionRepository : ITransactionRepository
@@ -87,9 +87,9 @@ namespace DataLayer.Repository
                 data = data.Where(x => x.AccountId == filter.AccountId);
             if (filter.CategoryId is not null)
                 data = data.Where(x => x.CategoryId == filter.CategoryId);
-            if (filter.TypeTransaction != 0)
+            if (filter.TypeTransaction != TypeTransaction.IncomeAndExpense)
             {
-                if(filter.TypeTransaction == 1)
+                if(filter.TypeTransaction == TypeTransaction.Income)
                     data = data.Where(x => x.IsIncome == true);
                 else
                     data = data.Where(x => x.IsIncome == false);

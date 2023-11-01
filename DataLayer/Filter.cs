@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using DataLayer.Enum;
 namespace DataLayer
 {
     public class Filter
@@ -13,7 +13,7 @@ namespace DataLayer
         public string? Value { get; set; }
         public bool MoreValue { get; set; }
         public bool IsForward {get;set;}
-        public int TypeTransaction { get; set; }
+        public TypeTransaction TypeTransaction { get; set; } = 0;
         public string? StringToFind { get; set; }
         public int PageNumber { get; set; }
 
