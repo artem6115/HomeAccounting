@@ -24,15 +24,19 @@ namespace BusinessLayer.Services
         }
         public async Task<Inventory> Add(Inventory inventory)
         {
-            var SumTransactionAfterDate = await TransactionRepository.GetBalanceAfterDate(inventory.AccountId, inventory.Date);
-            var oldBalance = await InventoryRepository.GetLastBalance(inventory.AccountId);
-            inventory.Value = oldBalance + SumTransactionAfterDate;
+            var oldBalance = await InventoryRepository.GetLastBalance(inventory.AccountId,inventory.Date) ?? new Inventory() { Date=new DateTime()};
+
+            var SumTransactionAfterDate = await TransactionRepository.GetBalanceAfterDate(inventory.AccountId, inventory.Date,oldBalance.Date);
+            
+            inventory.Value = oldBalance.Value + SumTransactionAfterDate+inventory.Value;
             var entity = await InventoryRepository.Add(inventory);
             return entity;
         }
         public void Delete(long Id) => InventoryRepository.Delete(Id);
         public async Task<List<Inventory>> GetInvByAccount(long accountId)
-            =>await InventoryRepository.GetAccountInventories(accountId);
-
+        {
+ 
+            return await InventoryRepository.GetAccountInventories(accountId);
+        }
     }
 }

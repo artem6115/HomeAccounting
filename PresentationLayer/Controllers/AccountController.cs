@@ -11,14 +11,17 @@ namespace PresentationLayer.Controllers;
 public class AccountController : Controller
 { 
     private readonly AccountService accountService;
+    private readonly InventoryService inventoryService;
+
     private readonly ILogger<AccountController> Log;
     private readonly IMapper _Mapper;
 
-    public AccountController(ILogger<AccountController> log,AccountService rep, IMapper mapper)
+    public AccountController(ILogger<AccountController> log,AccountService rep, IMapper mapper, InventoryService invService)
     {
         accountService = rep;
-        _Mapper=mapper;
+        _Mapper = mapper;
         Log = log;
+        inventoryService = invService;
     }
 
     public  bool CheckExistName(string name)=> !accountService.CheckExistName(name);
@@ -42,8 +45,15 @@ public class AccountController : Controller
         if (ModelState.IsValid) {
             if (!model.Id.HasValue)
             {
-                await accountService.Add(_Mapper.Map<Account>(model));
+                var account = await accountService.Add(_Mapper.Map<Account>(model));
                 TempData["Message"] = "Новый счет добавлен";
+                await inventoryService.Add(
+                    new Inventory(){
+                        AccountId= account.Id,
+                        Account=account,
+                        Date=DateTime.Today,
+                        Value=double.Parse(model.StartValue)
+                    });
             }
             else {
                 TempData["Message"] = "Название счета изменено";

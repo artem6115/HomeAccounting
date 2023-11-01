@@ -18,5 +18,8 @@ namespace PresentationLayer.Models
         [RegularExpression(@".*[a-zA-Zа-яА-Я0-9_].*",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
         [Remote(action:"CheckExistName",controller:"Account",ErrorMessage ="Такое название счета уже существует")]
         public string Name { get; set; }
+
+        [RegularExpression(@"^(-)?\d+(,\d{1,2})?", ErrorMessage = "Число содержать не более 2 знаков после запятой")]
+        public string StartValue { get; set; }
     }
 }

@@ -100,7 +100,7 @@ namespace DataLayer.Repository
             {
                 switch (filter.PropetryForSorting)
                 {
-                    case "data":data = (filter.IsForward) ? data.OrderBy(x => x.Date) : data.OrderByDescending(x => x.Date); break;
+                    case "date":data = (filter.IsForward) ? data.OrderBy(x => x.Date) : data.OrderByDescending(x => x.Date); break;
                     case "account": data = (filter.IsForward) ? data.OrderBy(x => x.Account) : data.OrderByDescending(x => x.Account); break;
                     case "category": data = (filter.IsForward) ? data.OrderBy(x => x.Category) : data.OrderByDescending(x => x.Category); break;
                     case "value": data = (filter.IsForward) ? data.OrderBy(x => x.Value) : data.OrderByDescending(x => x.Value); break;
@@ -121,10 +121,10 @@ namespace DataLayer.Repository
             return (pages[filter.PageNumber].ToList(),pages.Count());
         }
 
-        public async Task<double> GetBalanceAfterDate(long accountId, DateTime date)
+        public async Task<double> GetBalanceAfterDate(long accountId, DateTime CurrentDate,DateTime LastInvDate)
         {
-            double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date>date)).SumAsync(x => x.Value);
-            double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date > date)).SumAsync(x => x.Value);
+            double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date< CurrentDate && x.Date> LastInvDate)).SumAsync(x => x.Value);
+            double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date < CurrentDate && x.Date > LastInvDate)).SumAsync(x => x.Value);
             return income - expense;
 
         }

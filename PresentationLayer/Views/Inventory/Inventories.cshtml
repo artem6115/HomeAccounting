@@ -8,12 +8,23 @@
 {
     <div class="alert @messageStyle mt-3 mb-3 text-center">@message</div>
 }
-
+<script>
+    function deleteCommand(id,accountId) {
+       
+        if (confirm("Уадилить данные инвентаризации?")) {
+            window.location.replace("/Inventory/Delete/" + id+"?accountId="+accountId);
+        }
+    }
+</script>
 <form method="post" asp-controller="Inventory" asp-action="Add">
     <div class="row justify-content-center mt-3">
-        <div class="col-lg-5 col-7">
+        <div class="col-lg-2">
             <input name="Date" type="date" class="form-control" />
             <input name="AccountId" hidden="hidden" class="form-control" value="@Model.AccountId" />
+            
+        </div>
+        <div class="col-2 ml-2">
+            <input name="Value" class="form-control" placeholder="Корректирующие значение" />
         </div>
         <div class="col-2">
             <button class="btn btn-success" type="submit">Добавить</button>
@@ -45,9 +56,10 @@
                         <td style="color:@((item.Value>=0)?"green":"red");">@item.Value</td>
 
                         <td width="50px">
-                            <a asp-controller="Inventory" asp-action="Delete"asp-route-accountId=@item.AccountId asp-route-Id=@item.Id>
-                                <img src="/images/delete.png" width="50px;" />
-                            </a>
+
+                                <button class="btn" onclick="deleteCommand(@item.Id,@item.AccountId)"><img src="/images/delete.png" width="50px;" /></button>
+                          
+                            
                         </td>
 
                     </tr>

@@ -18,24 +18,27 @@ namespace PresentationLayer.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> Get(long id)
-            => View("Inventories", new InventoryViewModel()
-            {
-                Inventories = await _inventoryService.GetInvByAccount(id),
-                AccountId = id
-            });
+        {
+            
+            return View("Inventories", new InventoryViewModel()
+               {
+                   Inventories = await _inventoryService.GetInvByAccount(id),
+                   AccountId = id,
+               });;
+        }
         [HttpPost]
         public async Task<IActionResult> Add(Inventory inventory)
         {
            await _inventoryService.Add(inventory);
-            ViewData["Message"] = "Инвентаризация добавлена";
-            ViewData["MessageStyle"] = "alert-success";
+            TempData["Message"] = "Инвентаризация добавлена";
+            TempData["MessageStyle"] = "alert-success";
             return RedirectToAction("Get",new {Id= inventory.AccountId }); 
         }
         public IActionResult Delete(long id,long accountId)
         {
             _inventoryService.Delete(id);
-            ViewData["Message"] = "Инвентаризация удалена";
-            ViewData["MessageStyle"] = "alert-danger";
+            TempData["Message"] = "Инвентаризация удалена";
+            TempData["MessageStyle"] = "alert-danger";
             return RedirectToAction("Get", new { Id = accountId });
 
         }

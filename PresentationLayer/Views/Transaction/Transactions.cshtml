@@ -199,17 +199,15 @@
         <div class="col-6 text-center">
             @if (Model.Filter.PageNumber != 0)
             {
-                <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber","0")))">Первая страница</a>
-                <a href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber-1}")))"><img src="/images/back.png" /></a>
+                <a class="btn btn-secondary" href="@(Model.Url)/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber","0")))">Первая страница</a>
+                <a href="@(Model.Url)/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber-1}")))"><img src="/images/back.png" /></a>
             }
             <span>@(Model.Filter.PageNumber + 1)</span>
             @if (Model.Filter.PageNumber != Model.NumberOfLastPage - 1)
             {
-                <a href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber  +1}")))"><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
-                <a class="btn btn-danger" asp-route="Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница (старая версия)</a>
+                <a href="@(Model.Url)/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber  +1}")))"><img src="/images/next.png" /></a>
+                <a class="btn btn-secondary" href="@(Model.Url)/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
 
-            
 
             }
 

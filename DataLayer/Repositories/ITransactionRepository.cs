@@ -13,7 +13,7 @@ namespace DataLayer.Repository
         Task<Transaction> Add(Transaction account);
         void Edit(Transaction account);
         void Delete(long id);
-        Task<double> GetBalanceAfterDate(long accountId, DateTime date);
+        Task<double> GetBalanceAfterDate(long accountId, DateTime CurrentDate, DateTime LastInvDate);
         Task<Transaction> Get(long id);
         Task<List<Transaction>> GetAll();
         Task<List<Transaction>> GetAllforAccount(Account account);

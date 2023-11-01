@@ -51,7 +51,7 @@ namespace PresentationLayer.Controllers
                 Filter = filter,
                 Transactions = QueryExecuted.Item1,
                 NumberOfLastPage = QueryExecuted.Item2,
-                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}"
+                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{nameof(Transaction)}"
             };
 
 

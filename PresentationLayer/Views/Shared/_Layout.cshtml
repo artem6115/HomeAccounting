@@ -16,20 +16,26 @@
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav ">
                         <li class="nav-item my-nav-item">
-                            <a asp-controller="Transaction" asp-action="Get" class="nav-link my-nav-link">Бухгалтерия</a>
+                            <a asp-controller="Transaction" asp-action="Get" class="nav-link my-nav-link">Транзакции</a>
                         </li>
                         <li class="nav-item my-nav-item dropdown">
                             <a href="" class="nav-link my-nav-link  dropdown-toggle" data-bs-toggle="dropdown">Счета</a>
                             <ul class="dropdown-menu ">
+
                                 <li class="link">
-                                    <img src="/images/allcard.png" alt="" width="30" height="30" />
-                                    <a asp-controller="Account" asp-action="Get" class="link">Мои счета</a>
+                                    <a asp-controller="Account" asp-action="Get" class="link"> 
+                                        <img src="/images/allcard.png" alt="" width="30" height="30" />
+                                         <span class="link">Мои счета</span>
+                                    </a>
+                                    
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li class="link">
+                                    <a asp-controller="Account" asp-action="EditPage" class="link">
                                     <img src="/images/addcard.png" alt="" width="30" height="30" />
 
-                                    <a asp-controller="Account" asp-action="EditPage" class="link">Создать счет</a>
+                                    <span class = "link">Создать счет</span>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -37,22 +43,29 @@
                             <a asp-controller="Category" asp-action="Get" class="nav-link my-nav-link">Категории</a>
                         </li>
                         <li class="nav-item my-nav-item">
-                            <a href="" class="nav-link my-nav-link">Баланс</a>
+                            <a href="" class="nav-link my-nav-link">Статистика</a>
                         </li>
                         <li class="nav-item my-nav-item dropdown">
                             <a href="" class="nav-link my-nav-link  dropdown-toggle" data-bs-toggle="dropdown">О нас</a>
                             <ul class="dropdown-menu ">
-                                <li class="link">
-                                    <img src="/images/vk.png" class="" width="30" height="30" />
-                                    <a href="https://vk.com/mikov2003" class="linkUsualText">Vcontacte</a>
+                                <li class="link">                                    
+                                    <a href="https://vk.com/mikov2003" class="linkUsualText">
+                                        <img src="/images/vk.png" class="" width="30" height="30" />
+                                        <span class="linkUsualText">Vcontacte</span>
+                                    </a>
                                 </li>
                                 <li class="link">
-                                    <img src="/images/tg.png" class="" width="30" height="30" />
-                                    <a href="https://t.me/Artem6115" class="linkUsualText">Telegram</a>
+                                    <a href="https://t.me/Artem6115" class="linkUsualText">
+                                        <img src="/images/tg.png" class="" width="30" height="30" />
+                                        <span class="linkUsualText">Telegram</span>
+                                        
+                                     </a>
                                 </li>
                                 <li class="link">
-                                    <img src="/images/git.png" class="" width="30" height="30" />
-                                    <a href="https://github.com/artem6115/HomeAccounting" class="linkUsualText">GitHub</a>
+                                    <a href="https://github.com/artem6115/HomeAccounting" class="linkUsualText">
+                                        <img src="/images/git.png" class="" width="30" height="30" />
+                                        <span class="linkUsualText">GitHub</span>     
+                                    </a>
                                 </li>
                             </ul>
                         </li>

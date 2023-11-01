@@ -19,6 +19,12 @@
                 <label class="form-label">Название счета:</label>
                 <input asp-for=Name value=@Model?.Name class="form-control" />
                 <span asp-validation-for=Name class="validationError"></span>
+                @if (Model is null)
+                {
+                    <label class="form-label mt-1">Начальная сумма:</label>
+                    <input asp-for=StartValue value="0" class="form-control" />
+                    <span asp-validation-for=StartValue class="validationError"></span>
+                }
                 <div class="row justify-content-center mt-4 ">
                     <div class="col-9 ">
                         <button type="submit" class="btn btn-success">Сохранить</button>
