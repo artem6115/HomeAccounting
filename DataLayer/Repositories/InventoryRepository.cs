@@ -22,6 +22,7 @@ namespace DataLayer.Repositories
         public async Task<Inventory> Add(Inventory inventory)
         {
             var entity = (await Context.Inventories.AddAsync(inventory)).Entity;
+            Context.SaveChangesAsync();
             Log.LogInformation($"Добавлена инвентаризация - {entity.Id}");
             return entity;
         }
@@ -30,6 +31,7 @@ namespace DataLayer.Repositories
         {
             var entity =await Get (Id);
             Context.Inventories.Remove(entity);
+            Context.SaveChangesAsync();
             Log.LogInformation($"Удалена инвентаризация - {entity.Id}");
         }
 
@@ -42,9 +44,10 @@ namespace DataLayer.Repositories
 
         public async Task<double> GetLastBalance(long accountId)
         {
-            var LastDate  =await Context.Inventories.Where(x => x.AccountId == accountId).MaxAsync(x => x.Date);
-            var entity = await Context.Inventories.FirstAsync(x => x.Date == LastDate);
-            return entity.Value;
+            var listInv = await Context.Inventories.Where(x => x.AccountId == accountId).ToListAsync();
+            if (listInv == null || listInv.Count==0) return 0;
+            var LastInv = listInv.MaxBy(x => x.Date);
+            return LastInv.Value;
         }
     }
 }

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using BusinessLayer.Services;
 using AutoMapper;
 using PresentationLayer.Models;
+using DataLayer.Repositories;
+
 namespace PresentationLayer
 {
     public class Program
@@ -24,10 +26,14 @@ namespace PresentationLayer
             builder.Services.AddTransient<IAccountRepository, AccountRepository>();
             builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
             builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+            builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
+
 
             builder.Services.AddTransient<TransactionService>();
             builder.Services.AddTransient<CategoryService>();
             builder.Services.AddTransient<AccountService>();
+            builder.Services.AddTransient<InventoryService>();
+
 
             builder.Services.AddAutoMapper(typeof(MappintProfile));
 

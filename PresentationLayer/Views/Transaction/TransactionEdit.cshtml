@@ -1,8 +1,4 @@
-﻿@using BusinessLayer.Services;
-@using DataLayer.Entities;
-@using DataLayer;
-@using PresentationLayer.Models;
-@model TransactionEditModel
+﻿@model TransactionEditModel
 @{
     ViewData["Title"] = "Создание/редактирование транзакции";
     List<Account> Accounts = AccountService.GetAll().Result;
