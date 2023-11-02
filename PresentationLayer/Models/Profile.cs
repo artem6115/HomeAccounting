@@ -10,7 +10,7 @@ namespace PresentationLayer.Models
             CreateMap<AccountEditModel, Account>().ReverseMap();
             CreateMap<CategoryEditModel, Category>().ReverseMap();
             CreateMap<TransactionEditModel, Transaction>().ReverseMap();
-
+            CreateMap<InventoryEditModel, Inventory>().ReverseMap();
         }
     }
 }

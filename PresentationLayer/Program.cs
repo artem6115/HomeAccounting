@@ -37,6 +37,8 @@ namespace PresentationLayer
 
             builder.Services.AddAutoMapper(typeof(MappintProfile));
 
+            new AccountingDbContext().Database.EnsureCreated();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -11,10 +11,17 @@ namespace PresentationLayer.Controllers
     {
         private readonly InventoryService _inventoryService;
         private readonly ILogger<InventoryController> _log;
-        public InventoryController(InventoryService inventoryService, ILogger<InventoryController> logger)
+        private readonly IMapper _mapper;
+        private readonly AccountService _accountService;
+
+
+
+        public InventoryController(InventoryService inventoryService, AccountService accountService, ILogger<InventoryController> logger,IMapper mapper)
         {
             _inventoryService = inventoryService;
             _log = logger;
+            _mapper = mapper;
+            _accountService = accountService;
         }
         [HttpGet]
         public async Task<IActionResult> Get(long id)
@@ -23,15 +30,21 @@ namespace PresentationLayer.Controllers
             return View("Inventories", new InventoryViewModel()
                {
                    Inventories = await _inventoryService.GetInvByAccount(id),
-                   AccountId = id,
+                   Account =await _accountService.Get(id),
                });;
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Inventory inventory)
+        public async Task<IActionResult> Add(InventoryEditModel inventory)
         {
-           await _inventoryService.Add(inventory);
-            TempData["Message"] = "Инвентаризация добавлена";
-            TempData["MessageStyle"] = "alert-success";
+            var x = HttpContext.Request.QueryString.Value;
+            var y = HttpContext.Request.RouteValues;
+
+            if (ModelState.IsValid)
+            {
+                await _inventoryService.Add(_mapper.Map<Inventory>(inventory));
+                TempData["Message"] = "Инвентаризация добавлена";
+                TempData["MessageStyle"] = "alert-success";
+            }
             return RedirectToAction("Get",new {Id= inventory.AccountId }); 
         }
         public IActionResult Delete(long id,long accountId)
