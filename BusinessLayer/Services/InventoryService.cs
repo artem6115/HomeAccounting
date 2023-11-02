@@ -28,7 +28,7 @@ namespace BusinessLayer.Services
 
             var SumTransactionAfterDate = await TransactionRepository.GetBalanceAfterDate(inventory.AccountId, inventory.Date,oldBalance.Date);
             
-            inventory.Value = oldBalance.Value + SumTransactionAfterDate+inventory.Value;
+            inventory.Value =Math.Round(oldBalance.Value + SumTransactionAfterDate+inventory.Value,2);
             var entity = await InventoryRepository.Add(inventory);
             return entity;
         }

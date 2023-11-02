@@ -44,14 +44,16 @@ namespace PresentationLayer.Controllers
             Filter filter) {
             //AddRandomEntity(200);
             
-            (List<Transaction>,int) QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
+            var QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
                 Categories = await _categoryService.GetAll(),
                 Filter = filter,
-                Transactions = QueryExecuted.Item1,
-                NumberOfLastPage = QueryExecuted.Item2,
-                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{nameof(Transaction)}"
+                Transactions = QueryExecuted.Transactions,
+                NumberOfLastPage = QueryExecuted.PageCount,
+                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{nameof(Transaction)}",
+                Sum = _transactionService.ParseValue(QueryExecuted.Sum)
+                
             };
 
 

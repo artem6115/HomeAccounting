@@ -12,5 +12,7 @@ namespace PresentationLayer.Models
         public List<Transaction> Transactions { get; set; }
         public int NumberOfLastPage { get; set; }
         public string Url { get; set; }
+        public string Sum { get; set; }
+        
     }
 }

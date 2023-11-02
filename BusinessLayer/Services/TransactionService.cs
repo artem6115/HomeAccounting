@@ -30,6 +30,21 @@ namespace BusinessLayer.Services
 
         public Task<Transaction> Get(long id) => Repository.Get(id);
 
-        public Task<(List<Transaction>,int)> GetTransactionsWithFilterByPages(Filter filter) => Repository.GetTransactionsWithFilterByPages(filter);
+        public Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter) => Repository.GetTransactionsWithFilterByPages(filter);
+
+        public string ParseValue(double sum)
+        {
+            string str = sum.ToString();
+            var parts = str.Split(',');
+            string doublePart = parts.Count()>1?parts.Last():"00";
+            string MainPart = parts.First();
+            int coutnPart = MainPart.Length % 3;
+            var reversArrayNumbers = MainPart.ToCharArray().Reverse();
+            var partsOfNumbers = reversArrayNumbers.Chunk(3);
+            string result = "";
+            foreach( var part in partsOfNumbers.Reverse())
+                result += $"{string.Join("",part.Reverse())} ";
+            return $"{result.Remove(result.Length - 1)},{doublePart}";
+        }
     }
 }

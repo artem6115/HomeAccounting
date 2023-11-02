@@ -136,6 +136,13 @@
 </div>
 
 <div class="container mt-4">
+    <div class="row mt-3 mb-3  justify-content-center">
+        <div class="col-6">
+            <div class="row" style="display:inline;">
+                <h4 style="display:inline;">Сумма = </h4><h4 style="color:@(Model.Sum[0]!='-'?"green":"red");display:inline;">@Model.Sum</h4>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <table id="table" class=" table table-striped table-bordered  table-hover" width="100%">

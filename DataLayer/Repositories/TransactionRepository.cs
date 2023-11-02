@@ -113,20 +113,38 @@ namespace DataLayer.Repository
             return await data.ToListAsync();
         }
 
-        public async Task<(List<Transaction>, int)> GetTransactionsWithFilterByPages(Filter filter)
+        public async Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter)
         {
             var allTransactionWithFilter = await GetByFilter(filter);
             var pages = allTransactionWithFilter.Chunk(MaxNoteOnPage).ToList();
-            if (pages.Count() == 0) return (new List<Transaction>(0),0);
-            return (pages[filter.PageNumber].ToList(),pages.Count());
+            if (pages.Count() == 0) return (new QueryTransactionResult());
+            var ListTrans = pages[filter.PageNumber].ToList();
+            return new QueryTransactionResult()
+            {
+                Transactions = ListTrans,
+                PageCount = pages.Count(),
+                Sum = Sum(allTransactionWithFilter)
+            };
         }
 
         public async Task<double> GetBalanceAfterDate(long accountId, DateTime CurrentDate,DateTime LastInvDate)
         {
             double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date< CurrentDate && x.Date> LastInvDate)).SumAsync(x => x.Value);
             double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date < CurrentDate && x.Date > LastInvDate)).SumAsync(x => x.Value);
-            return income - expense;
+            return Math.Round(income - expense,2);
 
         }
+        private double Sum(List<Transaction> trs)
+        {
+            double income = 0;
+            double expense = 0;
+            foreach (var item in trs)
+            {
+                if (item.IsIncome) income += item.Value;
+                else expense += item.Value;
+            }
+            return Math.Round(income - expense, 2);
+        }
+
     }
 }
