@@ -15,20 +15,23 @@ namespace BusinessLayer.Services
         private readonly ILogger<InventoryService> Logger;
         private readonly IInventoryRepository InventoryRepository;
         private readonly ITransactionRepository TransactionRepository;
+        private readonly AccountService _accountService;
 
-        public InventoryService(ILogger<InventoryService> log, IInventoryRepository rep, ITransactionRepository transactionRep)
+
+        public InventoryService(ILogger<InventoryService> log, IInventoryRepository rep, ITransactionRepository transactionRep,AccountService accServ)
         {
             InventoryRepository = rep;
             Logger = log;
             TransactionRepository = transactionRep;
+            _accountService= accServ;
         }
         public async Task<Inventory> Add(Inventory inventory)
         {
-            var oldBalance = await InventoryRepository.GetLastBalance(inventory.AccountId,inventory.Date) ?? new Inventory() { Date=new DateTime()};
+            var oldBalance = await InventoryRepository.GetLastInventory(inventory.AccountId,inventory.Date) ?? new Inventory() { Date=new DateTime()};
 
-            var SumTransactionAfterDate = await TransactionRepository.GetBalanceAfterDate(inventory.AccountId, inventory.Date,oldBalance.Date);
-            
-            inventory.Value =Math.Round(oldBalance.Value + SumTransactionAfterDate+inventory.Value,2);
+            var SumTransactionAfterDate = await TransactionRepository.GetTransactionSum(inventory.AccountId, oldBalance.Date, inventory.Date);
+
+            inventory.Value =await _accountService.GetBalance(inventory.AccountId);
             var entity = await InventoryRepository.Add(inventory);
             return entity;
         }

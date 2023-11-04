@@ -48,14 +48,6 @@ namespace DataLayer.Repository
         public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).SingleAsync(x=>x.Id == id);
 
         public  Task<List<Transaction>> GetAll() => Context.Transactions.Include(x => x.Account).Include(x => x.Category).ToListAsync();
-        public async Task<(int,List<Transaction>)> GetAllPartial(int page, int count)
-        {
-            var query =Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsEnumerable().Chunk(count).ToList();
-            if(query.Count==0) return (0,new List<Transaction>(0));
-            return (query.Count,query[page].ToList());
-         }
-
-
         public Task<List<Transaction>> GetAllforAccount(Account account)
             => Context.Transactions.Where(x=>x.AccountId==account.Id).Include(x => x.Account).Include(x => x.Category).ToListAsync();
 
@@ -127,11 +119,14 @@ namespace DataLayer.Repository
             };
         }
 
-        public async Task<double> GetBalanceAfterDate(long accountId, DateTime CurrentDate,DateTime LastInvDate)
+        public async Task<double> GetTransactionSum(long accountId, DateTime LastInvDate, DateTime CurrentDate)
         {
-            double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date< CurrentDate && x.Date> LastInvDate)).SumAsync(x => x.Value);
-            double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date < CurrentDate && x.Date > LastInvDate)).SumAsync(x => x.Value);
-            return Math.Round(income - expense,2);
+            //double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date< CurrentDate && x.Date> LastInvDate)).SumAsync(x => x.Value);
+            //double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date < CurrentDate && x.Date > LastInvDate)).SumAsync(x => x.Value);
+            return Math.Round(await (Context.Transactions
+                .Where(x => (x.AccountId == accountId && x.Date <= CurrentDate && x.Date > LastInvDate))
+                .Select(x=>(x.IsIncome)?x.Value:-1*x.Value))
+                .SumAsync(x=>x), 2);
 
         }
         private double Sum(List<Transaction> trs)

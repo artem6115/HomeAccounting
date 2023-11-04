@@ -1,4 +1,4 @@
-﻿@model List<Account>
+﻿@model List<AccountViewModel>
 @{
     ViewData["Title"] = "Счета";
     string? message = TempData["Message"]?.ToString();
@@ -29,7 +29,10 @@
                 </div>
             </div>
             <p class="AccountName">@item.Name</p>
-            <p class="AccountBalance">Баланс : ...</p>
+                <p class="AccountBalance" style="display:inline;">
+                    Баланс :
+                    <span style="display:inline;color:@(item.Balance[0]=='-'?"red":"green")">@item.Balance</span>
+                </p>
             <div class="row justify-content-center">
                         <div class="row">
                             <a asp-controller="Account" asp-action="EditPage" asp-route-Id=@item.Id class="btn btn-success mb-1">Изменить</a>

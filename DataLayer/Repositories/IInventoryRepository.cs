@@ -13,6 +13,6 @@ namespace DataLayer.Repositories
         Task<Inventory> Get(long Id);
         Task<Inventory> Add(Inventory inventory);
         void Delete(long Id);
-        Task<Inventory> GetLastBalance(long accountId, DateTime Date);
+        Task<Inventory> GetLastInventory(long accountId, DateTime Date);
     }
 }

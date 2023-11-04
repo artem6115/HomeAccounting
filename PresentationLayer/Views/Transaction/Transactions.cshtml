@@ -16,16 +16,7 @@
             window.location.replace(url);
         }
     }
-    function SendForm(page){
-        var value = document.querySelector("valueInput").value  ;
-        var selectedForm = document.getElementById("FilterForm");
-        selectedForm.submit();
 
-    }
-    function Log(){
-        var value = document.querySelector("valueInput").ariaValueText;
-        
-    }
 </script>
 
 <div class="ToolBar" id="ToolBar">  
@@ -38,7 +29,7 @@
             
                             <select asp-for=@Model.Filter.AccountId class="form-select">
                                 <option class="active" value="">Все счета</option>
-                                @foreach (Account item in Model.Accounts)
+                                @foreach (AccountViewModel item in Model.Accounts)
                                 {
                                     <option value=@item.Id>@item.Name</option>
                                 }

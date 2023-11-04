@@ -13,12 +13,11 @@ namespace DataLayer.Repository
         Task<Transaction> Add(Transaction account);
         void Edit(Transaction account);
         void Delete(long id);
-        Task<double> GetBalanceAfterDate(long accountId, DateTime CurrentDate, DateTime LastInvDate);
+        Task<double> GetTransactionSum(long accountId, DateTime LastInvDate, DateTime CurrentDate);
         Task<Transaction> Get(long id);
         Task<List<Transaction>> GetAll();
         Task<List<Transaction>> GetAllforAccount(Account account);
         Task<List<Transaction>> GetByFilter(Filter filter);
-        Task<(int,List<Transaction>)> GetAllPartial(int page, int count);
         Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter);
     }
 }

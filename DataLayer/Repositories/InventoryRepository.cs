@@ -46,9 +46,9 @@ namespace DataLayer.Repositories
             return await Context.Inventories.Where(x => x.AccountId == accountId).OrderByDescending(x => x.Date).Include(x => x.Account).ToListAsync();
          }
 
-        public async Task<Inventory> GetLastBalance(long accountId,DateTime Date)
+        public async Task<Inventory> GetLastInventory(long accountId,DateTime Date)
         {
-            var listInv = await Context.Inventories.Where(x => x.AccountId == accountId && x.Date<Date).ToListAsync();
+            var listInv = await Context.Inventories.Where(x => x.AccountId == accountId && x.Date<=Date).ToListAsync();
             if (listInv == null || listInv.Count==0) return null;
             var LastInv = listInv.MaxBy(x => x.Date);
             return LastInv;
