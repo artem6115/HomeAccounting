@@ -165,7 +165,7 @@
                             <td>@item.Category?.Name</td>
                             <td style="color:@(item.IsIncome?"green":"red")">@item.Value</td>
                             <td>@item.Comment</td>
-                            <td>@item.Date.ToShortDateString()</td>
+                            <td>@item.Date.ToString()</td>
                             <td class="td-edit">
                                 <a class="btn" asp-controller="Transaction" asp-action="EditPage" asp-route-Id=@item.Id><img src="/images/editnote.png" /></a>
                             </td>

@@ -50,16 +50,16 @@ namespace BusinessLayer.Services
             {
                 Id = item.Id,
                 Name = item.Name,
-                Balance =_transactionService.ParseValue(await GetBalance(item.Id))
+                Balance =_transactionService.ParseValue(await GetBalance(item.Id,DateTime.Now))
             });
         }
         return ViewResult;
 
         }
-        public async Task<double> GetBalance(long id)
+        public async Task<double> GetBalance(long id,DateTime byDate)
         {
-            Inventory lastInv =await  _inventoryRepository.GetLastInventory(id, DateTime.Now);
-            var sumTransactions =await  _transactionRepository.GetTransactionSum(id, ((lastInv!=null)?lastInv.Date:new DateTime()), DateTime.Now);
+            Inventory? lastInv =await  _inventoryRepository.GetLastInventory(id, DateTime.Now);
+            var sumTransactions =await  _transactionRepository.GetTransactionSum(id, ((lastInv is not null)?lastInv.Date:new DateTime()), byDate);
             return Math.Round(sumTransactions+((lastInv!=null)?lastInv.Value:0),2);
         }
         public Task<Account> Get(long id) => _accountRepository.Get(id);

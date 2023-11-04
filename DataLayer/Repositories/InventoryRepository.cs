@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataLayer.Repositories
 {
@@ -52,6 +53,14 @@ namespace DataLayer.Repositories
             if (listInv == null || listInv.Count==0) return null;
             var LastInv = listInv.MaxBy(x => x.Date);
             return LastInv;
+        }
+        public async Task RebuildInventories(long accountId,DateTime EditTransactionDate,double differenceValue)
+        {
+            var listInv = await Context.Inventories.Where(x => x.AccountId == accountId && x.Date >= EditTransactionDate).ToListAsync();
+            foreach (var item in listInv)
+                item.Value += differenceValue;
+            await Context.SaveChangesAsync();
+
         }
     }
 }

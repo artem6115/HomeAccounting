@@ -5,21 +5,25 @@ using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
 using DataLayer;
 using Microsoft.AspNetCore.Http.Extensions;
+using DataLayer.Repositories;
 
 namespace PresentationLayer.Controllers
 {
     public class TransactionController : Controller
     {
         private readonly TransactionService _transactionService;
+        private readonly IInventoryRepository _inventoryRepository;
+
 
         private readonly ILogger<TransactionController> _log;
         private readonly IMapper _mapper;
 
-        public TransactionController(ILogger<TransactionController> log, TransactionService trs,IMapper mapper)
+        public TransactionController(ILogger<TransactionController> log, TransactionService trs, IInventoryRepository inventoryRepository, IMapper mapper)
         {
             _transactionService = trs;
             _mapper = mapper;
             _log = log;
+            _inventoryRepository=inventoryRepository;
         }
         [HttpGet]
 
@@ -64,27 +68,30 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPage(long? id)
             => View("TransactionEdit",(id.HasValue)
-                ? _mapper.Map<TransactionEditModel> (await _transactionService.Get(id.Value)):null);
+                ? _mapper.Map<TransactionEditModel> (await _transactionService.Get(id.Value)):new TransactionEditModel() { Date=DateTime.Now});
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Edit(TransactionEditModel model)
         {
             if (ModelState.IsValid)
             {
+                double difference = 0;
+                difference = ((model.IsIncome) ? double.Parse(model.Value) : (-1 * double.Parse(model.Value)));
+
                 if (!model.Id.HasValue)
                 {
                     await _transactionService.Add(_mapper.Map<Transaction>(model));
                     TempData["Message"] = "Транзакция добавлена";
-
-
                 }
                 else
                 {
-                    _transactionService.Edit(_mapper.Map<Transaction>(model));
+                    var oldTrans = await _transactionService.Get(model.Id.Value);
+
+                    await _transactionService.Edit(_mapper.Map<Transaction>(model));
+                    difference = Math.Round(difference-(oldTrans.IsIncome?oldTrans.Value:-oldTrans.Value), 2);
                     TempData["Message"] = "Транзакция отредактирована";
-
-
                 }
+                _inventoryRepository.RebuildInventories(model.AccountId, model.Date, difference);
                 TempData["MessageStyle"] = "alert-success";
                 TempData["MessageColor"] = "green";
 
@@ -95,7 +102,14 @@ namespace PresentationLayer.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
+            var transaction = await _transactionService.Get(id);
             _transactionService.Delete(id);
+            _inventoryRepository.RebuildInventories(
+                transaction.AccountId,
+                transaction.Date,
+                (transaction.IsIncome)?-transaction.Value: transaction.Value
+            );
+
             TempData["Message"] = "Транзакция удалена";
             TempData["MessageStyle"] = "alert-danger";
             TempData["MessageColor"] = "red";

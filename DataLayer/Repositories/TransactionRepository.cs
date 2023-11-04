@@ -37,15 +37,15 @@ namespace DataLayer.Repository
 
         }
 
-        public void Edit(Transaction transaction)
+        public async Task Edit(Transaction transaction)
         {
             Context.Transactions.Update(transaction);
             Log.LogDebug($"Транзакция изменена - {transaction.Id}");
-            Context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
         }
 
-        public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).SingleAsync(x=>x.Id == id);
+        public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsNoTracking().SingleAsync(x=>x.Id == id);
 
         public  Task<List<Transaction>> GetAll() => Context.Transactions.Include(x => x.Account).Include(x => x.Category).ToListAsync();
         public Task<List<Transaction>> GetAllforAccount(Account account)

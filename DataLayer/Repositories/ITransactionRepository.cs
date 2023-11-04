@@ -11,7 +11,7 @@ namespace DataLayer.Repository
     {
        
         Task<Transaction> Add(Transaction account);
-        void Edit(Transaction account);
+        Task Edit(Transaction account);
         void Delete(long id);
         Task<double> GetTransactionSum(long accountId, DateTime LastInvDate, DateTime CurrentDate);
         Task<Transaction> Get(long id);

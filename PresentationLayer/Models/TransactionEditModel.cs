@@ -22,7 +22,7 @@ namespace PresentationLayer.Models
 
         public string Value { get; set; }
         [Required(ErrorMessage = "Дата обязательно поле")]
-        [DataType(DataType.Date,ErrorMessage ="Дата задана не корректно")]
+        [DataType(DataType.DateTime,ErrorMessage ="Дата задана не корректно")]
         public DateTime Date { get; set; }
         [MaxLength(40,ErrorMessage ="Максимальная длинна 40 символов")]
         public string? Comment { get; set; }

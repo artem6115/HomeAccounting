@@ -51,7 +51,7 @@ public class AccountController : Controller
                     new Inventory(){
                         AccountId= account.Id,
                         Account=account,
-                        Date=DateTime.Now,
+                        Date = DateTime.Now.AddMinutes(-1),
                         Value=double.Parse(model.StartValue)
                     });
             }
