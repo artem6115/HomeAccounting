@@ -29,7 +29,7 @@
             
                             <select asp-for=@Model.Filter.AccountId class="form-select">
                                 <option class="active" value="">Все счета</option>
-                                @foreach (AccountViewModel item in Model.Accounts)
+                                @foreach (var item in Model.Accounts)
                                 {
                                     <option value=@item.Id>@item.Name</option>
                                 }

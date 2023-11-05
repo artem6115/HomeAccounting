@@ -27,7 +27,7 @@ public class AccountController : Controller
     public  bool CheckExistName(string name)=> !accountService.CheckExistName(name);
 
     [HttpGet]
-    public async Task<IActionResult> Get() =>View("Accounts",await accountService.GetAll());
+    public async Task<IActionResult> Get() =>View("Accounts",await accountService.GetAllIncludeBalance());
     [HttpGet]
     public async Task<IActionResult> EditPage(long? id = null!)
     {
