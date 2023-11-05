@@ -39,22 +39,21 @@ namespace BusinessLayer.Services
         public  Task<Account> Add(Account model)=> _accountRepository.Add(model);
         public void Edit(Account model) => _accountRepository.Edit(model);
         public void Delete(long id) => _accountRepository.Delete(id);
-        public async Task<List<AccountViewModel>> GetAll()
+        public async Task<List<Account>> GetAll() => await _accountRepository.GetAll();
+        public async Task<List<AccountViewModel>> GetAllIncludeBalance()
         {
-        
-        var entities = await _accountRepository.GetAll();
-        var ViewResult = new List<AccountViewModel>();
-        foreach (var item in entities)
-        {
-            ViewResult.Add(new AccountViewModel()
+            var entities = await _accountRepository.GetAll();
+            var ViewResult = new List<AccountViewModel>();
+            foreach (var item in entities)
             {
-                Id = item.Id,
-                Name = item.Name,
-                Balance =_transactionService.ParseValue(await GetBalance(item.Id,DateTime.Now))
-            });
-        }
-        return ViewResult;
-
+                ViewResult.Add(new AccountViewModel()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Balance = _transactionService.ParseValue(await GetBalance(item.Id, DateTime.Now))
+                });
+            }
+            return ViewResult;
         }
         public async Task<double> GetBalance(long id,DateTime byDate)
         {

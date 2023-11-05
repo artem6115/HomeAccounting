@@ -8,7 +8,7 @@ namespace PresentationLayer.Models
 {
     public class TransactionViewModel
     {
-        public List<AccountViewModel> Accounts { get; set; }
+        public List<Account> Accounts { get; set; }
         public List<Category> Categories { get; set; }
         public Filter Filter { get; set; }
         public List<Transaction> Transactions { get; set; }
