@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer.Enum;
+using DataLayer.Models;
+
 namespace DataLayer.Repository
 {
     public class TransactionRepository : ITransactionRepository

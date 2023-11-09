@@ -3,9 +3,9 @@ using BusinessLayer.Services;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
-using DataLayer;
 using Microsoft.AspNetCore.Http.Extensions;
 using DataLayer.Repositories;
+using DataLayer.Models;
 
 namespace PresentationLayer.Controllers
 {
