@@ -76,7 +76,7 @@ namespace DataLayer.Repository
                 }
             }
             if (filter.Date is not null)
-                data = data.Where(x => x.Date== filter.Date);
+                data = data.Where(x => x.Date.ToString().Contains(filter.Date.Value.ToShortDateString()));
             if (filter.AccountId is not null)
                 data = data.Where(x => x.AccountId == filter.AccountId);
             if (filter.CategoryId is not null)

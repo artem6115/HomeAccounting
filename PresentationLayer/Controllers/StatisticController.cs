@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataLayer.Models;
 using BusinessLayer.Services;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using DataLayer.Repositories;
 
 namespace PresentationLayer.Controllers
 {
@@ -9,17 +9,57 @@ namespace PresentationLayer.Controllers
     [ApiController]
     public class StatisticController : ControllerBase
     {
-        private readonly StatisticService _statisticService;
-        public StatisticController(StatisticService statisticService)
+        private readonly IStatisticRepository _statisticRepository;
+        public StatisticController(IStatisticRepository statisticService)
         {
-            _statisticService = statisticService;
+            _statisticRepository = statisticService;
         }
 
         // GET: api/<StatisticController>
         [HttpGet]
-        public async Task<IEnumerable<StatisticData>> Category([FromBody] StatisticFilter filter)
+        public async Task<IEnumerable<StatisticData>> Category()
         {
-            return await _statisticService.BuildCategoriesStatistic(filter);
+            var filter = new StatisticFilter()
+            {
+                AllAccounts = true,
+                AccountId=72,
+                AllTime = true,
+                TypeTransaction = DataLayer.Enum.TypeTransaction.Expense,
+                Month=11,
+                Year=2023,
+                TypeGroup=DataLayer.Enum.TypeGroup.Day
+                
+            };
+            return await _statisticRepository.BuildCategoriesStatistic(filter);
+        }
+        public async Task<IEnumerable<StatisticData>> Transaction()
+        {
+            var filter = new StatisticFilter()
+            {
+                AllAccounts = true,
+                AccountId = 51,
+                AllTime = false,
+                TypeTransaction = DataLayer.Enum.TypeTransaction.Expense,
+                Month = 10,
+                Year = 2023,
+                TypeGroup = DataLayer.Enum.TypeGroup.Month
+
+            };
+            return await _statisticRepository.BuildTransactionStatistic(filter);
+        }
+        public async Task<IEnumerable<StatisticData>> Balance()
+        {
+            var filter = new StatisticFilter()
+            {
+                AllAccounts = true,
+                AccountId = 72,
+                AllTime = true,
+                Month = 10,
+                Year = 2023,
+
+
+            };
+            return await _statisticRepository.BuildBalanceStatistic(filter);
         }
 
     }

@@ -24,7 +24,7 @@ namespace DataLayer.Repository
           {
             account.Name = account.Name.Trim();
             var entity = (await Context.Accounts.AddAsync(account)).Entity;
-            Log.LogInformation($"Добавлен новый счёт - {entity.Name}");
+            Log.LogTrace($"Добавлен новый счёт - {entity.Name}");
             await Context.SaveChangesAsync();
             return entity;
           }

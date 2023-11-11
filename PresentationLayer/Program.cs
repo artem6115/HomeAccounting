@@ -5,6 +5,8 @@ using BusinessLayer.Services;
 using AutoMapper;
 using PresentationLayer.Models;
 using DataLayer.Repositories;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Configuration;
 
 namespace PresentationLayer
 {
@@ -13,7 +15,7 @@ namespace PresentationLayer
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<AccountingDbContext>(
@@ -27,6 +29,8 @@ namespace PresentationLayer
             builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
             builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
             builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
+            builder.Services.AddTransient<IStatisticRepository, StatisticRepository>();
+
 
 
             builder.Services.AddTransient<TransactionService>();
@@ -36,8 +40,15 @@ namespace PresentationLayer
 
 
             builder.Services.AddAutoMapper(typeof(MappintProfile));
-
+            builder.Configuration.AddJsonFile("Properties/launchSettings.json", true);
             new AccountingDbContext().Database.EnsureCreated();
+            builder.WebHost.ConfigureLogging((context,log) => {
+                log.AddConsole();
+                log.AddFile();
+                log.AddConfiguration(context.Configuration.GetSection("Logging"));
+            });
+            builder.WebHost.ConfigureLogging(b => b.AddConsole());
+
 
             var app = builder.Build();
 
@@ -64,6 +75,7 @@ namespace PresentationLayer
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+            app.Logger.LogTrace("Start");
         }
     }
 }
