@@ -17,6 +17,8 @@ namespace PresentationLayer.Controllers
 
         // GET: api/<StatisticController>
         [HttpGet]
+        [Route("category")]
+
         public async Task<IEnumerable<StatisticData>> Category()
         {
             var filter = new StatisticFilter()
@@ -32,6 +34,9 @@ namespace PresentationLayer.Controllers
             };
             return await _statisticRepository.BuildCategoriesStatistic(filter);
         }
+
+        [HttpGet]
+        [Route("transaction")]
         public async Task<IEnumerable<StatisticData>> Transaction()
         {
             var filter = new StatisticFilter()
@@ -47,6 +52,9 @@ namespace PresentationLayer.Controllers
             };
             return await _statisticRepository.BuildTransactionStatistic(filter);
         }
+
+        [HttpGet]
+        [Route("balance")]
         public async Task<IEnumerable<StatisticData>> Balance()
         {
             var filter = new StatisticFilter()
