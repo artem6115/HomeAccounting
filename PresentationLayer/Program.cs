@@ -41,7 +41,6 @@ namespace PresentationLayer
 
             builder.Services.AddAutoMapper(typeof(MappintProfile));
             builder.Configuration.AddJsonFile("Properties/launchSettings.json", true);
-            new AccountingDbContext().Database.EnsureCreated();
             builder.WebHost.ConfigureLogging((context,log) => {
                 log.AddConsole();
                 log.AddFile();

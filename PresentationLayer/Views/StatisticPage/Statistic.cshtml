@@ -7,13 +7,68 @@
     function MoveToolBar() {
         document.getElementById("ToolBar").classList.toggle("ActiveStatisticBar");
     }
-</script>
 
+    function LoadData(url) {
+        let form = JSON.stringify($("form.AjaxForm2").serialize());
+
+        var formData =  new FormData($(".AjaxForm2").get(0));
+        var formKeys = formData.keys();
+        var formEntries = formData.entries();
+        const data = new URLSearchParams(formData);
+        // for (const pair of formData) {
+        //     data.append(pair[0], pair[1]);
+        //     console.log(pair[0], pair[1])
+        // }
+        do {
+            console.log(formEntries.next().value);
+        } while (!formKeys.next().done)
+        console.log("mothod doing");
+
+
+
+        let MyHeaders = {
+           // 'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+             'charset':'UTF-8'
+           // 'Content- Length': form.length.toString()
+        };
+
+        fetch(url, {
+           method:"POST",
+           headers:MyHeaders,
+
+        })
+           .then(response => { return response.json() })
+           .then(json => {
+               console.log(json)
+           })
+
+        // $('.AjaxForm').submit(function (e) {
+        //     e.preventDefault();
+        //     $.ajax({
+        //         url: url,
+        //         type: 'POST',
+        //         data: $(this),
+        //         success: function (json) {
+        //             console.log("method had result"),
+        //             console.log(json)
+        //         }
+        //     });
+        // });
+    }
+
+</script>
+<form class="AjaxForm2">
+    <input name="loggin" class="form-control"/>
+    <input name="password" class="form-control" />
+
+</form>
 <div class="ToolBar" id="ToolBar">
     <div class="row">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="col-12">
-                <form method="get" asp-controller="Statistic">
+                <form class="AjaxForm" method="get" asp-controller="Statistic">
                     <div class="row justify-content-center ">
                         <div class="col-2">
                             <label class="form-label">Выберите счёт</label>
@@ -88,7 +143,6 @@
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </nav>
@@ -102,8 +156,13 @@
 
 <div class="row mt-3 mb-3 justify-content-center">
     <div class="col-2">
-        <button class="btn btn-success">Загрузить данные
+        <button class="btn btn-success"  onclick="LoadData('https://localhost:7177/api/statistic/category?user=null)')">
+            
+            
+@*             Загрузить данные
             <img class="ml-1" src="~/images/drow.png" />
+ *@
+
         </button>
         
     </div>

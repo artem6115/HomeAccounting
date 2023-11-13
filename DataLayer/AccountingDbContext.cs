@@ -14,6 +14,7 @@ public partial class AccountingDbContext : DbContext
     public AccountingDbContext(DbContextOptions<AccountingDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
     public virtual DbSet<Account> Accounts { get; set; }

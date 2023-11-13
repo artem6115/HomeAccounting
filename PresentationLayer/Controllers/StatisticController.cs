@@ -16,12 +16,17 @@ namespace PresentationLayer.Controllers
         }
 
         // GET: api/<StatisticController>
-        [HttpGet]
+
+
+
+
+        [HttpPost]
         [Route("category")]
 
-        public async Task<IEnumerable<StatisticData>> Category()
+
+        public async Task<IEnumerable<StatisticData>> Category([FromQuery] StatisticFilter filter)
         {
-            var filter = new StatisticFilter()
+            filter = new StatisticFilter()
             {
                 AllAccounts = true,
                 AccountId=72,
