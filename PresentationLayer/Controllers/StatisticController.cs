@@ -20,7 +20,10 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         [Route("category")]
 
-
+        //Example query -
+        //https://localhost:7177/api/statistic/category   - empty
+        //https://localhost:7177/api/statistic/category?allaccounts=true
+        //https://localhost:7177/api/statistic/category?allaccounts=true&alltime=true&year=2023&month=11
         public async Task<IEnumerable<StatisticData>> Category([FromQuery] StatisticFilter filter)
         {
             //filter = new StatisticFilter()
