@@ -1,36 +1,29 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+async function LoadData(url) {
 
-// Write your JavaScript code.
+    var formData = new FormData($(".AjaxForm").get(0));
+    url = url + new URLSearchParams(formData).toString();
+    return await fetch(url, {
+        method: "GET"
+         })
+        .then(response => {
+            if (response.status >= 200 && response.status < 300)
+                return response.json();
+            else if (response.status == 400) {
+                let error = new Error("Не корректные данные были посланы на сервер.\nКод ошибки 400.");
+                throw error
+            }
+            else {
+                let error = new Error();
+                alert("Соединение с сервером разорвано\nВозможно проблеммы с сервером или интернетом.");
+                throw error
+            }
+        })
+        .then(json => {
+            //console.log(json);
+            result = json;
+            return json;
+        })
+        .catch(err => alert(err));
 
-//function LoadData(url) {
-//    let MyHeaders = {
-//        'Content-Type':'application/json'
-//    }
-//    $('.AjaxForm').submit(function (e) {
-//        e.preventDefault();
-//        $.ajax({
-//            url: url,
-//            type: 'POST',
-//            data: $(this),
-//            success: function (json) {
-//                console.log(json)
-//            }
-//        });
-//    });
-//}
-
-
-//fetch(url {
-//    body = JSON.stringify(body),
-//    method="POST",
-//    headers=MyHeaders,
-
-//})
-//    .then(response => { return response.json })
-//    .then(json => {
-//        console.log(json),
-//            return json
-//    })
-
-//    }
+}

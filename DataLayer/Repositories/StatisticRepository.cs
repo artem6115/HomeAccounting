@@ -38,10 +38,10 @@ namespace DataLayer.Repositories
             if (!filter.AllAccounts)
                 Query = Query.Where(x=> x.AccountId == filter.AccountId);
 
-            if(filter.TypeTransaction == TypeTransaction.Income)
-                Query = Query.Where(x => x.IsIncome);
-            else
+            if(filter.TypeTransaction == TypeTransaction.Expense)
                 Query = Query.Where(x => !x.IsIncome);
+            else
+                Query = Query.Where(x => x.IsIncome);
 
             var result =await Query
                 .Include(x=>x.Category)

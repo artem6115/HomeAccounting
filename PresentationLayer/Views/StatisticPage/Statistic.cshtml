@@ -4,66 +4,23 @@
     ViewData["Title"] = "Статистика";
 }
 <script>
+
     function MoveToolBar() {
         document.getElementById("ToolBar").classList.toggle("ActiveStatisticBar");
     }
 
-    function LoadData(url) {
-        let form = JSON.stringify($("form.AjaxForm2").serialize());
-
-        var formData =  new FormData($(".AjaxForm2").get(0));
-        var formKeys = formData.keys();
-        var formEntries = formData.entries();
-        const data = new URLSearchParams(formData);
-        // for (const pair of formData) {
-        //     data.append(pair[0], pair[1]);
-        //     console.log(pair[0], pair[1])
-        // }
-        do {
-            console.log(formEntries.next().value);
-        } while (!formKeys.next().done)
-        console.log("mothod doing");
-
-
-
-        let MyHeaders = {
-           // 'Content-Type': 'application/json',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-             'charset':'UTF-8'
-           // 'Content- Length': form.length.toString()
-        };
-
-        fetch(url, {
-           method:"POST",
-           headers:MyHeaders,
-
-        })
-           .then(response => { return response.json() })
-           .then(json => {
-               console.log(json)
-           })
-
-        // $('.AjaxForm').submit(function (e) {
-        //     e.preventDefault();
-        //     $.ajax({
-        //         url: url,
-        //         type: 'POST',
-        //         data: $(this),
-        //         success: function (json) {
-        //             console.log("method had result"),
-        //             console.log(json)
-        //         }
-        //     });
-        // });
+    async function Load() {
+        var result;
+          result =await LoadData('https://localhost:7177/api/statistic/category?');
+        console.log(result);
+          result=await LoadData('https://localhost:7177/api/statistic/transaction?');
+        console.log(result);
+          result=await LoadData('https://localhost:7177/api/statistic/balance?');
+        console.log(result);
     }
 
 </script>
-<form class="AjaxForm2">
-    <input name="loggin" class="form-control"/>
-    <input name="password" class="form-control" />
 
-</form>
 <div class="ToolBar" id="ToolBar">
     <div class="row">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -73,7 +30,6 @@
                         <div class="col-2">
                             <label class="form-label">Выберите счёт</label>
                             <select asp-for="AccountId" class="form-select">
-                                <option class="active" value="">Все счета</option>
                                 @foreach (var item in _accountService.GetAll().Result)
                                 {
                                     <option value=@item.Id>@item.Name</option>
@@ -82,8 +38,8 @@
                         </div>
                         <div class="col-2">
                             <label class="form-label">Выберите месяц</label>
-                            <select asp-for="Month" class="form-control">
-                                <option value="1">Январь</option>
+                            <select asp-for="Month" class="form-select">
+                                <option value="1" >Январь</option>
                                 <option value="2">Февраль</option>
                                 <option value="3">Март</option>
                                 <option value="4">Апрель</option>
@@ -99,7 +55,7 @@
                         </div>
                         <div class="col-2">
                             <label class="form-label">Введите год</label>
-                            <input asp-for="Year" class="form-control" value="@DateTime.Now.Year" />
+                            <input asp-for="Year" class="form-control"/>
                         </div>
                         <div class="col-3 mt-5">
                             <div class="input-group">
@@ -113,23 +69,21 @@
                     <div class="row justify-content-center ">
                         <div class="col-2">
                             <label class="form-label">Выберите тип транзакций</label>
-                            <select asp-for="TypeTransaction" class="form-control">
+                            <select asp-for="TypeTransaction" class="form-select">
                                 <option value="-1">Расход</option>
-                                <option value="0">Расход/Доход</option>
+                                <option value="0" disabled>Расход/Доход</option>
                                 <option value="1">Доход</option>
                             </select>
                         </div>
                         <div class="col-2">
                             <label class="form-label">Выберите тип группировки</label>
-                            <select asp-for="TypeGroup" class="form-control">
+                            <select asp-for="TypeGroup" class="form-select">
                                 <option value="0">День</option>
-                                <option value="1">Неделя</option>
                                 <option value="2">Месяц</option>
                             </select>
                         </div>
                         <div class="col-2">
-                            <label class="form-label">Введите год</label>
-                            <input asp-for="Year" class="form-control" value="@DateTime.Now.Year" />
+                         
                         </div>
 
                  
@@ -156,13 +110,9 @@
 
 <div class="row mt-3 mb-3 justify-content-center">
     <div class="col-2">
-        <button class="btn btn-success"  onclick="LoadData('https://localhost:7177/api/statistic/category?user=null)')">
-            
-            
-@*             Загрузить данные
+        <button class="btn btn-success"  onclick="Load()">  
+             Загрузить данные
             <img class="ml-1" src="~/images/drow.png" />
- *@
-
         </button>
         
     </div>
