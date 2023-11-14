@@ -45,10 +45,10 @@ namespace DataLayer.Repositories
 
             var result =await Query
                 .Include(x=>x.Category)
-                .GroupBy(x => x.CategoryId)
+                .GroupBy(x => x.Category)
                 .Select(x => new StatisticData()
                 {
-                    Description = x.Key.Value.ToString(),
+                    Description = (x.Key!=null)? x.Key.Name.ToString():"Прочее",
                     X = (int)x.Sum(x => x.Value)
                 })
                 .ToListAsync();

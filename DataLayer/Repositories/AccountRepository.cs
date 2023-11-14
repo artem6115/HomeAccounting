@@ -24,7 +24,7 @@ namespace DataLayer.Repository
           {
             account.Name = account.Name.Trim();
             var entity = (await Context.Accounts.AddAsync(account)).Entity;
-            Log.LogTrace($"Добавлен новый счёт - {entity.Name}");
+            Log.LogDebug($"Добавлен новый счёт - {entity.Name}");
             await Context.SaveChangesAsync();
             return entity;
           }
@@ -33,7 +33,7 @@ namespace DataLayer.Repository
         {
             var account = await Get(id);
             Context.Accounts.Remove(account);
-            Log.LogInformation($"Удален счёт - {account.Name}");
+            Log.LogDebug($"Удален счёт - {account.Name}");
             Context.SaveChangesAsync();
 
         }
@@ -42,7 +42,7 @@ namespace DataLayer.Repository
         {
             account.Name = account.Name.Trim();
             var entity = Context.Accounts.Update(account).Entity;
-            Log.LogInformation($"Название счёта изменено - {entity.Name}");
+            Log.LogDebug($"Название счёта изменено - {entity.Id}");
             Context.SaveChangesAsync();
         }
 

@@ -10,15 +10,12 @@ namespace PresentationLayer.Controllers
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticRepository _statisticRepository;
-        public StatisticController(IStatisticRepository statisticService)
+        private readonly ILogger<StatisticController> _logger;
+        public StatisticController(IStatisticRepository statisticService, ILogger<StatisticController> log)
         {
             _statisticRepository = statisticService;
+            _logger = log;
         }
-
-        // GET: api/<StatisticController>
-
-
-
 
         [HttpGet]
         [Route("category")]
@@ -37,7 +34,7 @@ namespace PresentationLayer.Controllers
             //    TypeGroup=DataLayer.Enum.TypeGroup.Day
 
             //};
-
+            _logger.LogDebug("Get запрос к api контроллеру, метод расчета категорий");
             return await _statisticRepository.BuildCategoriesStatistic(filter);
         }
 
@@ -45,6 +42,7 @@ namespace PresentationLayer.Controllers
         [Route("transaction")]
         public async Task<IEnumerable<StatisticData>> Transaction([FromQuery] StatisticFilter filter)
         {
+            _logger.LogDebug("Get запрос к api контроллеру, метод расчета транзакций");
             return await _statisticRepository.BuildTransactionStatistic(filter);
         }
 
@@ -52,6 +50,7 @@ namespace PresentationLayer.Controllers
         [Route("balance")]
         public async Task<IEnumerable<StatisticData>> Balance([FromQuery] StatisticFilter filter)
         {
+            _logger.LogDebug("Get запрос к api контроллеру, метод расчета баланса");
             return await _statisticRepository.BuildBalanceStatistic(filter);
         }
 

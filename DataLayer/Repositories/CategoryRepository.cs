@@ -26,7 +26,7 @@ namespace DataLayer.Repository
         {
             category.Name = category.Name.Trim();
             var entity =(await Context.Categories.AddAsync(category)).Entity;
-            Log.LogInformation($"Добавлена новая категория - {entity.Name}");
+            Log.LogDebug($"Добавлена новая категория - {entity.Name}");
             await Context.SaveChangesAsync();
             return entity;
         }
@@ -35,7 +35,7 @@ namespace DataLayer.Repository
         {
             var category = await Get(id);
             Context.Categories.Remove(category);
-            Log.LogInformation($"Категория удалена - {category.Name}");
+            Log.LogDebug($"Категория удалена - {category.Name}");
             Context.SaveChangesAsync();
 
         }
@@ -44,7 +44,7 @@ namespace DataLayer.Repository
         {
             category.Name = category.Name.Trim();
             Context.Categories.Update(category);
-            Log.LogInformation($"Категория периименована - {category.Name}");
+            Log.LogDebug($"Категория периименована - {category.Id}");
             Context.SaveChangesAsync();
 
 

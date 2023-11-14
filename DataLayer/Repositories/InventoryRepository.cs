@@ -24,7 +24,7 @@ namespace DataLayer.Repositories
         {
             var entity = (await Context.Inventories.AddAsync(inventory)).Entity;
             Context.SaveChangesAsync();
-            Log.LogInformation($"Добавлена инвентаризация - {entity.Id}");
+            Log.LogDebug($"Добавлена инвентаризация - {entity.Id}");
             return entity;
         }
 
@@ -33,7 +33,7 @@ namespace DataLayer.Repositories
             var entity =await Get (Id);
             Context.Inventories.Remove(entity);
             Context.SaveChangesAsync();
-            Log.LogInformation($"Удалена инвентаризация - {entity.Id}");
+            Log.LogDebug($"Удалена инвентаризация - {entity.Id}");
         }
 
         public async Task<Inventory> Get(long Id)
@@ -43,7 +43,10 @@ namespace DataLayer.Repositories
         public async Task<List<Inventory>> GetAccountInventories(long accountId)
         {
             if (await Context.Accounts.FindAsync(accountId) == null)
+            {
+                Log.LogError($"Доступ к счету которого не существует (InventoryRepository), id - {accountId}");
                 throw new Exception("Доступ к счету которого не существует (InventoryRepository)");
+            }
             return await Context.Inventories.Where(x => x.AccountId == accountId).OrderByDescending(x => x.Date).Include(x => x.Account).ToListAsync();
          }
 
@@ -60,6 +63,7 @@ namespace DataLayer.Repositories
             foreach (var item in listInv)
                 item.Value += differenceValue;
             await Context.SaveChangesAsync();
+            Log.LogDebug($"Интвенторизации счета {accountId} пресчитаны");
 
         }
     }

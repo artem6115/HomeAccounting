@@ -37,6 +37,8 @@ namespace PresentationLayer
             builder.Services.AddTransient<CategoryService>();
             builder.Services.AddTransient<AccountService>();
             builder.Services.AddTransient<InventoryService>();
+            builder.Services.AddTransient<GeneratorEntitiesService>();
+
 
 
             builder.Services.AddAutoMapper(typeof(MappintProfile));

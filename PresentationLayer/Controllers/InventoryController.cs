@@ -31,7 +31,7 @@ namespace PresentationLayer.Controllers
                {
                    Inventories = await _inventoryService.GetInvByAccount(id),
                    Account =await _accountService.Get(id),
-               });;
+               });
         }
         [HttpPost]
         public async Task<IActionResult> Add(InventoryEditModel inventory)

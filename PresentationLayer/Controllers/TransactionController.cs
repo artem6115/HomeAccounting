@@ -27,27 +27,10 @@ namespace PresentationLayer.Controllers
         }
         [HttpGet]
 
-        public async void AddRandomEntity(int k)
-        {
-            var rnd = new Random();
-            for (int i = 0; i < k; i++)
-            {
-                var tr = new Transaction()
-                {
-                    AccountId = 51,
-                    Comment = rnd.Next(0, 100000).ToString(),
-                    Date = DateTime.Now,
-                    IsIncome = (rnd.Next(0, 2) == 1),
-                    Value = rnd.Next(100, 1000000)
-                };
-                await _transactionService.Add(tr);
-            }
-        }
         public async Task<IActionResult> Get([FromServices] AccountService _accountService, 
             [FromServices]CategoryService _categoryService, 
             Filter filter) {
-            //AddRandomEntity(200);
-            
+           
             var QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
@@ -65,6 +48,7 @@ namespace PresentationLayer.Controllers
 
             return View("Transactions", model);
             }
+
         [HttpGet]
         public async Task<IActionResult> EditPage(long? id)
             => View("TransactionEdit",(id.HasValue)
@@ -97,6 +81,7 @@ namespace PresentationLayer.Controllers
                 else
                 {
                     var value = double.Parse(model.Value);
+                    _log.LogDebug("Обнаружен перевод между счетами");
                     _inventoryRepository.RebuildInventories(oldTrans.AccountId, oldTrans.Date,(oldTrans.IsIncome)?-oldTrans.Value:oldTrans.Value);
                     _inventoryRepository.RebuildInventories(model.AccountId, model.Date,(model.IsIncome)?value:-value );
 
