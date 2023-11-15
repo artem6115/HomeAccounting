@@ -5,20 +5,21 @@
     string url = ViewData["url"].ToString();
 }
 <script>
-
     function MoveToolBar() {
         document.getElementById("ToolBar").classList.toggle("ActiveStatisticBar");
     }
 
     async function Load() {
         var result;
-          result =await LoadData('@(url)/category?');
+        result =await LoadData('@(url)/category?');
+        Drow(result);
         console.log(result);
         result = await LoadData('@(url)/transaction?');
         console.log(result);
         result = await LoadData('@(url)/balance?');
-        console.log(result);
+        console.log(result);   
     }
+
 
 </script>
 
@@ -139,80 +140,36 @@
     </div>
 </div>
 
-<canvas>
+<canvas id="canvas">
 
 </canvas>
-<!--
 
-<form method="get" asp-controller="Statistic" class="model">
-<div class="row justify-content-center mt-3 ">
-    <div class="col-lg-7 col-12">
-        <div class="col-4">
-            <label class="form-label">Выберите счет</label>
-            <select asp-for="AccountId" class="form-control">
-                @foreach (var i in _accountService.GetAll().Result)
-                {
-                    <option value=@i.Id>@i.Name</option>
+<script>
+    
+
+ function Drow(json) {
+    document.getElementById('canvas').remove();
+    var cnv = document.createElement('canvas');
+    cnv.id = "canvas";
+    document.body.append(cnv);
+    var ctx = cnv.getContext('2d');
+    let data = ParseData(json);
+    let chart = new Chart(ctx, {
+        type:'pie',
+        data: data,
+        options: {
+            title: {
+                display: true,
+                text: 'Статистика по категориям '
+            },
+            plugins: {
+                colorschemes: {
+                    scheme: 'office.Office6'
                 }
-            </select>
-        </div>
-        <div class="col-4">
-            <label class="form-label">Выберите месяц</label>
-            <select asp-for="Month" class="form-control">
-                <option value="1">Январь</option>
-                <option value="2">Февраль</option>
-                <option value="3">Март</option>
-                <option value="4">Апрель</option>
-                <option value="5">Май</option>
-                <option value="6">Июнь</option>
-                <option value="7">Июль</option>
-                <option value="8">Август</option>
-                <option value="9">Сентябрь</option>
-                <option value="10">Октябрь</option>
-                <option value="11">Ноябрь</option>
-                <option value="12">Декабрь</option>
-            </select>
-        </div>
-        <div class="col-4">
-            <label class="form-label">Выберите тип транзакций</label>
-            <select asp-for="TypeTransaction" class="form-control">
-                <option value="-1">Расход</option>
-                <option value="0">Расход/Доход</option>
-                <option value="1">Доход</option>
-            </select>
-        </div>
-        <div class="col-4">
-            <label class="form-label">Выберите тип группировки</label>
-            <select asp-for="TypeGroup" class="form-control">
-                <option value="0">День</option>
-                <option value="1">Неделя</option>
-                <option value="2">Месяц</option>
-            </select>
-        </div>
-        <div class="col-10">
-            <label class="form-label">Введите год</label>
-            <input asp-for="Year" class="form-control" value="@DateTime.Now.Year" />
-        </div>
-        <div class="col-4">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <h5 class="input-grop-text">За все время</h5>
-                </div>
-                <input type="checkbox" asp-for="AllTime" class="form-check-input m-lg-2 mt-2" />
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <h5 class="input-grop-text">По всем счетам</h5>
-                </div>
-                <input type="checkbox" asp-for="AllAccounts" class="form-check-input m-lg-2 mt-2" />
-            </div>
-        </div>
-    <div class="col-lg-8 col-12 mt-2">
-        
-    </div>
-</div>
-</form>
+            }
+        }
 
--->
+    });
+     chart.update();
+}
+</script>
