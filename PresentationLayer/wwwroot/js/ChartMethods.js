@@ -2,8 +2,12 @@
 function ParseData(json) {
     let labels = [];
     let points = [];
+    let sum = 0;
     for (let i = 0; i < json.length; i++) {
-        labels[i] = json[i].description;
+        sum += json[i].x;
+    }
+    for (let i = 0; i < json.length; i++) {
+        labels[i] = json[i].description + " (" + Math.round((json[i].x/sum)*100).toString() +"%)" ;
         points[i] = json[i].x;
         console.log(json[i]);
 
@@ -17,6 +21,7 @@ function ParseData(json) {
         datasets: [{
             label: 'Сумма',
             data :points,
+            hoverOffset: 100
         }],
     };
     return data;

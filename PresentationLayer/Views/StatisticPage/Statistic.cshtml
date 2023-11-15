@@ -73,7 +73,7 @@
                             <label class="form-label">Выберите тип транзакций</label>
                             <select asp-for="TypeTransaction" class="form-select">
                                 <option value="-1">Расход</option>
-                                <option value="0" disabled>Расход/Доход</option>
+                                <!--<option value="0" disabled>Расход/Доход</option>-->
                                 <option value="1">Доход</option>
                             </select>
                         </div>
@@ -139,19 +139,22 @@
         </div>
     </div>
 </div>
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-11" id="canvasDiv">
+        <canvas id="canvas">
 
-<canvas id="canvas">
-
-</canvas>
-
+        </canvas>
+    </div>
+</div>
 <script>
     
 
  function Drow(json) {
     document.getElementById('canvas').remove();
+    cnvd = document.getElementById('canvasDiv')
     var cnv = document.createElement('canvas');
     cnv.id = "canvas";
-    document.body.append(cnv);
+    cnvd.append(cnv);
     var ctx = cnv.getContext('2d');
     let data = ParseData(json);
     let chart = new Chart(ctx, {
@@ -162,11 +165,19 @@
                 display: true,
                 text: 'Статистика по категориям '
             },
-            plugins: {
-                colorschemes: {
-                    scheme: 'office.Office6'
+            layout: {
+                padding: {
+                    top: 25,
+                }
+            },
+            legend: {
+                display: true,
+                labels: {
+                    padding: 500
                 }
             }
+
+           
         }
 
     });

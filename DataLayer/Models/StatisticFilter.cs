@@ -17,7 +17,7 @@ namespace DataLayer.Models
         public TypeTransaction TypeTransaction { get; set; }
         public TypeGroup TypeGroup { get; set; }
         public long AccountId { get; set; }
-        public bool AllAccounts { get; set; }
+        public bool AllAccounts { get; set; } = true;
         public bool AllTime { get; set; }
 
     }
