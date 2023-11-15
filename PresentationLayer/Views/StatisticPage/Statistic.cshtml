@@ -2,6 +2,7 @@
 @inject AccountService _accountService
 @{
     ViewData["Title"] = "Статистика";
+    string url = ViewData["url"].ToString();
 }
 <script>
 
@@ -11,11 +12,11 @@
 
     async function Load() {
         var result;
-          result =await LoadData('https://localhost:7177/api/statistic/category?');
+          result =await LoadData('@(url)/category?');
         console.log(result);
-          result=await LoadData('https://localhost:7177/api/statistic/transaction?');
+        result = await LoadData('@(url)/transaction?');
         console.log(result);
-          result=await LoadData('https://localhost:7177/api/statistic/balance?');
+        result = await LoadData('@(url)/balance?');
         console.log(result);
     }
 

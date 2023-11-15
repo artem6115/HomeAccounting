@@ -5,8 +5,11 @@ namespace PresentationLayer.Controllers
 {
     public class StatisticPageController : Controller
     {
-        public IActionResult Statistic() => 
-            View( new StatisticFilter() { Month = DateTime.Now.Month,Year=DateTime.Now.Year});
+        public IActionResult Statistic()
+        {
+            ViewData["url"] = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/statistic";
+            return View(new StatisticFilter() { Month = DateTime.Now.Month, Year = DateTime.Now.Year });
+        }
 
     }
 }

@@ -15,6 +15,7 @@ namespace PresentationLayer.Controllers
         {
             _statisticRepository = statisticService;
             _logger = log;
+           
         }
 
         [HttpGet]
