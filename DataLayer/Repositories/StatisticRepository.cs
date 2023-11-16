@@ -107,13 +107,21 @@ namespace DataLayer.Repositories
             IQueryable<IGrouping<int, Inventory>> Group = null;
             if (!filter.AllAccounts)
                 Query = Query.Where(x => x.AccountId == filter.AccountId);
-
-            StartDate = new DateTime(filter.Year, filter.Month, 1);
-            FinishDate = new DateTime(filter.Year, filter.Month, 1).AddMonths(1).AddDays(-1);
-            Query = Query.Where(x => x.Date >= StartDate && x.Date <= FinishDate);
-            Group = Query.GroupBy(x => x.Date.Day);
-
-
+            if (filter.TypeGroup == TypeGroup.Day)
+            {
+                StartDate = new DateTime(filter.Year, filter.Month, 1);
+                FinishDate = new DateTime(filter.Year, filter.Month, 1).AddMonths(1).AddDays(-1);
+                Query = Query.Where(x => x.Date >= StartDate && x.Date <= FinishDate);
+                Group = Query.GroupBy(x => x.Date.Day);
+            }
+            else
+            {
+                StartDate = new DateTime(filter.Year, 1, 1);
+                FinishDate = new DateTime(filter.Year+1, 1, 1).AddSeconds(-1);
+                Query = Query.Where(x => x.Date >= StartDate && x.Date <= FinishDate);
+                Group = Query.GroupBy(x => x.Date.Month);
+            }
+           
             var result = await Group
                 .Select(x => new StatisticData()
                 {

@@ -5,19 +5,36 @@
     string url = ViewData["url"].ToString();
 }
 <script>
+    var CurrentCanvas = "category";
+    var IsIncome = false;
+    var GroupByMonth = false;
+    var DataName = "";
+    var Title = "";
+
     function MoveToolBar() {
         document.getElementById("ToolBar").classList.toggle("ActiveStatisticBar");
     }
 
     async function Load() {
         var result;
-        result =await LoadData('@(url)/category?');
+        DataName = "Сумма ";
+        Title = "Статистика по категориям";
+
+        if (CurrentCanvas === "category")
+            result = await LoadData('@(url)/category?');
+        else if (CurrentCanvas === "transaction") {
+            result = await LoadData('@(url)/transaction?');
+            DataName = (IsIncome===true)? "Доход " : "Расход ";
+            Title = "Статистика по транзакциям";
+
+        }
+        else {
+            result = await LoadData('@(url)/balance?');
+            DataName = "Баланс ";
+            Title = "Изменения баланса";
+
+        }
         Drow(result);
-        console.log(result);
-        result = await LoadData('@(url)/transaction?');
-        console.log(result);
-        result = await LoadData('@(url)/balance?');
-        console.log(result);   
     }
 
 
@@ -93,7 +110,7 @@
                         <div class="col-3 mt-5">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <h5 class="input-grop-text" style="color:white;">За все время</h5>
+                                    <h5 class="input-grop-text" style="color:white;">За все время(только для категорий)</h5>
                                 </div>
                                 <input type="checkbox" asp-for="AllTime" class="form-check-input m-lg-2 mt-2" />
                             </div>
@@ -120,51 +137,67 @@
     </div>
 </div>
 <div class="row justify-content-center mt-5">
-    <div class="col-lg-6 col-12">
+    <div class="col-lg-10 col-12">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="Category-tab" data-bs-toggle="tab" data-bs-target="#Category" type="button" role="tab" aria-selected="true">Категории</button>
+                <button onclick="CurrentCanvas='category'" class="nav-link active" id="Category-tab" data-bs-toggle="tab" data-bs-target="#Category" type="button" role="tab" aria-selected="true">Категории</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="Transaction-tab" data-bs-toggle="tab" data-bs-target="#Transaction" type="button" role="tab" aria-selected="false">Транзакции</button>
+                <button onclick="CurrentCanvas='transaction'" class="nav-link" id="Transaction-tab" data-bs-toggle="tab" data-bs-target="#Transaction" type="button" role="tab" aria-selected="false">Транзакции</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="Balance-tab" data-bs-toggle="tab" data-bs-target="#Balance" type="button" role="tab" aria-selected="false">Баланс</button>
+                <button  onclick="CurrentCanvas='balance'" class="nav-link" id="Balance-tab" data-bs-toggle="tab" data-bs-target="#Balance" type="button" role="tab" aria-selected="false">Баланс</button>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="Category" role="tabpanel" aria-labelledby="Category-tab">1</div>
-            <div class="tab-pane fade" id="Transaction" role="tabpanel" aria-labelledby="Transaction-tab">2</div>
-            <div class="tab-pane fade" id="Balance" role="tabpanel" aria-labelledby="Balance-tab">3</div>
+            <div class="tab-pane fade show active " id="Category" role="tabpanel" aria-labelledby="Category-tab">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-10" id="canvas-Div-category">
+                        <canvas id="canvas-category">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="Transaction" role="tabpanel" aria-labelledby="Transaction-tab">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 col-10" id="canvas-Div-transaction">
+                        <canvas id="canvas-transaction">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="Balance" role="tabpanel" aria-labelledby="Balance-tab">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 col-10" id="canvas-Div-balance">
+                        <canvas id="canvas-balance">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="row justify-content-center">
-    <div class="col-lg-7 col-11" id="canvasDiv">
-        <canvas id="canvas">
 
-        </canvas>
-    </div>
-</div>
 <script>
-    
+
 
  function Drow(json) {
-    document.getElementById('canvas').remove();
-    cnvd = document.getElementById('canvasDiv')
-    var cnv = document.createElement('canvas');
-    cnv.id = "canvas";
-    cnvd.append(cnv);
+    var cnv = Update();
     var ctx = cnv.getContext('2d');
-    let data = ParseData(json);
+    let data = GetDateBar(json,GroupByMonth);
+    let chartType = "bar";
+     if (CurrentCanvas === "category") {
+         chartType = 'pie'
+         data = GetDatePie(json);
+
+     }
+    else if (CurrentCanvas === "balance")
+        chartType = 'line'
+     data.datasets[0].label = DataName;
     let chart = new Chart(ctx, {
-        type:'pie',
+        type:chartType,
         data: data,
         options: {
-            title: {
-                display: true,
-                text: 'Статистика по категориям '
-            },
             layout: {
                 padding: {
                     top: 25,
@@ -175,12 +208,19 @@
                 labels: {
                     padding: 500
                 }
-            }
+            },
+            plugins: {
+                legend: {
+                    position: 'right'
+                },
+                title: {
+                    display: true,
+                    text: Title,
+                }
 
-           
+            }
         }
 
     });
-     chart.update();
 }
 </script>

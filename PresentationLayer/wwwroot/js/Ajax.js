@@ -2,6 +2,9 @@
 async function LoadData(url) {
 
     var formData = new FormData($(".AjaxForm").get(0));
+    GroupByMonth = formData.get("TypeGroup") === '2';
+    IsIncome = formData.get("TypeTransaction") === '1';
+
     url = url + new URLSearchParams(formData).toString();
     return await fetch(url, {
         method: "GET"
