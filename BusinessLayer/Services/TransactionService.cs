@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer.Models;
+using Aspose.Cells;
 
 namespace BusinessLayer.Services
 {
@@ -43,6 +44,31 @@ namespace BusinessLayer.Services
             foreach( var part in partsOfNumbers.Reverse())
                 result += $"{string.Join("",part.Reverse())} ";
             return $"{result.Remove(result.Length - 1)},{doublePart}";
+        }
+
+        public async Task<Stream> GetExcel(Filter filter)
+        {
+            var data = await Repository.GetByFilter(filter);
+            var book = new Workbook();
+            var sheet = book.Worksheets[0];
+            int i = 2;
+            sheet.Cells[$"A1"].PutValue("Счёт");
+            sheet.Cells[$"B1"].PutValue("Категория");
+            sheet.Cells[$"C1"].PutValue("Величина операции");
+            sheet.Cells[$"D1"].PutValue("Коментарий");
+            sheet.Cells[$"E1"].PutValue("Дата создания");
+            foreach (var item in data)
+            {
+                sheet.Cells[$"A{i}"].PutValue(item.Account.Name);
+                sheet.Cells[$"B{i}"].PutValue(item.Category?.Name);
+                sheet.Cells[$"C{i}"].PutValue(item.IsIncome?item.Value: -item.Value);
+                sheet.Cells[$"D{i}"].PutValue(item.Comment);
+                sheet.Cells[$"E{i++}"].PutValue(item.Date.ToString());
+
+            }
+            book.Save("Transactions.xlsm", SaveFormat.Xlsm);
+            return book.SaveToStream();
+
         }
     }
 }

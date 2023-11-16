@@ -30,7 +30,7 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> Get([FromServices] AccountService _accountService, 
             [FromServices]CategoryService _categoryService, 
             Filter filter) {
-           
+            //_transactionService.GetExcel(filter);
             var QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
@@ -38,7 +38,7 @@ namespace PresentationLayer.Controllers
                 Filter = filter,
                 Transactions = QueryExecuted.Transactions,
                 NumberOfLastPage = QueryExecuted.PageCount,
-                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{nameof(Transaction)}",
+                Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}",
                 Sum = _transactionService.ParseValue(QueryExecuted.Sum)
                 
             };
