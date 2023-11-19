@@ -61,17 +61,16 @@
                             </div>
                          </div>
                         <div class="col-2"><input asp-for=@Model.Filter.Date class="form-control" type="date" placeholder="Дата" /></div>
+                        <div class="col-3 ">
+                            <input asp-for="@Model.Filter.StringToFind" class="form-control" placeholder="Что искать..." />
+                        </div>
                         <div class="col-1 mt-1">
                             <p data-tooltip="Применить фильтр">
                             <button class="btn" type="submit"><img src="/images/filtr.png" /></button>
                             </p>
                         </div>
-                        <div class="col-2 ">
-                            <input asp-for="@Model.Filter.StringToFind" class ="form-control" placeholder="Что искать..." />
-                        </div>
-                        <div class="col-1 mt-1 ">
-                            <p data-tooltip="Поиск по коментарию"> <button class="btn" type="submit"><img src="/images/find.png" /></button></p>
-                        </div>
+                        
+           >
                     </div>
                     <div class="row justify-content-center mt-3">
                         <div class="col-2">
@@ -100,12 +99,6 @@
                                 <option value="account">Сортировка по счету</option>
                             </select>
                         </div>
-                        <div class="col-1">
-                            <p data-tooltip="Убрать фильтр">
-                            <a class = "btn ml-1" asp-controller="Transaction" asp-action="Get"><img src="/images/NoFilter.png" /></a>
-                            </p>
-                        </div>
-
                         <div class="col-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -114,6 +107,13 @@
                                 <input type="checkbox" asp-for=@Model.Filter.IsForward class="form-check-input m-lg-2 mt-2" />
                             </div>
                         </div>
+                        <div class="col-1">
+                            <p data-tooltip="Убрать фильтр">
+                            <a class = "btn ml-1" asp-controller="Transaction" asp-action="Get"><img src="/images/NoFilter.png" /></a>
+                            </p>
+                        </div>
+
+                        
                     </div>
 
                 </form>
