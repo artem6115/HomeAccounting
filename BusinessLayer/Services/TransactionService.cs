@@ -75,6 +75,7 @@ namespace BusinessLayer.Services
 
             }
             //book.Save("Transactions.xlsm", SaveFormat.Xlsm);
+            logger.LogDebug("Excel файл создан");
             return book.SaveToStream();
             //var book = new Workbook();
             //book.Sheets.Delete();
