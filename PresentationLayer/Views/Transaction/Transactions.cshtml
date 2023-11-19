@@ -16,6 +16,12 @@
             window.location.replace(url);
         }
     }
+    function deleteByFilterCommand() {
+        var url = "@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))";
+        if (confirm("Вы уверены, что хотите удалить данные транзакции?")) {
+            window.location.replace(url);
+        }
+    }
 
 </script>
 
@@ -55,14 +61,18 @@
                             </div>
                          </div>
                         <div class="col-2"><input asp-for=@Model.Filter.Date class="form-control" type="date" placeholder="Дата" /></div>
-                        <div class="col-1 mt-1"><button class="btn" type="submit"><img src="/images/filtr.png" /></a></div>
+                        <div class="col-1 mt-1">
+                            <p data-tooltip="Применить фильтр">
+                            <button class="btn" type="submit"><img src="/images/filtr.png" /></button>
+                            </p>
+                        </div>
                         <div class="col-2 ">
                             <input asp-for=@Model.Filter.StringToFind class ="form-control" placeholder="Что искать..." />
                            <!-- <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
                             -->
                         </div>
                         <div class="col-1 mt-1 ">
-                            <button class="btn" type ="submit" ><img src="/images/find.png" /></button>
+                            <p data-tooltip="Поиск по коментарию"><button class="btn" type="submit"><img src="/images/find.png" /></button></p>
                         </div>
                     </div>
                     <div class="row justify-content-center mt-3">
@@ -93,7 +103,9 @@
                             </select>
                         </div>
                         <div class="col-1">
+                            <p data-tooltip="Убрать фильтр">
                             <a class = "btn ml-1" asp-controller="Transaction" asp-action="Get"><img src="/images/NoFilter.png" /></a>
+                            </p>
                         </div>
 
                         <div class="col-3">
@@ -123,16 +135,27 @@
 }
 <div class="work-panel">
     <div style="width:55px;height:55px" class="m-2">
+        <p data-tooltip="Добавить транзакцию">
         <a  asp-controller="Transaction" asp-action="EditPage"><img  width="50px" height="50px" src="/images/addTransaction.png" /></a>
+        </p>
     </div>
     <div style="width:55px;height:55px" class="m-2">
-        <a href="@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))"><img width="50px" height="50px" src="/images/delete_all_by_filter.png" /></a>
+        <p data-tooltip="Удалить все транзакци в выборке">
+            <button style="padding:0;" class="btn" onclick="deleteByFilterCommand()"><img width="50px" height="50px" src="/images/delete_all_by_filter.png" /></button>
+        </p>
+
     </div>
     <div style="width:55px;height:55px" class="m-2">
+        <p data-tooltip="Скачать Excel документ">
         <a href="@(Model.Url)/api/File/excel?@(ReflectionServies.GetQueryString(Model.Filter))"><img width="50px" height="50px" src="/images/excel.png" /></a>
+        </>
+
     </div>
     <div style="width:55px;height:55px" class="m-2">
+        <p data-tooltip="Скачать Word документ">
         <a href="#"><img width="50px" height="50px" src="/images/word.png" /></a>
+       </p>
+
     </div>
 </div>
 <div class="container mt-4">
