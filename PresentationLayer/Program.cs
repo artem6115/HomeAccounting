@@ -40,7 +40,7 @@ namespace PresentationLayer
             builder.Services.AddTransient<GeneratorEntitiesService>();
 
 
-
+            builder.Services.AddCors();
             builder.Services.AddAutoMapper(typeof(MappintProfile));
             builder.Configuration.AddJsonFile("Properties/launchSettings.json", true);
             builder.WebHost.ConfigureLogging((context,log) => {
@@ -59,16 +59,14 @@ namespace PresentationLayer
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             }
-            // app.UseExceptionHandler("/Error");
-            //  app.UseStatusCodePagesWithRedirects("/Error");
-
-           // app.UseExceptionHandler("/Home/Error");
 
             app.UseHttpsRedirection();
+            app.UseHsts();
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

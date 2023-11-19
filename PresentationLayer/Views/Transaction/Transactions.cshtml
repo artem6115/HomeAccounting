@@ -11,13 +11,13 @@
     }
 
     function deleteCommand(id) {
-        var url = "delete/" + id;
+        let url = "delete/" + id;
         if (confirm("Вы уверены, что хотите удалить транзакцию?")) {
             window.location.replace(url);
         }
     }
     function deleteByFilterCommand() {
-        var url = "@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))";
+        let url = "@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))";
         if (confirm("Вы уверены, что хотите удалить данные транзакции?")) {
             window.location.replace(url);
         }
@@ -67,12 +67,10 @@
                             </p>
                         </div>
                         <div class="col-2 ">
-                            <input asp-for=@Model.Filter.StringToFind class ="form-control" placeholder="Что искать..." />
-                           <!-- <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
-                            -->
+                            <input asp-for="@Model.Filter.StringToFind" class ="form-control" placeholder="Что искать..." />
                         </div>
                         <div class="col-1 mt-1 ">
-                            <p data-tooltip="Поиск по коментарию"><button class="btn" type="submit"><img src="/images/find.png" /></button></p>
+                            <p data-tooltip="Поиск по коментарию"> <button class="btn" type="submit"><img src="/images/find.png" /></button></p>
                         </div>
                     </div>
                     <div class="row justify-content-center mt-3">
