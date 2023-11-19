@@ -20,5 +20,6 @@ namespace DataLayer.Repository
         Task<List<Transaction>> GetAllforAccount(Account account);
         Task<List<Transaction>> GetByFilter(Filter filter);
         Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter);
+        public Task<List<Transaction>> DeleteByFilter(Filter filter);
     }
 }

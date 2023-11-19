@@ -107,12 +107,13 @@ namespace DataLayer.Repository
             return await data.ToListAsync();
         }
 
-        public async void DeleteAllByFilter(Filter filter)
+        public async Task<List<Transaction>> DeleteByFilter(Filter filter)
         {
             var items = await GetByFilter(filter);
             foreach(var item in items) 
                 Context.Transactions.Remove(item);
             await Context.SaveChangesAsync();
+            return items;
         }
 
         public async Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter)

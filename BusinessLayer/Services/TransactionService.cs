@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer.Models;
 using Aspose.Cells;
+using Microsoft.Office.Interop.Word;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+//using Microsoft.Office.Interop.Excel;
 
 namespace BusinessLayer.Services
 {
@@ -22,14 +26,16 @@ namespace BusinessLayer.Services
         }
         public bool CheckValueHasMoreTwoNumber (double value)=> (value.ToString().Split(',')).Last().Length > 2;
         public Task<Transaction> Add(Transaction model) => Repository.Add(model);
-        public async Task Edit(Transaction model) =>await Repository.Edit(model);
+        public async System.Threading.Tasks.Task Edit(Transaction model) =>await Repository.Edit(model);
         public void Delete(long id) => Repository.Delete(id);
         public Task<List<Transaction>> GetAll() => Repository.GetAll();    
-        public Task<List<Transaction>> GetByFilter(Filter filter) => Repository.GetByFilter(filter);
+        public Task<List<Transaction>> GetByFilter(DataLayer.Models.Filter filter) => Repository.GetByFilter(filter);
 
         public Task<Transaction> Get(long id) => Repository.Get(id);
+        public async Task<List<Transaction>> DeleteByFilter(DataLayer.Models.Filter filter) =>await Repository.DeleteByFilter(filter);
 
-        public Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter) => Repository.GetTransactionsWithFilterByPages(filter);
+
+        public Task<QueryTransactionResult> GetTransactionsWithFilterByPages(DataLayer.Models.Filter filter) => Repository.GetTransactionsWithFilterByPages(filter);
 
         public string ParseValue(double sum)
         {
@@ -46,10 +52,12 @@ namespace BusinessLayer.Services
             return $"{result.Remove(result.Length - 1)},{doublePart}";
         }
 
-        public async Task<Stream> GetExcel(Filter filter)
+        public async Task<Stream> GetExcel(DataLayer.Models.Filter filter)
         {
             var data = await Repository.GetByFilter(filter);
             var book = new Workbook();
+            book.Worksheets.Clear();
+            book.Worksheets.Add("Транзакции");
             var sheet = book.Worksheets[0];
             int i = 2;
             sheet.Cells[$"A1"].PutValue("Счёт");
@@ -61,14 +69,37 @@ namespace BusinessLayer.Services
             {
                 sheet.Cells[$"A{i}"].PutValue(item.Account.Name);
                 sheet.Cells[$"B{i}"].PutValue(item.Category?.Name);
-                sheet.Cells[$"C{i}"].PutValue(item.IsIncome?item.Value: -item.Value);
+                sheet.Cells[$"C{i}"].PutValue(item.IsIncome ? item.Value : -item.Value);
                 sheet.Cells[$"D{i}"].PutValue(item.Comment);
                 sheet.Cells[$"E{i++}"].PutValue(item.Date.ToString());
 
             }
             book.Save("Transactions.xlsm", SaveFormat.Xlsm);
             return book.SaveToStream();
+            //var book = new Workbook();
+            //book.Sheets.Delete();
+            //book.Sheets.Add();
+            //Worksheet sheet = book.Sheets[0];
+            //sheet.Name = "Transaction";
+            //var app = new Application();
+            //app.save
+
 
         }
+        public async void GetWord(DataLayer.Models.Filter filter)
+        {
+            var data = await Repository.GetByFilter(filter);
+            var app = new Application();
+            app.Documents.Add();
+            var dock = app.Documents[0];
+            dock.Sections.Add();
+            dock.Sections[0].Range.Text="test";
+            app.ActiveDocument.SaveAs("Trn.dock");
+            dock.Close();
+            app.Quit();
+            
+
+        }
+
     }
 }

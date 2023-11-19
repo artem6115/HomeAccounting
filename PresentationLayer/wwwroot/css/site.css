@@ -155,3 +155,11 @@ form-control {
 .form-label{
     color:white;
 }
+.work-panel {
+    border-width: 5px 0px 5px 5px;
+    border-style: ridge;
+    background-color:aliceblue;
+    position: fixed;
+    top: 35%;
+    right: -1px;
+}

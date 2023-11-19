@@ -23,15 +23,15 @@ namespace PresentationLayer.Controllers
             _transactionService = trs;
             _mapper = mapper;
             _log = log;
-            _inventoryRepository=inventoryRepository;
+            _inventoryRepository = inventoryRepository;
         }
         [HttpGet]
 
-        public async Task<IActionResult> Get([FromServices] AccountService _accountService, 
-            [FromServices]CategoryService _categoryService, 
+        public async Task<IActionResult> Get([FromServices] AccountService _accountService,
+            [FromServices] CategoryService _categoryService,
             Filter filter) {
             //_transactionService.GetExcel(filter);
-            var QueryExecuted =await _transactionService.GetTransactionsWithFilterByPages(filter);
+            var QueryExecuted = await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
                 Categories = await _categoryService.GetAll(),
@@ -40,14 +40,25 @@ namespace PresentationLayer.Controllers
                 NumberOfLastPage = QueryExecuted.PageCount,
                 Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}",
                 Sum = _transactionService.ParseValue(QueryExecuted.Sum)
-                
+
             };
-
-
-
-
             return View("Transactions", model);
-            }
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> DeleteByFilter([FromQuery] Filter filter)
+        {
+            //_transactionService.GetExcel(filter);
+            
+            foreach(var item in await _transactionService.DeleteByFilter(filter))
+                _inventoryRepository.RebuildInventories(
+                    item.AccountId,
+                    item.Date,
+                    (item.IsIncome) ? -item.Value : item.Value
+            );
+            return RedirectToAction("Get");
+        }
 
         [HttpGet]
         public async Task<IActionResult> EditPage(long? id)
@@ -115,3 +126,4 @@ namespace PresentationLayer.Controllers
 
     }
 }
+

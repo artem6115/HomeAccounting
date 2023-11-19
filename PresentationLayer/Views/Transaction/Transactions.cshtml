@@ -121,11 +121,20 @@
 {
     <div class="alert @messageStyle mt-3 mb-3 text-center" style="z-index:0;">@message</div>
 }
-
-<div style="position:absolute;right:2%;margin-top:50px;width:50px;height:50px">
-    <a asp-controller="Transaction" asp-action="EditPage"><img  width="50px" height="50px" src="/images/addTransaction.png" /></a>
+<div class="work-panel">
+    <div style="width:55px;height:55px" class="m-2">
+        <a  asp-controller="Transaction" asp-action="EditPage"><img  width="50px" height="50px" src="/images/addTransaction.png" /></a>
+    </div>
+    <div style="width:55px;height:55px" class="m-2">
+        <a href="@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))"><img width="50px" height="50px" src="/images/delete_all_by_filter.png" /></a>
+    </div>
+    <div style="width:55px;height:55px" class="m-2">
+        <a href="@(Model.Url)/api/File/excel?@(ReflectionServies.GetQueryString(Model.Filter))"><img width="50px" height="50px" src="/images/excel.png" /></a>
+    </div>
+    <div style="width:55px;height:55px" class="m-2">
+        <a href="#"><img width="50px" height="50px" src="/images/word.png" /></a>
+    </div>
 </div>
-
 <div class="container mt-4">
     <div class="row mt-3 mb-3  justify-content-center">
         <div class="col-6">
@@ -212,5 +221,4 @@
 
         </div>
     </div>
-    <button href="@(Model.Url)/api/File?@(ReflectionServies.GetQueryString(Model.Filter))" class="btn btn-danger">download excel</button>
 }

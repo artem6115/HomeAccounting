@@ -19,12 +19,25 @@ namespace PresentationLayer.Controllers
             _logger = log;
 
         }
-
+        [Route("excel")]
         [HttpGet]
-        public FileStreamResult Excel([FromQuery] Filter filter)
+        //https://localhost:7177/api/File?AccountId=85&MoreValue=False&IsForward=False&TypeTransaction=IncomeAndExpense
+        public async Task<IActionResult> Excel([FromQuery] Filter filter)
         {
-            var stream = _transactionService.GetExcel(filter).Result;
-            return File(stream, "application/octet-stream", "Transactions.xlsm");
+            var stream =await _transactionService.GetExcel(filter);
+            stream.Position = 0;
+            return File(stream, "application/vnd.ms-excel", "Transactions.xls");
+            
+        }
+        [HttpGet]
+        [Route("word")]
+
+        public async Task<IActionResult> Word([FromQuery] Filter filter)
+        {
+            _transactionService.GetWord(filter);
+            
+            return RedirectToAction("Index","Home");
+
         }
     }
 }
