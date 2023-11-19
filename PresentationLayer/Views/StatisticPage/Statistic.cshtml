@@ -44,7 +44,7 @@
     <div class="row">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="col-12">
-                <form class="AjaxForm" method="get" asp-controller="Statistic">
+                <form class="AjaxForm statisticForm" method="get" asp-controller="Statistic">
                     <div class="row justify-content-center ">
                         <div class="col-2">
                             <label class="form-label">Выберите счёт</label>
@@ -120,7 +120,7 @@
             </div>
         </nav>
     </div>
-    <div class="menuButton">
+    <div class="menuFilterButton">
         <button class="btn" onclick="MoveToolBar()">
             <img asp-append-version=true src="/images/setting1.png" width="50px" height="50px" />
         </button>
