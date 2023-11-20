@@ -6,6 +6,7 @@ using PresentationLayer.Models;
 using Microsoft.AspNetCore.Http.Extensions;
 using DataLayer.Repositories;
 using DataLayer.Models;
+using System.Text;
 
 namespace PresentationLayer.Controllers
 {
@@ -30,7 +31,6 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> Get([FromServices] AccountService _accountService,
             [FromServices] CategoryService _categoryService,
             Filter filter) {
-            //_transactionService.GetExcel(filter);
             var QueryExecuted = await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
                 Accounts = await _accountService.GetAll(),
@@ -42,21 +42,15 @@ namespace PresentationLayer.Controllers
                 Sum = _transactionService.ParseValue(QueryExecuted.Sum)
 
             };
+            HttpContext.Session.Set("url",Encoding.UTF8.GetBytes(HttpContext.Request.GetDisplayUrl()));
             return View("Transactions", model);
         }
 
         [HttpGet]
-
-        public async Task<IActionResult> DeleteByFilter([FromQuery] Filter filter)
+        public async Task<IActionResult> DeleteByFilter( Filter filter)
         {
-            //_transactionService.GetExcel(filter);
-            
-            foreach(var item in await _transactionService.DeleteByFilter(filter))
-                _inventoryRepository.RebuildInventories(
-                    item.AccountId,
-                    item.Date,
-                    (item.IsIncome) ? -item.Value : item.Value
-            );
+
+            await _transactionService.DeleteByFilter(filter);
             return RedirectToAction("Get");
         }
 
@@ -99,7 +93,12 @@ namespace PresentationLayer.Controllers
                 }
                 TempData["MessageStyle"] = "alert-success";
                 TempData["MessageColor"] = "green";
-
+                HttpContext.Session.TryGetValue("url", out var bytes_url);
+                if (bytes_url != null)
+                {
+                    var url = Encoding.UTF8.GetString(bytes_url);
+                    //return Redirect(url);
+                }
                 return RedirectToAction("Get");
             }
             return View("TransactionEdit", model);
@@ -109,16 +108,12 @@ namespace PresentationLayer.Controllers
         {
             var transaction = await _transactionService.Get(id);
             _transactionService.Delete(id);
-            _inventoryRepository.RebuildInventories(
-                transaction.AccountId,
-                transaction.Date,
-                (transaction.IsIncome)?-transaction.Value: transaction.Value
-            );
 
             TempData["Message"] = "Транзакция удалена";
             TempData["MessageStyle"] = "alert-danger";
             TempData["MessageColor"] = "red";
             return RedirectToAction("Get");
+
         }
 
 

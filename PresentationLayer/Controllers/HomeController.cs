@@ -17,6 +17,7 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.Set("oldUrl",new byte[0]);
             return View();
         }
         public IActionResult Generate()
