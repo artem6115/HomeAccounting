@@ -8,25 +8,17 @@
 {
     <div class="alert @messageStyle mt-3 mb-3 text-center">@message</div>
 }
-<script>
-    function deleteCommand(id,accountId) {
-       
-        if (confirm("Уадилить данные инвентаризации?")) {
-            window.location.replace("/Inventory/Delete/" + id+"?accountId="+accountId);
-        }
-    }
-</script>
 <div class="row justify-content-center mt-3 mb-3">
     <div class="col-8">
         <h2>Счёт - @Model.Account.Name</h2>
         <hr />
     </div>
 </div>
-<form method="post" asp-controller="Inventory" asp-action="Add">
+<form id="InvForm" method="post" asp-controller="Inventory" asp-action="Add">
     <div class="row justify-content-center mt-3">
         <div class="col-lg-2 col-4">
 
-            <input name="Date"  asp-for="InventoryEditModel.Date"  value ="@System.DateTime.Now" class="form-control" />
+            <input name="Date"  asp-for="InventoryEditModel.Date" class="form-control" />
             <span data-valmsg-for="Date" data-valmsg-replace="true" class="validationError"></span>
 
             <input name="AccountId" hidden="hidden" class="form-control" value="@Model.Account.Id" />
@@ -37,11 +29,17 @@
             <input  name ="Value" asp-for="InventoryEditModel.Value" class="form-control" placeholder="Корректирующие значение" />
             <span data-valmsg-for="Value" data-valmsg-replace="true" class="validationError"></span>
         </div>
+
         <div class="col-2">
             <button class="btn btn-success" type="submit">Добавить</button>
         </div>
     </div>
 </form>
+<div class="col-lg-2 col-5">
+    <p>Расчетный баланс = @Model.CalculateValue</p>
+    <button onclick="UpdateBalance();" class="btn btn-info">Расчитать</button>
+
+</div>
 
 <div class="row justify-content-center mt-3">
     <div class="col-lg-7 col-10">
@@ -79,3 +77,22 @@
         </table>
     </div>
 </div>
+
+<script>
+    function deleteCommand(id, accountId) {
+
+        if (confirm("Уадилить данные инвентаризации?")) {
+            window.location.replace("/Inventory/Delete/" + id + "?accountId=" + accountId);
+        }
+    }
+    function UpdateBalance() {
+        let formData = new FormData(document.forms["InvForm"]);
+        let date = formData.get("Date").toString();
+        console.log("date = " + date);
+        var urlToUpdate = "@Model.Url/Inventory/Get?id=@(Model.Account.Id)&date=" + date;
+        console.log(urlToUpdate);
+        window.location.replace(urlToUpdate);
+        
+    }
+</script>
+

@@ -66,5 +66,9 @@ namespace DataLayer.Repositories
             Log.LogDebug($"Интвенторизации счета {accountId} пресчитаны");
 
         }
+        public bool CheckExistData(DateTime date)
+        {
+            return Context.Inventories.Any(x => x.Date >= date && x.Date < date.AddMinutes(1));
+        }
     }
 }

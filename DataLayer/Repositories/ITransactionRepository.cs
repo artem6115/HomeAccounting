@@ -11,8 +11,8 @@ namespace DataLayer.Repository
     public interface ITransactionRepository
     {
        
-        Task<Transaction> Add(Transaction account);
-        Task Edit(Transaction account);
+        Task<Transaction> Add(Transaction transaction);
+        Task Edit(Transaction transaction);
         void Delete(long id);
         Task<double> GetTransactionSum(long accountId, DateTime LastInvDate, DateTime CurrentDate);
         Task<Transaction> Get(long id);

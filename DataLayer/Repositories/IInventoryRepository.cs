@@ -15,5 +15,6 @@ namespace DataLayer.Repositories
         void Delete(long Id);
         Task<Inventory> GetLastInventory(long accountId, DateTime Date);
         Task RebuildInventories(long accountId, DateTime EditTransactionDate, double differenceValue);
+        bool CheckExistData(DateTime date);
     }
 }

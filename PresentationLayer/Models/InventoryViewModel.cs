@@ -6,7 +6,8 @@ namespace PresentationLayer.Models
     {
         public List<Inventory> Inventories { get; set; }
         public InventoryEditModel InventoryEditModel { get; set; }
-
+        public double CalculateValue { get; set; }
         public Account Account { get; set; }
+        public string Url { get; set; }
     }
 }

@@ -49,7 +49,6 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteByFilter( Filter filter)
         {
-
             await _transactionService.DeleteByFilter(filter);
             return RedirectToAction("Get");
         }
@@ -64,10 +63,6 @@ namespace PresentationLayer.Controllers
         {
             if (ModelState.IsValid)
             {
-                double difference = 0;
-                Transaction oldTrans=null!;
-                difference = ((model.IsIncome) ? double.Parse(model.Value) : (-1 * double.Parse(model.Value)));
-
                 if (!model.Id.HasValue)
                 {
                     await _transactionService.Add(_mapper.Map<Transaction>(model));
@@ -75,21 +70,8 @@ namespace PresentationLayer.Controllers
                 }
                 else
                 {
-                    oldTrans = await _transactionService.Get(model.Id.Value);
-
                     await _transactionService.Edit(_mapper.Map<Transaction>(model));
-                    difference = Math.Round(difference-(oldTrans.IsIncome?oldTrans.Value:-oldTrans.Value), 2);
                     TempData["Message"] = "Транзакция отредактирована";
-                }
-                if(oldTrans == null || model.AccountId==oldTrans.AccountId)
-                    _inventoryRepository.RebuildInventories(model.AccountId, model.Date, difference);
-                else
-                {
-                    var value = double.Parse(model.Value);
-                    _log.LogDebug("Обнаружен перевод между счетами");
-                    _inventoryRepository.RebuildInventories(oldTrans.AccountId, oldTrans.Date,(oldTrans.IsIncome)?-oldTrans.Value:oldTrans.Value);
-                    _inventoryRepository.RebuildInventories(model.AccountId, model.Date,(model.IsIncome)?value:-value );
-
                 }
                 TempData["MessageStyle"] = "alert-success";
                 TempData["MessageColor"] = "green";
@@ -106,12 +88,16 @@ namespace PresentationLayer.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            var transaction = await _transactionService.Get(id);
             _transactionService.Delete(id);
-
             TempData["Message"] = "Транзакция удалена";
             TempData["MessageStyle"] = "alert-danger";
             TempData["MessageColor"] = "red";
+            HttpContext.Session.TryGetValue("url", out var bytes_url);
+            if (bytes_url != null)
+            {
+                var url = Encoding.UTF8.GetString(bytes_url);
+                return Redirect(url);
+            }
             return RedirectToAction("Get");
 
         }

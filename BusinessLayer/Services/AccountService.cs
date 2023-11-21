@@ -57,7 +57,7 @@ namespace BusinessLayer.Services
         }
         public async Task<double> GetBalance(long id,DateTime byDate)
         {
-            Inventory? lastInv =await  _inventoryRepository.GetLastInventory(id, DateTime.Now);
+            Inventory? lastInv =await  _inventoryRepository.GetLastInventory(id, byDate);
             var sumTransactions =await  _transactionRepository.GetTransactionSum(id, ((lastInv is not null)?lastInv.Date:new DateTime()), byDate);
             return Math.Round(sumTransactions+((lastInv!=null)?lastInv.Value:0),2);
         }

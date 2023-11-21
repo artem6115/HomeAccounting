@@ -27,10 +27,12 @@ namespace BusinessLayer.Services
         }
         public async Task<Inventory> Add(Inventory inventory)
         {
-            inventory.Value = inventory.Value + await _accountService.GetBalance(inventory.AccountId,inventory.Date);
             var entity = await InventoryRepository.Add(inventory);
             return entity;
         }
+
+        public bool CheckExistData(DateTime date) =>InventoryRepository.CheckExistData(date);
+
         public void Delete(long Id) => InventoryRepository.Delete(Id);
         public async Task<List<Inventory>> GetInvByAccount(long accountId)
         {
