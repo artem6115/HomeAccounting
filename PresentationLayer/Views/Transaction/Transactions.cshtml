@@ -1,4 +1,4 @@
-﻿    @model TransactionViewModel
+﻿@model TransactionViewModel
 @{
 
     ViewData["Title"] = "Транзакции";
@@ -6,18 +6,20 @@
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
 }
 <script>
+    let endocindUrl = ("@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))");
+    var url = endocindUrl.replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<");
+
     function MoveToolBar (){
         document.getElementById("ToolBar").classList.toggle("ActiveBar");
     }
 
     function deleteCommand(id) {
-        let url = "delete/" + id;
+        let urlToDelete = "delete/" + id;
         if (confirm("Вы уверены, что хотите удалить транзакцию?")) {
-            window.location.replace(url);
+            window.location.replace(urlToDelete);
         }
     }
     function deleteByFilterCommand() {
-        let url = "@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))";
         if (confirm("Вы уверены, что хотите удалить данные транзакции?")) {
             window.location.replace(url);
         }
@@ -138,6 +140,7 @@
         </p>
     </div>
     <div style="width:55px;height:55px" class="m-2">
+
         <p data-tooltip="Удалить все транзакци в выборке">
             <button style="padding:0;" class="btn" onclick="deleteByFilterCommand()"><img width="50px" height="50px" src="/images/delete_all_by_filter.png" /></button>
         </p>

@@ -18,13 +18,14 @@ namespace BusinessLayer.Services
                 {
                     var keyValue = keyValuePairs.FirstOrDefault(x => x.Item1 == prop.Name);
                     if (keyValue.Item1!= null)
-                        queryString += $"{prop.Name}={keyValue.Item2}&";
+                        queryString += $"{obj.GetType().Name}.{prop.Name}={keyValue.Item2}&";
                     else if(prop.GetValue(obj)!=null && prop.GetValue(obj).ToString() !="")
-                        queryString += $"{prop.Name}={prop.GetValue(obj)}&";
+                        queryString += $"{obj.GetType().Name}.{prop.Name}={prop.GetValue(obj)}&";
                 }
                 if (queryString.Last() =='&') queryString=queryString.Remove(queryString.Count()-1);
 
             }
+            Console.WriteLine("URL DONE - "+queryString);
             return queryString;
         }
     }

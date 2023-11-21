@@ -97,7 +97,7 @@ namespace PresentationLayer.Controllers
                 if (bytes_url != null)
                 {
                     var url = Encoding.UTF8.GetString(bytes_url);
-                    //return Redirect(url);
+                    return Redirect(url);
                 }
                 return RedirectToAction("Get");
             }
