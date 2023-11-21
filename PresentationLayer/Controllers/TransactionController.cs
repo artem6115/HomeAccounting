@@ -56,7 +56,14 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPage(long? id)
             => View("TransactionEdit",(id.HasValue)
-                ? _mapper.Map<TransactionEditModel> (await _transactionService.Get(id.Value)):new TransactionEditModel() { Date=DateTime.Now});
+                ? _mapper.Map<TransactionEditModel> (await _transactionService.Get(id.Value)):new TransactionEditModel() { Date=CurrentDate()});
+
+        private DateTime CurrentDate()
+        {
+            var date = DateTime.Now;
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, 0);
+        }
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Edit(TransactionEditModel model)

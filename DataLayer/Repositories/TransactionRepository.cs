@@ -130,14 +130,12 @@ namespace DataLayer.Repository
             };
         }
 
-        public async Task<double> GetTransactionSum(long accountId, DateTime LastInvDate, DateTime CurrentDate)
+        public async Task<double> GetTransactionSum(long accountId, DateTime StartInvDate,DateTime EndInvDate)
         {
-            //double income =await Context.Transactions.Where(x => (x.AccountId == accountId && x.IsIncome && x.Date< CurrentDate && x.Date> LastInvDate)).SumAsync(x => x.Value);
-            //double expense =await Context.Transactions.Where(x => (x.AccountId == accountId && !x.IsIncome && x.Date < CurrentDate && x.Date > LastInvDate)).SumAsync(x => x.Value);
             return Math.Round(await (Context.Transactions
-                .Where(x => (x.AccountId == accountId && x.Date <= CurrentDate && x.Date > LastInvDate))
-                .Select(x=>(x.IsIncome)?x.Value:-1*x.Value))
-                .SumAsync(x=>x), 2);
+                .Where(x => (x.AccountId == accountId && x.Date <= EndInvDate && x.Date > StartInvDate))
+                .Select(x => (x.IsIncome) ? x.Value : -1 * x.Value))
+                .SumAsync(x => x), 2);
 
         }
         private double Sum(List<Transaction> trs)
