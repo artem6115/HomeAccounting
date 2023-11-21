@@ -49,13 +49,7 @@
 
                             <div class="input-group">
 
-
-                                <div class="input-group-prepend">
-                                    <input id="MoreValue" asp-for=@Model.Filter.MoreValue hidden="hidden"/>
-                                    <input asp-for=@Model.Filter.PageNumber value="0" hidden="hidden" />
-
-                                </div>
-                                
+                                <input asp-for=@Model.Filter.PageNumber value="0" hidden="hidden" />
                                 <input asp-for=@Model.Filter.Value class="form-control valueInput" placeholder="(>,<,=) Стоимость" />
                                 <span class="input-group-text">₽</span>
 

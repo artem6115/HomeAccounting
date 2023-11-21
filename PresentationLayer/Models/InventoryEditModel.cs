@@ -12,7 +12,7 @@ namespace PresentationLayer.Models
         [Remote(action: "CheckExistData", controller: "Inventory", ErrorMessage = "На одну дату можно сделать не более 1 инвенторизации")]
 
         public DateTime Date { get; set; }
-        [RegularExpression(@"^(-)?\d+(,\d{1,2})?", ErrorMessage = "Число содержать не более 2 знаков после запятой")]
+        [RegularExpression(@"^(-)?\d+(,\d{1,2})?", ErrorMessage = "Число может содержать не более 2 знаков после запятой")]
         public string? Value { get; set; }
         public bool CreateBalanceTransaction { get; set; } = true;
 

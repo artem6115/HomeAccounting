@@ -14,10 +14,17 @@
         <hr />
     </div>
 </div>
+<div class="row justify-content-center mt-3">
+    <div class="col-8">
+        <h4>Расчётный баланс = @Model.CalculateValue рублей</h4>
+        <button onclick="UpdateBalance();" class="btn btn-info">Расчитать на указаную дату</button>
+        <hr />
+    </div>
+</div>
 <form id="InvForm" method="post" asp-controller="Inventory" asp-action="Add">
     <div class="row justify-content-center mt-3">
         <div class="col-lg-2 col-4">
-
+            <label class="form-label">Дата инвенторизации</label>
             <input name="Date"  asp-for="InventoryEditModel.Date" class="form-control" />
             <span data-valmsg-for="Date" data-valmsg-replace="true" class="validationError"></span>
 
@@ -26,20 +33,27 @@
             
         </div>
         <div class="col-lg-2 col-5">
-            <input  name ="Value" asp-for="InventoryEditModel.Value" class="form-control" placeholder="Корректирующие значение" />
-            <span data-valmsg-for="Value" data-valmsg-replace="true" class="validationError"></span>
+            <label class="form-label">Фактический баланс</label>
+            <div class="input-group">
+                <input  name ="Value" asp-for="InventoryEditModel.Value" class="form-control" placeholder="Укажите фактический баланс" />
+                <span class="input-group-text">₽</span>
+                <span data-valmsg-for="Value" data-valmsg-replace="true" class="validationError"></span>
+            </div>
         </div>
-
+       @*  <div class="col-2">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span style="color:white;" class="input-grop-text">Создать корректирующея транзакцию</span>
+                </div>
+                <input type="checkbox" asp-for="InventoryEditModel.CreateBalanceTransaction" class="form-check-input m-lg-2 mt-2" />
+            </div>
+        </div> *@
         <div class="col-2">
-            <button class="btn btn-success" type="submit">Добавить</button>
+            <button class="btn btn-success" type="submit">Добавить инвенторизацию</button>
         </div>
     </div>
 </form>
-<div class="col-lg-2 col-5">
-    <p>Расчетный баланс = @Model.CalculateValue</p>
-    <button onclick="UpdateBalance();" class="btn btn-info">Расчитать</button>
 
-</div>
 
 <div class="row justify-content-center mt-3">
     <div class="col-lg-7 col-10">

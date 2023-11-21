@@ -12,7 +12,6 @@ namespace DataLayer.Models
 
         [RegularExpression(@"^([=<>])?\d+(,\d{1,2})?")]
         public string? Value { get; set; }
-        public bool MoreValue { get; set; }
         public bool IsForward { get; set; }
         public TypeTransaction TypeTransaction { get; set; } = 0;
         public string? StringToFind { get; set; }
