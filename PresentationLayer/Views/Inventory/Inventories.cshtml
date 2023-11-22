@@ -16,7 +16,7 @@
 </div>
 <div class="row justify-content-center mt-3">
     <div class="col-8">
-        <h4>Расчётный баланс = @Model.CalculateValue рублей</h4>
+        <h4>Расчётный баланс = @Model.CalculateBalance рублей</h4>
         <button onclick="UpdateBalance();" class="btn btn-info">Расчитать на указаную дату</button>
         <hr />
     </div>
@@ -40,14 +40,6 @@
                 <span data-valmsg-for="Value" data-valmsg-replace="true" class="validationError"></span>
             </div>
         </div>
-       @*  <div class="col-2">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span style="color:white;" class="input-grop-text">Создать корректирующея транзакцию</span>
-                </div>
-                <input type="checkbox" asp-for="InventoryEditModel.CreateBalanceTransaction" class="form-check-input m-lg-2 mt-2" />
-            </div>
-        </div> *@
         <div class="col-2">
             <button class="btn btn-success" type="submit">Добавить инвенторизацию</button>
         </div>
@@ -93,18 +85,22 @@
 </div>
 
 <script>
+    //Подтверждение удаления
     function deleteCommand(id, accountId) {
 
         if (confirm("Уадилить данные инвентаризации?")) {
             window.location.replace("/Inventory/Delete/" + id + "?accountId=" + accountId);
         }
     }
+    //Функция расчета баланса на указаную дату
+    //Функция не асинхроная и перезагружает страницу
+
     function UpdateBalance() {
+        //Получение данных из формы
         let formData = new FormData(document.forms["InvForm"]);
         let date = formData.get("Date").toString();
-        console.log("date = " + date);
+        //Создание url для обращения
         var urlToUpdate = "@Model.Url/Inventory/Get?id=@(Model.Account.Id)&date=" + date;
-        console.log(urlToUpdate);
         window.location.replace(urlToUpdate);
         
     }

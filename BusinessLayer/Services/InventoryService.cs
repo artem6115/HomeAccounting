@@ -36,8 +36,8 @@ namespace BusinessLayer.Services
         public void Delete(long Id) => InventoryRepository.Delete(Id);
         public async Task<List<Inventory>> GetInvByAccount(long accountId)
         {
- 
-            return await InventoryRepository.GetAccountInventories(accountId);
+            //Ограничение на количество выводимых инвенторизаций
+            return (await InventoryRepository.GetAccountInventories(accountId)).Take(200).ToList();
         }
     }
 }

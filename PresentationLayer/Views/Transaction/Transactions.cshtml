@@ -6,19 +6,23 @@
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
 }
 <script>
+    //Получаем строку запроса и генирируем url для удаления
     let endocindUrl = ("@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))");
+    //url необходимо декодировать
     var url = endocindUrl.replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<");
 
+    //Скрытие меню
     function MoveToolBar (){
         document.getElementById("ToolBar").classList.toggle("ActiveBar");
     }
-
+    //Запрос на удаление записи
     function deleteCommand(id) {
         let urlToDelete = "delete/" + id;
         if (confirm("Вы уверены, что хотите удалить транзакцию?")) {
             window.location.replace(urlToDelete);
         }
     }
+    //Удаление всех выборки
     function deleteByFilterCommand() {
         if (confirm("Вы уверены, что хотите удалить данные транзакции?")) {
             window.location.replace(url);
@@ -71,7 +75,7 @@
                     <div class="row justify-content-center mt-3">
                         <div class="col-2">
                             <select asp-for=@Model.Filter.CategoryId class="form-select" data-mdb-filter="true">
-                                <option class="active" value="">Все категории</option>
+                                <option class="active" value="">Без категорий</option>
 
                                 @foreach (Category item in Model.Categories)
                                 {
@@ -104,7 +108,7 @@
                             </div>
                         </div>
                         <div class="col-1">
-                            <p data-tooltip="Убрать фильтр">
+                            <p data-tooltip="Удалить фильтр">
                             <a class = "btn ml-1" asp-controller="Transaction" asp-action="Get"><img src="/images/NoFilter.png" /></a>
                             </p>
                         </div>

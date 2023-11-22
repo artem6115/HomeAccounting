@@ -35,7 +35,7 @@ namespace PresentationLayer.Controllers
             {
                 Inventories = await _inventoryService.GetInvByAccount(id),
                 Account = await _accountService.Get(id),
-                CalculateValue = CalculateValue,
+                CalculateBalance = CalculateValue,
                 Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}",
                 InventoryEditModel = new InventoryEditModel()
                 {

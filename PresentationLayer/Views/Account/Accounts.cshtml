@@ -35,13 +35,13 @@
                 </p>
             <div class="row justify-content-center mt-3">
                         <div class="row">
-                            <a asp-controller="Account" asp-action="EditPage" asp-route-Id=@item.Id class="btn btn-success mb-1">Изменить</a>
+                            <a asp-controller="Account" asp-action="EditPage" asp-route-Id=@item.Id class="btn btn-success mb-1">Изменить название</a>
                         </div>
                         <div class="row">
                             <button class="btn btn-danger mb-1" onclick="deleteCommand(@item.Id)">Удалить</button>
                         </div>
                         <div class="row">
-                            <a asp-controller="Inventory" asp-action="Get" asp-route-Id=@item.Id class="btn btn-info">Инвентаризация</a>
+                            <a asp-controller="Inventory" asp-action="Get" asp-route-Id=@item.Id class="btn btn-info">Инвентаризации</a>
                         </div>
             </div>
         </div>

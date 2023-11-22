@@ -16,10 +16,10 @@ namespace PresentationLayer.Models
         [Required(ErrorMessage = "Название счета обязательное поле")]
         [MaxLength(30, ErrorMessage = "Максимальная длина - 30")]
         [RegularExpression(@".*[a-zA-Zа-яА-Я0-9_].*",ErrorMessage ="Строка пустая, либо содержит не корректные символы")]
-        [Remote(action:"CheckExistName",controller:"Account",ErrorMessage ="Такое название счета уже существует")]
+        [Remote(action:"CheckExistName",controller:"Account",ErrorMessage ="Данное название счета уже существует")]
         public string Name { get; set; }
 
-        [RegularExpression(@"^(-)?\d+(,\d{1,2})?", ErrorMessage = "Число содержать не более 2 знаков после запятой")]
+        [RegularExpression(@"^(-)?\d+(,\d{1,2})?", ErrorMessage = "Число должно содержать не более 2 знаков после запятой")]
         public string StartValue { get; set; }
     }
 }

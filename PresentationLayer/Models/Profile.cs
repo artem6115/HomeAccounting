@@ -5,6 +5,7 @@ namespace PresentationLayer.Models
 {
     public class MappintProfile : Profile
     {
+        //Карта мапинга
         public MappintProfile()
         {
             CreateMap<AccountEditModel, Account>().ReverseMap();
