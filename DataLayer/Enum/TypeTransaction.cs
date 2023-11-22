@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Enum
 {
+    //Тип транзакций доход, расход или оба варианты
     public enum TypeTransaction
     {
         Expense=-1,

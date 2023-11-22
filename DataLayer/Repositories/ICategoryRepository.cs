@@ -14,6 +14,8 @@ namespace DataLayer.Repository
         void Delete(long id);
         Task<Category>Get(long id);
         Task<List<Category>> GetAll();
+
+        //Наличие категории с таким наименованием
         bool CheckExistName(string name);
     }
 }

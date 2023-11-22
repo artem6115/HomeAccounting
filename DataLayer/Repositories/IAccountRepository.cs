@@ -14,6 +14,8 @@ namespace DataLayer.Repository
         void Delete(long id);
         Task<Account> Get(long id);
         Task<List<Account>> GetAll();
+
+        //Наличие счета с таким наименованием
         bool CheckExistName(string name);
 
 

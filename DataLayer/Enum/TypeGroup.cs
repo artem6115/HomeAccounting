@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Enum
 {
+    //Как группировать транзакции и баланс
     public enum TypeGroup
     {
         Day,

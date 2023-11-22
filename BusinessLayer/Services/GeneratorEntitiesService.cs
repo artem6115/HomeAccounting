@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Services
 {
+    //Класс который генерирует записи в базе данных
     public class GeneratorEntitiesService
     {
         private readonly ILogger<GeneratorEntitiesService> _logger;
@@ -34,6 +35,7 @@ namespace BusinessLayer.Services
 
         public void Generate(int CountOfAccount, int CountOfTransactionForEveryMonth, int CountOfCategory)
         {
+            //Спикок счетов и категорий
             List<Account> accounts = new List<Account>(CountOfAccount);
             List<Category> categories = new List<Category>(CountOfCategory);
             Random rnd = new Random((int)DateTime.Now.Ticks / DateTime.Now.Second);
@@ -91,7 +93,7 @@ namespace BusinessLayer.Services
         _logger.LogWarning("Данные сгенерированы");
 
         }
-
+        //Удаление сгенерированых данных
         private void DeleteOldTestEntities()
         {
             var categories = _categoryRep.GetAll().Result;

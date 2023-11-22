@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models
 {
+    //Объект для передачи на клиент
     public class StatisticData
     {
         public int X { get; set; }

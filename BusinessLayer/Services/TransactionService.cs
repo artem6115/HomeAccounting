@@ -24,7 +24,6 @@ namespace BusinessLayer.Services
             logger = log;
             Repository = rep;
         }
-        public bool CheckValueHasMoreTwoNumber (double value)=> (value.ToString().Split(',')).Last().Length > 2;
         public Task<Transaction> Add(Transaction model) => Repository.Add(model);
         public async System.Threading.Tasks.Task Edit(Transaction model) =>await Repository.Edit(model);
         public void Delete(long id) => Repository.Delete(id);
@@ -37,6 +36,7 @@ namespace BusinessLayer.Services
 
         public Task<QueryTransactionResult> GetTransactionsWithFilterByPages(DataLayer.Models.Filter filter) => Repository.GetTransactionsWithFilterByPages(filter);
 
+        //Парсинг числа в удобную для чтения строку
         public string ParseValue(double sum)
         {
             string str = sum.ToString();
@@ -74,19 +74,12 @@ namespace BusinessLayer.Services
                 sheet.Cells[$"E{i++}"].PutValue(item.Date.ToString());
 
             }
-            //book.Save("Transactions.xlsm", SaveFormat.Xlsm);
+
             logger.LogDebug("Excel файл создан");
             return book.SaveToStream();
-            //var book = new Workbook();
-            //book.Sheets.Delete();
-            //book.Sheets.Add();
-            //Worksheet sheet = book.Sheets[0];
-            //sheet.Name = "Transaction";
-            //var app = new Application();
-            //app.save
-
 
         }
+        //Не работает
         public async void GetWord(DataLayer.Models.Filter filter)
         {
             var data = await Repository.GetByFilter(filter);

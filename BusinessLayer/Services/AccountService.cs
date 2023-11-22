@@ -40,6 +40,8 @@ namespace BusinessLayer.Services
         public void Edit(Account model) => _accountRepository.Edit(model);
         public void Delete(long id) => _accountRepository.Delete(id);
         public async Task<List<Account>> GetAll() => await _accountRepository.GetAll();
+
+        //Метод который возвращяет счета с расчитаным балансом
         public async Task<List<AccountViewModel>> GetAllIncludeBalance()
         {
             var entities = await _accountRepository.GetAll();

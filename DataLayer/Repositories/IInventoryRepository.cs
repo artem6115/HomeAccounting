@@ -13,8 +13,10 @@ namespace DataLayer.Repositories
         Task<Inventory> Get(long Id);
         Task<Inventory> Add(Inventory inventory);
         void Delete(long Id);
-        Task<Inventory> GetLastInventory(long accountId, DateTime Date);
+        Task<Inventory> GetLastInventory(long accountId, DateTime ByDate);
         Task RebuildInventories(long accountId, DateTime EditTransactionDate, double differenceValue);
+
+        //Наличие инвенторизации на указаную дату (секунды и млс не учитываются)
         bool CheckExistData(DateTime date);
     }
 }

@@ -8,6 +8,7 @@ using DataLayer.Enum;
 
 namespace DataLayer.Models
 {
+    //Фильтр для статистики
     public class StatisticFilter
     {
         [Range(1900, 3000)]
@@ -17,7 +18,11 @@ namespace DataLayer.Models
         public TypeTransaction TypeTransaction { get; set; }
         public TypeGroup TypeGroup { get; set; }
         public long AccountId { get; set; }
+
+        // Использовать все счета
         public bool AllAccounts { get; set; } = true;
+
+        //За весть промежуток времени
         public bool AllTime { get; set; }
 
     }

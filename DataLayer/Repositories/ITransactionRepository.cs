@@ -17,10 +17,12 @@ namespace DataLayer.Repository
         Task<double> GetTransactionSum(long accountId, DateTime StartInvDate, DateTime EndInvDate);
         Task<Transaction> Get(long id);
         Task<List<Transaction>> GetAll();
-        Task<List<Transaction>> GetBetwinDate(DateTime startDate, DateTime endDate);
-
         Task<List<Transaction>> GetAllforAccount(Account account);
+
+        //Результат выполнения фильтра
         Task<List<Transaction>> GetByFilter(Filter filter);
+
+        //Разбиение выборки по страницам
         Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter);
         public Task<List<Transaction>> DeleteByFilter(Filter filter);
     }
