@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using DataLayer.Entities;
 using DataLayer.Enum;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataLayer.Repositories
 {
@@ -109,53 +110,78 @@ namespace DataLayer.Repositories
         public async Task<IEnumerable<StatisticData>> BuildBalanceStatistic(StatisticFilter filter)
         {
             var result = new List<StatisticData>();
-            if (filter.TypeGroup == TypeGroup.Day)
+
+            #region Новый алгоритм
+            var StartPeriod = new DateTime(filter.Year, filter.Month, 1);
+            var EndPeriod = StartPeriod.AddMonths(1);
+
+            var Transaction = Context.Transactions.Where(x => x.Date > StartPeriod && x.Date < EndPeriod).Where(x=>x.AccountId==filter.AccountId).ToList();
+            var Invetories =await _inventoryRepository.GetAccountInventories(filter.AccountId);
+            double balance = 0;
+            var lastInventory = Invetories.Where(x=>x.Date < StartPeriod)?.MaxBy(x=>x.Date);
+            if (lastInventory != null)
+                balance += lastInventory.Value;
+            var sumTrs = Transaction
+            .Where(x => x.Date > ((lastInventory != null) ? lastInventory.Date : new DateTime()) && x.Date < StartPeriod)?
+                   .Select(x => (x.IsIncome) ? x.Value : -x.Value)
+                   .Sum();
+            if (sumTrs.HasValue) balance += sumTrs.Value;
+
+            for (DateTime date = StartPeriod; date.Day < DateTime.DaysInMonth(filter.Year,filter.Month); date = date.AddDays(1))
             {
-                var daysCount = DateTime.DaysInMonth(filter.Year, filter.Month);
-                for(int i = 1; i <= daysCount; i++)
+                lastInventory = Invetories.Where(x => x.Date > date && x.Date < date.AddDays(1))?.MaxBy(x => x.Date);
+                if (lastInventory != null) 
+                    balance += lastInventory.Value; 
+                sumTrs =  Transaction
+                    .Where(x => x.Date >( (lastInventory!=null)?lastInventory.Date:date) && x.Date < date.AddDays(1))?
+                    .Select(x=>(x.IsIncome)?x.Value: -x.Value)
+                    .Sum();
+                if(sumTrs.HasValue) balance += sumTrs.Value;
+                result.Add(new StatisticData()
                 {
-                    var StartDate = new DateTime(filter.Year, filter.Month, i);
-                    var FinishDate =StartDate.AddDays(1).AddSeconds(-1);
+                    X = date.Day,
+                    Y = (int)Math.Round(balance)
+                });
 
-                    Inventory LastInventory =await _inventoryRepository.GetLastInventory(filter.AccountId,FinishDate);
-                    double balance;
-                    if (LastInventory != null && (LastInventory.Date> StartDate  || i==1))
-                        balance = LastInventory.Value + await _transactionRepository.GetTransactionSum(filter.AccountId, LastInventory.Date, FinishDate);
-                    else if(i!=1)
-                        balance = result.Last().Y + await _transactionRepository.GetTransactionSum(filter.AccountId, StartDate, FinishDate); 
-                    else
-                        balance = await _transactionRepository.GetTransactionSum(filter.AccountId, new DateTime(), FinishDate);
-
-                    result.Add(new StatisticData()
-                    {
-                        X=i,
-                        Y=(int)Math.Round(balance)
-                    });
-                }
             }
-            else
-            {
-                for (int i = 1; i <= 12; i++)
-                {
-                    var StartDate = new DateTime(filter.Year, i, 1);
-                    var FinishDate = StartDate.AddMonths(1).AddSeconds(-1);
 
-                    Inventory LastInventory = await _inventoryRepository.GetLastInventory(filter.AccountId, FinishDate);
-                    double balance;
-                    if (LastInventory != null && (LastInventory.Date > StartDate || i == 1))
-                        balance = LastInventory.Value + await _transactionRepository.GetTransactionSum(filter.AccountId, LastInventory.Date, FinishDate);
-                    else if (i != 1)
-                        balance = result.Last().Y + await _transactionRepository.GetTransactionSum(filter.AccountId, StartDate, FinishDate);
-                    else
-                        balance = await _transactionRepository.GetTransactionSum(filter.AccountId, new DateTime(), FinishDate);
 
-                    result.Add(new StatisticData()
-                    {
-                        X = i,
-                        Y = (int)Math.Round(balance)
-                    });
-                }
-            }
+            #endregion
+
+            //#region Вариант 2
+            //int MaxCount = 12;
+            //int day = 1;
+            //int month = filter.Month;
+            //if (filter.TypeGroup == TypeGroup.Day)
+            //    MaxCount = DateTime.DaysInMonth(filter.Year, filter.Month);
+
+            //for (int i = 1; i <= MaxCount; i++)
+            //{
+            //    var StartDate = new DateTime(filter.Year, month, day);
+            //    DateTime FinishDate;
+            //    if (filter.TypeGroup == TypeGroup.Day)
+            //        FinishDate = StartDate.AddDays(1).AddSeconds(-1);
+            //    else
+            //        FinishDate = StartDate.AddMonths(1).AddSeconds(-1);
+
+            //    Inventory LastInventory = await _inventoryRepository.GetLastInventory(filter.AccountId, FinishDate);
+            //    double balance;
+            //    if (LastInventory != null && (LastInventory.Date > StartDate || i == 1))
+            //        balance = LastInventory.Value + await _transactionRepository.GetTransactionSum(filter.AccountId, LastInventory.Date, FinishDate);
+            //    else if (i != 1)
+            //        balance = result.Last().Y + await _transactionRepository.GetTransactionSum(filter.AccountId, StartDate, FinishDate);
+            //    else
+            //        balance = await _transactionRepository.GetTransactionSum(filter.AccountId, new DateTime(), FinishDate);
+
+            //    result.Add(new StatisticData()
+            //    {
+            //        X = i,
+            //        Y = (int)Math.Round(balance)
+            //    });
+            //    if (filter.TypeGroup == TypeGroup.Day) day++;
+            //    else month++;
+            //}
+            //#endregion
 
             return result;
         }

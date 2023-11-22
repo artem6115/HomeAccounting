@@ -52,7 +52,8 @@ namespace DataLayer.Repository
         public  Task<List<Transaction>> GetAll() => Context.Transactions.Include(x => x.Account).Include(x => x.Category).ToListAsync();
         public Task<List<Transaction>> GetAllforAccount(Account account)
             => Context.Transactions.Where(x=>x.AccountId==account.Id).Include(x => x.Account).Include(x => x.Category).ToListAsync();
-
+        public async Task<List<Transaction>> GetBetwinDate(DateTime startDate, DateTime endDate)
+            => Context.Transactions.Where(x => x.Date > startDate && x.Date <= endDate).ToList();
         public async Task<List<Transaction>> GetByFilter(Filter filter)
         {
             IQueryable<Transaction> data = Context.Transactions;

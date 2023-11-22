@@ -17,6 +17,8 @@ namespace DataLayer.Repository
         Task<double> GetTransactionSum(long accountId, DateTime StartInvDate, DateTime EndInvDate);
         Task<Transaction> Get(long id);
         Task<List<Transaction>> GetAll();
+        Task<List<Transaction>> GetBetwinDate(DateTime startDate, DateTime endDate);
+
         Task<List<Transaction>> GetAllforAccount(Account account);
         Task<List<Transaction>> GetByFilter(Filter filter);
         Task<QueryTransactionResult> GetTransactionsWithFilterByPages(Filter filter);
