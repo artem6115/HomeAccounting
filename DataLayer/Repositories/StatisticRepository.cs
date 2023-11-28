@@ -111,18 +111,11 @@ namespace DataLayer.Repositories
         {
             var result = new List<StatisticData>();
            
-
-
-            #region Универсальный алгоритм
-
             DateTime StartDate = new DateTime(filter.Year,(filter.TypeGroup==TypeGroup.Day)?filter.Month:1,1);
-            DateTime FinishDate;
-            DateTime CurrentDate = StartDate.Date;
+            DateTime CurrentDate = StartDate;
             TypeGroup GroupByDay = filter.TypeGroup;
             bool IsGroupByDays = filter.TypeGroup == TypeGroup.Day;
-            if (IsGroupByDays)  FinishDate = StartDate.AddMonths(1);  
-            else  FinishDate = StartDate.AddYears(1); 
-
+            DateTime FinishDate = IsGroupByDays ? StartDate.AddMonths(1) : StartDate.AddYears(1);
 
             var Invetories = await Context.Inventories.Where(x => x.Date >= StartDate && x.Date < FinishDate).Where(x => x.AccountId == filter.AccountId).ToListAsync();
             var Transaction =await Context.Transactions.Where(x => x.Date >= StartDate && x.Date < FinishDate).Where(x => x.AccountId == filter.AccountId).ToListAsync();
@@ -132,71 +125,27 @@ namespace DataLayer.Repositories
 
             while (CurrentDate < FinishDate)
             {
-                DateTime endCurrentDate;
-                if (IsGroupByDays) endCurrentDate = CurrentDate.AddDays(1).AddMilliseconds(-1);
-                else endCurrentDate = CurrentDate.AddMonths(1).AddMilliseconds(-1);
+                DateTime endCurrentDate = IsGroupByDays? CurrentDate.AddDays(1):CurrentDate.AddMonths(1);
 
-                var lastInv = Invetories.Where(x => x.Date <= endCurrentDate).MaxBy(x => x.Date);
-                if (lastInv != null) {
-                    var transactionSum = Transaction.Where(x => x.Date <= endCurrentDate && x.Date > lastInv.Date).Select(x=>x.IsIncome?x.Value:-x.Value).Sum();
-                    Balance += lastInv.Value + transactionSum;   
-                }
-                else Balance += Transaction.Where(x => x.Date <= endCurrentDate && x.Date >= CurrentDate ).Select(x => x.IsIncome ? x.Value : -x.Value).Sum();
+                var lastInv = Invetories.Where(x => x.Date < endCurrentDate).MaxBy(x => x.Date);
+                var transactionSum = Transaction.Where(x => x.Date < endCurrentDate && x.Date > (lastInv?.Date ?? CurrentDate))
+                       .Select(x => x.IsIncome ? x.Value : -x.Value)
+                       .Sum();
+                Balance += transactionSum + (lastInv?.Value ?? 0);
 
                 result.Add(new StatisticData()
                 {
-                    X =  (IsGroupByDays)?CurrentDate.Day:CurrentDate.Month,
+                    X =  (IsGroupByDays) ? CurrentDate.Day : CurrentDate.Month,
                     Y = (int)Math.Round(Balance)
                 });
 
-                if (IsGroupByDays) CurrentDate.AddDays(1);
-                else CurrentDate.AddMonths(1);
+                CurrentDate = endCurrentDate;
             }
-
-
-            #endregion
-
-            #region Новый алгоритм
-            //var StartPeriod = new DateTime(filter.Year, filter.Month, 1);
-            //var EndPeriod = StartPeriod.AddMonths(1);
-
-            //var Transaction = Context.Transactions.Where(x => x.Date > StartPeriod && x.Date < EndPeriod).Where(x=>x.AccountId==filter.AccountId).ToList();
-            //var Invetories =await _inventoryRepository.GetAccountInventories(filter.AccountId);
-            //double balance = 0;
-            //var lastInventory = Invetories.Where(x=>x.Date < StartPeriod)?.MaxBy(x=>x.Date);
-            //if (lastInventory != null)
-            //    balance += lastInventory.Value;
-            //var sumTrs = Transaction
-            //.Where(x => x.Date > ((lastInventory != null) ? lastInventory.Date : new DateTime()) && x.Date < StartPeriod)?
-            //       .Select(x => (x.IsIncome) ? x.Value : -x.Value)
-            //       .Sum();
-            //if (sumTrs.HasValue) balance += sumTrs.Value;
-
-            //for (DateTime date = StartPeriod; date.Day < DateTime.DaysInMonth(filter.Year,filter.Month); date = date.AddDays(1))
-            //{
-            //    lastInventory = Invetories.Where(x => x.Date > date && x.Date < date.AddDays(1))?.MaxBy(x => x.Date);
-            //    if (lastInventory != null) 
-            //        balance += lastInventory.Value; 
-            //    sumTrs =  Transaction
-            //        .Where(x => x.Date >( (lastInventory!=null)?lastInventory.Date:date) && x.Date < date.AddDays(1))?
-            //        .Select(x=>(x.IsIncome)?x.Value: -x.Value)
-            //        .Sum();
-            //    if(sumTrs.HasValue) balance += sumTrs.Value;
-            //    result.Add(new StatisticData()
-            //    {
-            //        X = date.Day,
-            //        Y = (int)Math.Round(balance)
-            //    });
-
-            //}
-
-
-            #endregion
 
             return result;
         }
 
-        private double InitializeBalance(DateTime StartDate,Inventory lastInventory = null!)
+        private double InitializeBalance(DateTime StartDate,Inventory? lastInventory = null)
         {
             double Balance = 0;
             if (lastInventory != null)
