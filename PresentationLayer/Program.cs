@@ -25,6 +25,12 @@ namespace PresentationLayer
                     }
                 );
 
+            builder.Services.AddDefaultIdentity<ApplicationUser>(option => {
+                option.SignIn.RequireConfirmedAccount = true;
+                option.Lockout.AllowedForNewUsers = true;
+                }
+            ).AddEntityFrameworkStores<AccountingDbContext>();
+
             builder.Services.AddTransient<IAccountRepository, AccountRepository>();
             builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
             builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();

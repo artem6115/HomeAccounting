@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer;
 
-public partial class AccountingDbContext : DbContext
+public partial class AccountingDbContext : IdentityDbContext<ApplicationUser>
 {
     public AccountingDbContext()
     {
@@ -31,6 +32,8 @@ public partial class AccountingDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Transaction>(entity =>
         {
             entity.HasOne(d => d.Account).WithMany(p => p.Transactions).HasForeignKey(d => d.AccountId)
