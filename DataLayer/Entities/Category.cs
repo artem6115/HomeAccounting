@@ -6,7 +6,7 @@ namespace DataLayer.Entities;
 public partial class Category
 {
     public long Id { get; set; }
-    public Guid UserId { get; set; }
+    public ApplicationUser? User { get; set; }
 
     public string Name { get; set; } = null!;
 
