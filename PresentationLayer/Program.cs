@@ -7,6 +7,8 @@ using PresentationLayer.Models;
 using DataLayer.Repositories;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
+using Microsoft.AspNetCore.Identity;
+using PresentationLayer.Data;
 
 namespace PresentationLayer
 {
@@ -18,6 +20,8 @@ namespace PresentationLayer
             
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
+
             builder.Services.AddDbContext<AccountingDbContext>(
                 option => {
                     option.EnableSensitiveDataLogging(true);
@@ -78,7 +82,7 @@ namespace PresentationLayer
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapRazorPages();
             app.Run();
             app.Logger.LogTrace("Start");
         }

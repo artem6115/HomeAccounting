@@ -44,6 +44,7 @@ public partial class AccountingDbContext : IdentityDbContext<ApplicationUser>
                 .OnDelete(DeleteBehavior.SetNull);
         });
 
+
         OnModelCreatingPartial(modelBuilder);
     }
 
