@@ -34,9 +34,10 @@ namespace PresentationLayer.Controllers
 
         public async Task<IActionResult> Word([FromQuery] Filter filter)
         {
-            _transactionService.GetWord(filter);
-            
-            return RedirectToAction("Index","Home");
+
+            var stream = await _transactionService.GetWord(filter);
+            stream.Position = 0;
+            return File(stream, "application/rtf", "Transactions.rtf");
 
         }
     }

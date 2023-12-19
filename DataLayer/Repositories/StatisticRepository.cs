@@ -149,8 +149,8 @@ namespace DataLayer.Repositories
                     Y = (int)Math.Round(Balance)
                 });
 
-                if (IsGroupByDays) CurrentDate.AddDays(1);
-                else CurrentDate.AddMonths(1);
+                if (IsGroupByDays) CurrentDate= CurrentDate.AddDays(1);
+                else CurrentDate=CurrentDate.AddMonths(1);
             }
 
 

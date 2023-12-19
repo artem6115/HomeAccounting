@@ -80,17 +80,18 @@ namespace BusinessLayer.Services
 
         }
         //Не работает
-        public async void GetWord(DataLayer.Models.Filter filter)
+        public async Task<Stream> GetWord(DataLayer.Models.Filter filter)
         {
+            Stream report = new MemoryStream();
+            String msg = "Список транзакций по заданому фильтру\nВеличина --- счёт --- категория --- дата\n";
             var data = await Repository.GetByFilter(filter);
-            var app = new Application();
-            app.Documents.Add();
-            var dock = app.Documents[0];
-            dock.Sections.Add();
-            dock.Sections[0].Range.Text="test";
-            app.ActiveDocument.SaveAs("Trn.dock");
-            dock.Close();
-            app.Quit();
+            foreach(var i in data)
+            {
+                msg += $"{(i.IsIncome ? "+" : "-")}{i.Value} --- {i.Account.Name} --- {(i.Category?.Name??"прочее")} --- {i.Date}{Environment.NewLine}";
+            }
+            var buff = Encoding.UTF8.GetBytes(msg);
+            await report.WriteAsync(buff, 0, buff.Length);
+            return report;
             
 
         }
