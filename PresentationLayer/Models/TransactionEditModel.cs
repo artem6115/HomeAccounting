@@ -12,7 +12,7 @@ namespace PresentationLayer.Models
     {
         public long? Id { get; set; }
 
-        [Required(ErrorMessage ="Название счета обязательно поле")]
+        [Required(ErrorMessage = "Наличие счета обязательно (кликните для добовления)")]
         public long AccountId { get; set; }
         [Required(ErrorMessage = "Обязательно укажите тип операции")]
         public bool IsIncome { get; set; }

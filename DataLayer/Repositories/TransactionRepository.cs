@@ -77,7 +77,7 @@ namespace DataLayer.Repository
                 }
             }
             if (filter.Date is not null)
-                data = data.Where(x => x.Date >= filter.Date.Value && x.Date <= filter.Date.Value.AddDays(1).AddSeconds(-1));
+                data = data.Where(x => x.Date >= filter.Date.Value && x.Date < filter.Date.Value.AddDays(1));
             if (filter.AccountId is not null)
                 data = data.Where(x => x.AccountId == filter.AccountId);
             if (filter.CategoryId is not null)

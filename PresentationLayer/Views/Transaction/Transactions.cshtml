@@ -6,27 +6,47 @@
     string? messageStyle = TempData["MessageStyle"]?.ToString()!;
 }
 <script>
-    //Получаем строку запроса и генирируем url для удаления
-    let endocindUrl = ("@(Model.Url)/Transaction/DeleteByFilter?@(ReflectionServies.GetQueryString(Model.Filter))");
-    //url необходимо декодировать
-    var url = endocindUrl.replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<");
-
     //Скрытие меню
     function MoveToolBar (){
         document.getElementById("ToolBar").classList.toggle("ActiveBar");
     }
     //Запрос на удаление записи
-    function deleteCommand(id) {
+    function DeleteNote(id) {
         let urlToDelete = "delete/" + id;
         if (confirm("Вы уверены, что хотите удалить транзакцию?")) {
             window.location.replace(urlToDelete);
         }
     }
     //Удаление всех выборки
-    function deleteByFilterCommand() {
+    function DeleteAllByFilter() {
         if (confirm("Вы уверены, что хотите удалить данные транзакции?")) {
-            window.location.replace(url);
+            let form = document.getElementById("FilterForm");
+
+            form.action = "@(Model.Url)/Transaction/DeleteByFilter";
+            form.submit();
         }
+    }
+    function GetExcel() {
+        let form = document.getElementById("FilterForm");
+        form.action = "@(Model.Url)/api/File/excel";
+        form.submit();
+    }
+    function GetWord() {
+        let form = document.getElementById("FilterForm");
+        form.action = "@(Model.Url)/api/File/word";
+        form.submit();
+    }
+    function GetFilter() {
+        let form = document.getElementById("FilterForm");
+
+        form.action = "@(Model.Url)/Transaction/Get";
+        form.submit();
+    }
+    function MovePage(number){
+        let form = document.getElementById("FilterForm");
+        document.getElementById("PageNumber").value = number;
+        form.action = "@(Model.Url)/Transaction/Get";
+        form.submit();
     }
 
 </script>
@@ -36,6 +56,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="col-12">
                 <form method="get" id="FilterForm">
+                    <input id="PageNumber" asp-for=@Model.Filter.PageNumber type="hidden" hidden value="0"/>
                     <div class="row justify-content-center mt-1">
                         <div class="col-2">
             
@@ -66,7 +87,7 @@
                         </div>
                         <div class="col-1 mt-1">
                             <p data-tooltip="Применить фильтр">
-                            <button class="btn" type="submit"><img src="/images/filtr.png" /></button>
+                            <button class="btn" onclick="GetFilter()"><img src="/images/filtr.png" /></button>
                             </p>
                         </div>
                         
@@ -140,19 +161,20 @@
     <div style="width:55px;height:55px" class="m-2">
 
         <p data-tooltip="Удалить все транзакци в выборке">
-            <button style="padding:0;" class="btn" onclick="deleteByFilterCommand()"><img width="50px" height="50px" src="/images/delete_all_by_filter.png" /></button>
+            <button style="padding:0;" class="btn" onclick="DeleteAllByFilter()"><img width="50px" height="50px" src="/images/delete_all_by_filter.png" /></button>
         </p>
 
     </div>
     <div style="width:55px;height:55px" class="m-2">
         <p data-tooltip="Скачать Excel документ">
-        <a href="@(Model.Url)/api/File/excel?@(ReflectionServies.GetQueryString(Model.Filter))"><img width="50px" height="50px" src="/images/excel.png" /></a>
-        </>
+        @* <a href="@(Model.Url)/api/File/excel?@(ReflectionServies.GetQueryString(Model.Filter))"><img width="50px" height="50px" src="/images/excel.png" /></a> *@
+        <button class="btn p-0" onclick="GetExcel()"><img width="50px" height="50px" src="/images/excel.png" /></button>
+        <p/>
 
     </div>
     <div style="width:55px;height:55px" class="m-2">
         <p data-tooltip="Скачать Word документ">
-        <a href="#"><img width="50px" height="50px" src="/images/word.png" /></a>
+            <button class="btn p-0" onclick="GetWord()"><img width="50px" height="50px" src="/images/word.png" /></button>
        </p>
 
     </div>
@@ -201,7 +223,7 @@
                                 <a class="btn" asp-controller="Transaction" asp-action="EditPage" asp-route-Id=@item.Id><img src="/images/editnote.png" /></a>
                             </td>
                             <td class="td-edit">
-                                <button class="btn" onclick="deleteCommand(@item.Id)"><img src="/images/delete.png" /></button>
+                                <button class="btn" onclick="DeleteNote(@item.Id)"><img src="/images/delete.png" /></button>
                             </td>
                         </tr>
                     }
@@ -228,19 +250,15 @@
         <div class="col-6 text-center">
             @if (Model.Filter.PageNumber != 0)
             {
-                <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber","0")))">Первая страница</a>
-                <a href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber-1}")))"><img src="/images/back.png" /></a>
+                <button class="btn btn-secondary" onclick="MovePage(0)">Первая страница</button>
+                <button class="p-0 btn" onclick="MovePage(@(Model.Filter.PageNumber-1))"><img src="/images/back.png" /></button>
             }
             <span>@(Model.Filter.PageNumber + 1)</span>
             @if (Model.Filter.PageNumber != Model.NumberOfLastPage - 1)
             {
-                <a href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.Filter.PageNumber  +1}")))"><img src="/images/next.png" /></a>
-                <a class="btn btn-secondary" href="@(Model.Url)/Transaction/Get?@(ReflectionServies.GetQueryString(Model.Filter,("PageNumber",$"{Model.NumberOfLastPage -1}")))"> Последняя страница - @Model.NumberOfLastPage</a>
-
-
-            }
-            
-
+                <button class="p-0 btn" onclick="MovePage(@(Model.Filter.PageNumber+1))"><img src="/images/next.png" /></button>
+                <button class="btn btn-secondary" onclick="MovePage(@(Model.NumberOfLastPage-1))">Последняя страница - @(Model.NumberOfLastPage)</button>
+            } 
         </div>
     </div>
 }

@@ -110,7 +110,7 @@ namespace DataLayer.Repositories
         public async Task<IEnumerable<StatisticData>> BuildBalanceStatistic(StatisticFilter filter)
         {
             var result = new List<StatisticData>();
-           
+
             DateTime StartDate = new DateTime(filter.Year,(filter.TypeGroup==TypeGroup.Day)?filter.Month:1,1);
             DateTime CurrentDate = StartDate;
             TypeGroup GroupByDay = filter.TypeGroup;
