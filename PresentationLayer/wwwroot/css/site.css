@@ -199,3 +199,9 @@ form-control {
 .statisticForm .form-label {
     color: white;
 }
+
+.LoginWindow{
+    border:4px outset blue;
+    border-radius:5%;
+    
+}

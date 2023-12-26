@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Http.Extensions;
 using DataLayer.Repositories;
 using DataLayer.Models;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PresentationLayer.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
         private readonly TransactionService _transactionService;

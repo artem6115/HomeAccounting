@@ -8,7 +8,7 @@ using DataLayer.Repositories;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.AspNetCore.Identity;
-using PresentationLayer.Data;
+
 
 namespace PresentationLayer
 {
@@ -30,7 +30,7 @@ namespace PresentationLayer
                 );
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(option => {
-                option.SignIn.RequireConfirmedAccount = true;
+                option.SignIn.RequireConfirmedAccount = false;
                 option.Lockout.AllowedForNewUsers = true;
                 }
             ).AddEntityFrameworkStores<AccountingDbContext>();
