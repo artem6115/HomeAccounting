@@ -8,6 +8,7 @@ using DataLayer.Repositories;
 using DataLayer.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace PresentationLayer.Controllers
 {

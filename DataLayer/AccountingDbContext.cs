@@ -21,6 +21,8 @@ public partial class AccountingDbContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
 
     public virtual DbSet<Transaction> Transactions { get; set; }
     public virtual DbSet<Inventory> Inventories { get; set; }
@@ -44,7 +46,11 @@ public partial class AccountingDbContext : IdentityDbContext<ApplicationUser>
                 .OnDelete(DeleteBehavior.SetNull);
         });
 
-
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasOne(d => d.User).WithMany(p => p.Accounts).HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 

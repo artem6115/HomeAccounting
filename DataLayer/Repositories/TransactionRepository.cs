@@ -49,7 +49,11 @@ namespace DataLayer.Repository
 
         public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsNoTracking().SingleAsync(x=>x.Id == id);
 
-        public  Task<List<Transaction>> GetAll() => Context.Transactions.Include(x => x.Account).Include(x => x.Category).ToListAsync();
+        public  Task<List<Transaction>> GetAll(string UserId) => Context.Transactions
+            .Include(x => x.Account)
+            .Where(x=>x.Account.UserId==UserId)
+            .Include(x => x.Category)
+            .ToListAsync();
         public Task<List<Transaction>> GetAllforAccount(Account account)
             => Context.Transactions.Where(x=>x.AccountId==account.Id).Include(x => x.Account).Include(x => x.Category).ToListAsync();
         public async Task<List<Transaction>> GetBetwinDate(DateTime startDate, DateTime endDate)

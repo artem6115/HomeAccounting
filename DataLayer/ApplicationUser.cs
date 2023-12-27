@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DataLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace DataLayer
 {
     public class ApplicationUser : IdentityUser
     {
+        public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+
     }
 }

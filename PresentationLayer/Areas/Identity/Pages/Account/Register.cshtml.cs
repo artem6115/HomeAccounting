@@ -68,6 +68,11 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            [Required(ErrorMessage = "Full name is required")]
+            public string FullName { get; set; }     
+            
             [Required]
             [EmailAddress(ErrorMessage ="The email have incorrect format")]
             [Display(Name = "Email")]
@@ -102,13 +107,19 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ////var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+            //var user = new ApplicationUser()
+            //{
+            //    Email = Input.Email,
+            //};
+            //var result = await _userManager.CreateAsync(user, Input.Password);
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.FullName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
