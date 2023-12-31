@@ -2,11 +2,14 @@
 using DataLayer.Models;
 using BusinessLayer.Services;
 using DataLayer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PresentationLayer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticRepository _statisticRepository;

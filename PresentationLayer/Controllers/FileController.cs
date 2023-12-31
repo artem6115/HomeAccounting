@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using BusinessLayer.Services;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PresentationLayer.Controllers
 {
     [Route("api/File")]
     [ApiController]
+    [Authorize]
+
     public class FileController : ControllerBase
     {
         private readonly TransactionService _transactionService;

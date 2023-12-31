@@ -8,6 +8,7 @@ using DataLayer.Repositories;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.AspNetCore.Identity;
+using Aspose.Cells.Charts;
 
 
 namespace PresentationLayer
@@ -32,6 +33,9 @@ namespace PresentationLayer
             builder.Services.AddDefaultIdentity<ApplicationUser>(option => {
                 option.SignIn.RequireConfirmedAccount = false;
                 option.Lockout.AllowedForNewUsers = true;
+                option.Password.RequireDigit = true;
+                option.Password.RequiredLength = 6;
+
                 }
             ).AddEntityFrameworkStores<AccountingDbContext>();
 
@@ -48,6 +52,14 @@ namespace PresentationLayer
             builder.Services.AddTransient<AccountService>();
             builder.Services.AddTransient<InventoryService>();
             builder.Services.AddTransient<GeneratorEntitiesService>();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                "Admin",
+                policyBuilder => policyBuilder
+                .RequireClaim("Admin"));
+            });
 
             builder.Services.AddSession();
             builder.Services.AddCors();

@@ -1,11 +1,9 @@
 ﻿
-@model CategoryEditModel
-@inject CategoryService service
+@model CategoryPageModel
 @{
     ViewData["Title"] = "Категории";
     string? message = TempData["Message"]?.ToString();
-    string messageStyle = TempData["MessageStyle"]?.ToString()!;
-    List<Category> categories =await service.GetAll();
+    string messageStyle = TempData["MessageStyle"]?.ToString()!; 
 }
 @if (message is not null && message != "")
 {
@@ -14,8 +12,10 @@
 <form method="post" asp-controller="Category" asp-action="Add">
     <div class="row justify-content-center mt-3">
         <div class="col-lg-6 col-8">
-            <input asp-for=Name class="form-control" />
-            <span class="validationError" asp-validation-for=Name></span>
+            <input asp-for=@Model.EditModel.Name class="form-control" />
+            <span class="validationError" asp-validation-for=@Model.EditModel.Name></span>
+            <br />
+            <span class="validationError">@TempData["Error"]</span>
         </div>
         <div class="col-2">
             <button class="btn btn-success" type="submit">Добавить</button>
@@ -37,7 +37,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in categories){
+            @foreach(var item in Model.Categories){
                 <tr>
                     <td>@item.Name</td>
                     <td width="50px">

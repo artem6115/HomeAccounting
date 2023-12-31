@@ -6,25 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using DataLayer.Entities;
 using PresentationLayer.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+
 namespace PresentationLayer.Controllers;
 
+[Authorize]
 public class AccountController : Controller
 { 
     private readonly AccountService accountService;
     private readonly InventoryService inventoryService;
-
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<AccountController> Log;
     private readonly IMapper _Mapper;
 
-    public AccountController(ILogger<AccountController> log,AccountService rep, IMapper mapper, InventoryService invService)
+    public AccountController(ILogger<AccountController> log, UserManager<ApplicationUser>  userManager, AccountService rep, IMapper mapper, InventoryService invService)
     {
         accountService = rep;
         _Mapper = mapper;
         Log = log;
         inventoryService = invService;
+        _userManager = userManager;
     }
 
-    public  bool CheckExistName(string name)=> !accountService.CheckExistName(name);
+    public  bool CheckExistName(string name)=> accountService.CheckExistName(name);
 
     [HttpGet]
     public async Task<IActionResult> Get() =>View("Accounts",await accountService.GetAllIncludeBalance());
@@ -45,7 +50,14 @@ public class AccountController : Controller
         if (ModelState.IsValid) {
             if (!model.Id.HasValue)
             {
-                var account = await accountService.Add(_Mapper.Map<Account>(model));
+                if (CheckExistName(model.Name))
+                {
+                    TempData["Error"] = "Счет с таким названием уже существует";
+                    return RedirectToAction("EditPage",model.Id);
+                }
+                var account = _Mapper.Map<Account>(model);
+                account.UserId =_userManager.GetUserId(User);
+                account = await accountService.Add(account);
                 TempData["Message"] = "Новый счет добавлен";
                 await inventoryService.Add(
                     new Inventory(){

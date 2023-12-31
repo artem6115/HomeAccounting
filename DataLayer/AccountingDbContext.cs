@@ -51,6 +51,11 @@ public partial class AccountingDbContext : IdentityDbContext<ApplicationUser>
             entity.HasOne(d => d.User).WithMany(p => p.Accounts).HasForeignKey(d => d.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         });
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasOne(d => d.User).WithMany(p => p.Categories).HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 

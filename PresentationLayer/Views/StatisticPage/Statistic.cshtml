@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Статистика";
     string url = ViewData["url"].ToString();
+    var Accounts = _accountService.GetAll().Result ?? new List<Account>(0);
 }
 <script>
     var CurrentCanvas = "category";
@@ -49,7 +50,7 @@
                         <div class="col-2">
                             <label class="form-label">Выберите счёт</label>
                             <select asp-for="AccountId" class="form-select">
-                                @foreach (var item in _accountService.GetAll().Result)
+                                @foreach (var item in Accounts)
                                 {
                                     <option value=@item.Id>@item.Name</option>
                                 }

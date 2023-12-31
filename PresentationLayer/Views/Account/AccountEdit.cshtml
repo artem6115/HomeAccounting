@@ -15,10 +15,14 @@
                     </div>
                 </div>
                 <input asp-for=Id hidden="hidden" />
+                <input asp-for=UserId hidden="hidden" />
+
 
                 <label class="form-label">Название счета:</label>
                 <input asp-for=Name value=@Model?.Name class="form-control" />
-                <span asp-validation-for=Name class="validationError"></span>
+                <span asp-validation-for=Name class="validationError"></span><br />
+                <span class="validationError">@TempData["Error"]</span>
+
                 @if (Model is null)
                 {
                     <label class="form-label mt-1">Начальная сумма:</label>

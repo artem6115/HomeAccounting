@@ -2,6 +2,7 @@
 using BusinessLayer.Services;
 using DataLayer.Entities;
 using DataLayer.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PresentationLayer.Models;
@@ -9,6 +10,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PresentationLayer.Controllers
 {
+    [Authorize]
+
     public class InventoryController : Controller
     {
         private readonly InventoryService _inventoryService;

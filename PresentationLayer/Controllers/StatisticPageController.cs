@@ -1,8 +1,11 @@
 ﻿using DataLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
+    [Authorize]
+
     public class StatisticPageController : Controller
     {
         public IActionResult Statistic()

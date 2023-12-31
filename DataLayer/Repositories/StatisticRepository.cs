@@ -81,16 +81,16 @@ namespace DataLayer.Repositories
             if (filter.TypeGroup== TypeGroup.Day )
             {
                 StartDate = new DateTime(filter.Year, filter.Month, 1);
-                FinishDate = new DateTime(filter.Year, filter.Month, 1).AddMonths(1).AddDays(-1);
-                Query = Query.Where(x => x.Date >= StartDate && x.Date <= FinishDate);
+                FinishDate = StartDate.AddMonths(1);
+                Query = Query.Where(x => x.Date >= StartDate && x.Date < FinishDate);
                 Group = Query.GroupBy(x => x.Date.Day);
             }
 
             else
             {
                 StartDate = new DateTime(filter.Year,1,1);
-                FinishDate = new DateTime(filter.Year+1, 1, 1,23,59,59).AddDays(-1);
-                Query = Query.Where(x => x.Date >= StartDate && x.Date <= FinishDate);
+                FinishDate = StartDate.AddYears(1);
+                Query = Query.Where(x => x.Date >= StartDate && x.Date < FinishDate);
                 Group = Query.GroupBy(x => x.Date.Month);
 
             }
@@ -117,10 +117,19 @@ namespace DataLayer.Repositories
             bool IsGroupByDays = filter.TypeGroup == TypeGroup.Day;
             DateTime FinishDate = IsGroupByDays ? StartDate.AddMonths(1) : StartDate.AddYears(1);
 
-            var Invetories = await Context.Inventories.Where(x => x.Date >= StartDate && x.Date < FinishDate).Where(x => x.AccountId == filter.AccountId).ToListAsync();
-            var Transaction =await Context.Transactions.Where(x => x.Date >= StartDate && x.Date < FinishDate).Where(x => x.AccountId == filter.AccountId).ToListAsync();
+            var queryInventories = Context.Inventories.Where(x => x.Date >= StartDate && x.Date < FinishDate);
+            var queryTransactions = Context.Transactions.Where(x => x.Date >= StartDate && x.Date < FinishDate);
 
-            double Balance = InitializeBalance(StartDate, Invetories.Where(x => x.Date < StartDate).MaxBy(x => x.Date));
+            if (filter.AllAccounts)
+            {
+                queryInventories = queryInventories.Where(x => x.AccountId == filter.AccountId);
+                queryTransactions = queryTransactions.Where(x => x.AccountId == filter.AccountId);
+
+            }
+            var Invetories = await queryInventories.ToListAsync();
+            var Transaction =await queryTransactions.ToListAsync();
+
+            double Balance = InitializeBalance((filter.AllAccounts)?null:filter.AccountId,StartDate, Invetories.Where(x => x.Date < StartDate).MaxBy(x => x.Date));
 
 
             while (CurrentDate < FinishDate)
@@ -145,13 +154,14 @@ namespace DataLayer.Repositories
             return result;
         }
 
-        private double InitializeBalance(DateTime StartDate,Inventory? lastInventory = null)
+        private double InitializeBalance(long? accountId,DateTime StartDate,Inventory? lastInventory = null)
         {
             double Balance = 0;
             if (lastInventory != null)
                 Balance += lastInventory.Value;
-            var sumOldTransaction = Context.Transactions
-            .Where(x => x.Date > ((lastInventory != null) ? lastInventory.Date : new DateTime()) && x.Date < StartDate)?
+            IQueryable<Transaction> query = Context.Transactions;
+            if (accountId.HasValue) query = query.Where(x => x.AccountId == accountId.Value);
+            var sumOldTransaction = query.Where(x => x.Date > ((lastInventory != null) ? lastInventory.Date : new DateTime()) && x.Date < StartDate)?
                    .Select(x => (x.IsIncome) ? x.Value : -x.Value)
                    .Sum();
             if (sumOldTransaction.HasValue) Balance += sumOldTransaction.Value;

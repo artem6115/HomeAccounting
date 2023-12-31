@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities;
 
-public partial class Account
+public partial class Account: IHasUser
 {
     public long Id { get; set; }
     public string Name { get; set; } = null!;

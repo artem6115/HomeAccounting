@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DataLayer.Entities;
 
-public partial class Category
+public partial class Category : IHasUser
 {
     public long Id { get; set; }
     public ApplicationUser? User { get; set; }

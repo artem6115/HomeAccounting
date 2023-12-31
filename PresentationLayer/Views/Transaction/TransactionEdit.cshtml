@@ -1,12 +1,7 @@
-﻿@model TransactionEditModel
+﻿@model TransactionEditPageModel
 @{
     ViewData["Title"] = "Создание/редактирование транзакции";
-    List<Account> Accounts = AccountService.GetAll().Result;
-    List<Category> Categories = CategoryService.GetAll().Result;
 }
-@inject AccountService AccountService
-@inject CategoryService CategoryService
-
 <script>
     function back(){
 
@@ -19,16 +14,16 @@
                 <h1>@(Model is not null?"Редактирование транзакции":"Добавление транзакции")</h1>
                 <div class="col-lg-6 col-12 ">
 
-                    <input asp-for=Id hidden="hidden"/>
+                    <input asp-for=@Model.EditModel.Id hidden="hidden"/>
                     <label class="form-label">Выберите счет</label>
-                    <select asp-for=AccountId class="form-select">
-                        @foreach (var item in Accounts)
+                    <select asp-for=@Model.EditModel.AccountId class="form-select">
+                        @foreach (var item in Model.Accounts)
                         {
                             <option value=@item.Id>@item.Name</option>
                         }
                 
                     </select>
-                    <a asp-controller="Account" asp-action="EditPage" class="link"><span asp-validation-for=AccountId class="validationError"></span></a>
+                    <a asp-controller="Account" asp-action="EditPage" class="link"><span asp-validation-for=@Model.EditModel.AccountId class="validationError"></span></a>
 
 
                     <br />
@@ -38,22 +33,22 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text">Доход</span>
                         <div class="input-group-text">
-                            <input type="checkbox" asp-for=IsIncome class="form-check-input" />
+                            <input type="checkbox" class="form-check-input" asp-for=@Model.EditModel.IsIncome />
                         </div>
-                        <input asp-for=Value class="form-control" />
+                        <input class="form-control" asp-for=@Model.EditModel.Value />
                         
                     </div>
-                    <span asp-validation-for=Value class="validationError"></span>
+                    <span asp-validation-for=@Model.EditModel.Value class="validationError"></span>
                     
 
                 </div>
                 <div class="col-lg-6 col-12">
                     <label class="form-label">Выберите категорию*</label>
                     <a asp-action="Get" asp-controller="Category" class="btn btn-success m-2">Добавить категорию</a>
-                    <select asp-for=CategoryId class="form-select">
+                    <select asp-for=@Model.EditModel.CategoryId class="form-select">
                         <option value="">-</option>
 
-                        @foreach (var item in Categories)
+                        @foreach (var item in Model.Categories)
                         {
                             <option value=@item.Id>@item.Name</option>
                         }
@@ -61,12 +56,12 @@
 
                     <br />
                     <label class="form-label ">Укажите дату</label>
-                    <input asp-for=Date class="form-control" />
-                    <span asp-validation-for=Date class="validationError"></span>
+                    <input asp-for=@Model.EditModel.Date class="form-control" />
+                    <span asp-validation-for=@Model.EditModel.Date class="validationError"></span>
                     
                     <br />
                     <label class="form-label">Напишите коментарий*</label>
-                    <input asp-for=Comment class="form-control" />
+                    <input asp-for=@Model.EditModel.Comment class="form-control" />
                 </div>
 
             </div>

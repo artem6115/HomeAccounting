@@ -12,7 +12,7 @@ namespace DataLayer.Models
     public class StatisticFilter
     {
         [Range(1900, 3000)]
-        public int Year { get; set; } = 2023;
+        public int Year { get; set; } = DateTime.Now.Year;
         [Range(1, 12)]
         public int Month { get; set; } = DateTime.Now.Month;
         public TypeTransaction TypeTransaction { get; set; }

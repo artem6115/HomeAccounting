@@ -9,6 +9,8 @@ using DataLayer.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using DataLayer.Repository;
 
 namespace PresentationLayer.Controllers
 {
@@ -17,27 +19,30 @@ namespace PresentationLayer.Controllers
     {
         private readonly TransactionService _transactionService;
         private readonly IInventoryRepository _inventoryRepository;
-
+        private readonly IAccountRepository _accountRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         private readonly ILogger<TransactionController> _log;
         private readonly IMapper _mapper;
 
-        public TransactionController(ILogger<TransactionController> log, TransactionService trs, IInventoryRepository inventoryRepository, IMapper mapper)
+        public TransactionController(ILogger<TransactionController> log, TransactionService trs, 
+            IInventoryRepository inventoryRepository, IMapper mapper,
+            IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             _transactionService = trs;
             _mapper = mapper;
             _log = log;
             _inventoryRepository = inventoryRepository;
+            _accountRepository = accountRepository;
+            _categoryRepository = categoryRepository;
         }
         [HttpGet]
 
-        public async Task<IActionResult> Get([FromServices] AccountService _accountService,
-            [FromServices] CategoryService _categoryService,
-            Filter filter) {
+        public async Task<IActionResult> Get(Filter filter) {
             var QueryExecuted = await _transactionService.GetTransactionsWithFilterByPages(filter);
             TransactionViewModel model = new TransactionViewModel() {
-                Accounts = await _accountService.GetAll(),
-                Categories = await _categoryService.GetAll(),
+                Accounts = await _accountRepository.GetAll(),
+                Categories = await _categoryRepository.GetAll(),
                 Filter = filter,
                 Transactions = QueryExecuted.Transactions,
                 NumberOfLastPage = QueryExecuted.PageCount,
@@ -58,8 +63,21 @@ namespace PresentationLayer.Controllers
 
         [HttpGet]
         public async Task<IActionResult> EditPage(long? id)
-            => View("TransactionEdit",(id.HasValue)
-                ? _mapper.Map<TransactionEditModel> (await _transactionService.Get(id.Value)):new TransactionEditModel() { Date=CurrentDate()});
+        {
+            TransactionEditPageModel model = new();
+            if (id.HasValue)
+            {
+                var entity =await _transactionService.Get(id.Value);
+                model.EditModel = _mapper.Map<TransactionEditModel>(entity);
+            }
+            else
+                model.EditModel = new TransactionEditModel() {Date = CurrentDate()};
+            
+
+            model.Accounts = await _accountRepository.GetAll();
+            model.Categories = await _categoryRepository.GetAll();
+            return View("TransactionEdit", model);
+        }
 
         private DateTime CurrentDate()
         {
@@ -69,18 +87,18 @@ namespace PresentationLayer.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Edit(TransactionEditModel model)
+        public async Task<IActionResult> Edit(TransactionEditPageModel model)
         {
             if (ModelState.IsValid)
             {
-                if (!model.Id.HasValue)
+                if (!model.EditModel.Id.HasValue)
                 {
-                    await _transactionService.Add(_mapper.Map<Transaction>(model));
+                    await _transactionService.Add(_mapper.Map<Transaction>(model.EditModel));
                     TempData["Message"] = "Транзакция добавлена";
                 }
                 else
                 {
-                    await _transactionService.Edit(_mapper.Map<Transaction>(model));
+                    await _transactionService.Edit(_mapper.Map<Transaction>(model.EditModel));
                     TempData["Message"] = "Транзакция отредактирована";
                 }
                 TempData["MessageStyle"] = "alert-success";
@@ -93,7 +111,7 @@ namespace PresentationLayer.Controllers
                 }
                 return RedirectToAction("Get");
             }
-            return View("TransactionEdit", model);
+            return RedirectToAction("EditPage",model.EditModel.Id);
         }
 
         public async Task<IActionResult> Delete(long id)
