@@ -26,8 +26,7 @@ namespace BusinessLayer.Services
         }
         public Task<Transaction> Add(Transaction model) => Repository.Add(model);
         public async System.Threading.Tasks.Task Edit(Transaction model) =>await Repository.Edit(model);
-        public void Delete(long id) => Repository.Delete(id);
-        public Task<List<Transaction>> GetAll() => Repository.GetAll("");    
+        public void Delete(long id) => Repository.Delete(id);    
         public Task<List<Transaction>> GetByFilter(DataLayer.Models.Filter filter) => Repository.GetByFilter(filter);
 
         public Task<Transaction> Get(long id) => Repository.Get(id);

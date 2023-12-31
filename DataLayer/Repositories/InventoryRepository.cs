@@ -37,7 +37,7 @@ namespace DataLayer.Repositories
         }
 
         public async Task<Inventory> Get(long Id)
-            => await Context.Inventories.Include(x=>x.Account).SingleAsync(x=>x.Id==Id);
+            => await Context.Inventories.Include(x=>x.Account).SingleAsync(x=>x.Id==Id && x.Account.UserId == UserContext.UserId);
 
 
         public async Task<List<Inventory>> GetAccountInventories(long accountId)

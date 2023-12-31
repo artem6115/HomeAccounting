@@ -47,17 +47,9 @@ namespace DataLayer.Repository
 
         }
 
-        public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsNoTracking().SingleAsync(x=>x.Id == id);
+        public  Task<Transaction> Get(long id)=> Context.Transactions.Include(x => x.Account).Include(x => x.Category).AsNoTracking().SingleAsync(x=>x.Id == id && x.Account.UserId==UserContext.UserId);
 
-        public  Task<List<Transaction>> GetAll(string UserId) => Context.Transactions
-            .Include(x => x.Account)
-            .Where(x=>x.Account.UserId==UserId)
-            .Include(x => x.Category)
-            .ToListAsync();
-        public Task<List<Transaction>> GetAllforAccount(Account account)
-            => Context.Transactions.Where(x=>x.AccountId==account.Id).Include(x => x.Account).Include(x => x.Category).ToListAsync();
-        public async Task<List<Transaction>> GetBetwinDate(DateTime startDate, DateTime endDate)
-            => Context.Transactions.Where(x => x.Date > startDate && x.Date <= endDate).ToList();
+
         public async Task<List<Transaction>> GetByFilter(Filter filter)
         {
             IQueryable<Transaction> data = Context.Transactions;
@@ -80,6 +72,7 @@ namespace DataLayer.Repository
                     }
                 }
             }
+            data = data.Where(x => x.Account.UserId == UserContext.UserId);
             if (filter.Date is not null)
                 data = data.Where(x => x.Date >= filter.Date.Value && x.Date < filter.Date.Value.AddDays(1));
             if (filter.AccountId is not null)

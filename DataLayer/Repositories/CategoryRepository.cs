@@ -50,9 +50,9 @@ namespace DataLayer.Repository
 
         }
 
-        public  Task<Category> Get(long id)=> Context.Categories.SingleAsync(x=>x.Id == id);
+        public  Task<Category> Get(long id)=> Context.Categories.SingleAsync(x=>x.Id == id && x.UserId == UserContext.UserId);
 
-        public  Task<List<Category>> GetAll() => Context.Categories.ToListAsync();
+        public  Task<List<Category>> GetAll() => Context.Categories.Where(x=>x.UserId==UserContext.UserId).ToListAsync();
         public bool CheckExistName (string name)
             => Context.Categories.AsEnumerable().Any(x => x.Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase));
     }

@@ -46,9 +46,9 @@ namespace DataLayer.Repository
             Context.SaveChangesAsync();
         }
 
-        public Task<Account> Get(long id) => Context.Accounts.SingleAsync(x => x.Id == id);
+        public Task<Account> Get(long id) => Context.Accounts.SingleAsync(x => x.Id == id && x.UserId == UserContext.UserId);
 
-        public  Task<List<Account>> GetAll() =>  Context.Accounts.ToListAsync();
+        public  Task<List<Account>> GetAll() =>  Context.Accounts.Where(x=>x.UserId==UserContext.UserId).ToListAsync();
         public bool CheckExistName(string name)
              => Context.Accounts.AsEnumerable().Any(x => x.Name.Equals(name.Trim(),StringComparison.OrdinalIgnoreCase));
         

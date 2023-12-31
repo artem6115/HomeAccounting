@@ -34,7 +34,7 @@ namespace DataLayer.Repositories
         public async Task<IEnumerable<StatisticData>> BuildCategoriesStatistic(StatisticFilter filter)
         {
 
-            IQueryable<Transaction> Query = Context.Transactions;
+            IQueryable<Transaction> Query = Context.Transactions.Where(x=>x.Account.UserId == UserContext.UserId);
 
             if (!filter.AllTime)
             {
@@ -67,7 +67,8 @@ namespace DataLayer.Repositories
         {
             DateTime StartDate;
             DateTime FinishDate;
-            IQueryable<Transaction> Query = Context.Transactions;
+            IQueryable<Transaction> Query = Context.Transactions.Where(x => x.Account.UserId == UserContext.UserId);
+
             IQueryable<IGrouping<int,Transaction>> Group=null;
             if (!filter.AllAccounts)
                 Query = Query.Where(x => x.AccountId == filter.AccountId);
@@ -117,10 +118,10 @@ namespace DataLayer.Repositories
             bool IsGroupByDays = filter.TypeGroup == TypeGroup.Day;
             DateTime FinishDate = IsGroupByDays ? StartDate.AddMonths(1) : StartDate.AddYears(1);
 
-            var queryInventories = Context.Inventories.Where(x => x.Date >= StartDate && x.Date < FinishDate);
-            var queryTransactions = Context.Transactions.Where(x => x.Date >= StartDate && x.Date < FinishDate);
+            var queryInventories = Context.Inventories.Where(x => x.Date >= StartDate && x.Date < FinishDate && x.Account.UserId==UserContext.UserId);
+            var queryTransactions = Context.Transactions.Where(x => x.Date >= StartDate && x.Date < FinishDate && x.Account.UserId==UserContext.UserId);
 
-            if (filter.AllAccounts)
+            if (!filter.AllAccounts)
             {
                 queryInventories = queryInventories.Where(x => x.AccountId == filter.AccountId);
                 queryTransactions = queryTransactions.Where(x => x.AccountId == filter.AccountId);
@@ -159,7 +160,7 @@ namespace DataLayer.Repositories
             double Balance = 0;
             if (lastInventory != null)
                 Balance += lastInventory.Value;
-            IQueryable<Transaction> query = Context.Transactions;
+            IQueryable<Transaction> query = Context.Transactions.Where(x => x.Account.UserId == UserContext.UserId);
             if (accountId.HasValue) query = query.Where(x => x.AccountId == accountId.Value);
             var sumOldTransaction = query.Where(x => x.Date > ((lastInventory != null) ? lastInventory.Date : new DateTime()) && x.Date < StartDate)?
                    .Select(x => (x.IsIncome) ? x.Value : -x.Value)

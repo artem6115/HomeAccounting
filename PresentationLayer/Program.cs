@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Aspose.Cells.Charts;
-
+using PresentationLayer.Middlewares;
 
 namespace PresentationLayer
 {
@@ -90,7 +90,7 @@ namespace PresentationLayer
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseUserContext();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
