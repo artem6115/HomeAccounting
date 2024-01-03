@@ -54,6 +54,6 @@ namespace DataLayer.Repository
 
         public  Task<List<Category>> GetAll() => Context.Categories.Where(x=>x.UserId==UserContext.UserId).ToListAsync();
         public bool CheckExistName (string name)
-            => Context.Categories.AsEnumerable().Any(x => x.Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase));
+            => Context.Categories.Where(x => x.UserId == UserContext.UserId).AsEnumerable().Any(x => x.Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase));
     }
 }

@@ -35,6 +35,7 @@ namespace PresentationLayer
                 option.Lockout.AllowedForNewUsers = true;
                 option.Password.RequireDigit = true;
                 option.Password.RequiredLength = 6;
+                option.User.RequireUniqueEmail = true;
 
                 }
             ).AddEntityFrameworkStores<AccountingDbContext>();
@@ -44,6 +45,8 @@ namespace PresentationLayer
             builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
             builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
             builder.Services.AddTransient<IStatisticRepository, StatisticRepository>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
+
 
 
 
@@ -53,6 +56,7 @@ namespace PresentationLayer
             builder.Services.AddTransient<InventoryService>();
             builder.Services.AddTransient<GeneratorEntitiesService>();
             builder.Services.AddTransient<SettingsService>();
+            builder.Services.AddSingleton<EmailSenderService>();
 
 
             builder.Services.AddAuthorization(options =>

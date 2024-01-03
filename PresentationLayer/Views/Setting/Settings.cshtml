@@ -1,15 +1,11 @@
 ﻿@using DataLayer.Repository;
 @{
-    ViewData["Title"] = "Настройки";
-    string Url = TempData["url"].ToString();
-    List<Account> Accounts = await accountRep.GetAll();
 }
-@model Settings
-@inject IAccountRepository accountRep
+@model SettingsViewModel
 <script>
     function exit(){
         if(confirm("Вы уверены что хотите выйти?")){
-            window.location.replace("@(Url)/Identity/Account/Logout");
+            window.location.replace("@(Model.Url)/Identity/Account/Logout");
         }
     }
 </script>
@@ -17,7 +13,7 @@
     <div class="col-6 col-md-10">
         <h1>Аккаунт</h1>
         <hr />
-        <a class="btn btn-info"> Сменить пароль</a>
+        <a asp-asp-controller="UserManager" asp-action="SetCode" asp-route-email="@UserContext.UserName" class="btn btn-info"> Сменить пароль</a>
         <button class="btn btn-danger" onclick="exit()">Выйти из системы</button>
     </div>
 </div>
@@ -27,7 +23,7 @@
         <h1>Учетная политика</h1>
         <hr />
             <label class="form-label">Как часто проводить автоматическую инвенторизацию</label>
-            <select asp-for=@Model.AutoInvetory class="form-select">
+            <select asp-for=@Model.settings.AutoInvetory class="form-select">
                  <option value=4>Не проводить</option>
                 <option value=3>Каждый месяц</option>
                 <option value=2>Каждую неделю</option>
@@ -37,7 +33,7 @@
                 <div class="input-group-prepend">
                     <h5  class="input-grop-text">Создавать корректирующую транзакции при несовпадении расчетного баланса с фактическим </h5>
                 </div>
-                <input type="checkbox" asp-for=@Model.AddNewCategoryIfNotExist class="form-check-input m-lg-2 mt-2" />
+                <input type="checkbox" asp-for=@Model.settings.AddNewCategoryIfNotExist class="form-check-input m-lg-2 mt-2" />
             </div>
     </div>
 </div>
@@ -49,11 +45,11 @@
             <div class="input-group-prepend">
                 <h5  class="input-grop-text">Создавать введеную категорию при ее отсутвии </h5>
             </div>
-            <input type="checkbox" asp-for=@Model.CreateBalancingTransaction class="form-check-input m-lg-2 mt-2" />
+                <input type="checkbox" asp-for=@Model.settings.CreateBalancingTransaction class="form-check-input m-lg-2 mt-2" />
         </div>
         <label class="form-label">Счет по умолчанию</label>
-        <select asp-for=@Model.AccountId class="form-select">
-            @foreach(Account item in Accounts){
+            <select asp-for=@Model.settings.AccountId class="form-select">
+            @foreach(Account item in Model.Accounts ?? new ()){
                 <option value=@item.Id>@item.Name</option>
             }
         </select>

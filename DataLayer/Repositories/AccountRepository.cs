@@ -50,7 +50,7 @@ namespace DataLayer.Repository
 
         public  Task<List<Account>> GetAll() =>  Context.Accounts.Where(x=>x.UserId==UserContext.UserId).ToListAsync();
         public bool CheckExistName(string name)
-             => Context.Accounts.AsEnumerable().Any(x => x.Name.Equals(name.Trim(),StringComparison.OrdinalIgnoreCase));
+             => Context.Accounts.Where(x=>x.UserId==UserContext.UserId).AsEnumerable().Any(x => x.Name.Equals(name.Trim(),StringComparison.OrdinalIgnoreCase));
         
     }
 }

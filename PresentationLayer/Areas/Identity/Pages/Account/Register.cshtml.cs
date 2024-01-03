@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using BusinessLayer.Services;
 using DataLayer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -22,14 +23,16 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailSenderService _emailSender;
+
+
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            EmailSenderService emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -69,9 +72,7 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             /// 
-
-            [Required(ErrorMessage = "Full name is required")]
-            public string FullName { get; set; }     
+ 
             
             [Required]
             [EmailAddress(ErrorMessage ="The email have incorrect format")]
@@ -107,16 +108,22 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            ////var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-            //var user = new ApplicationUser()
-            //{
-            //    Email = Input.Email,
-            //};
-            //var result = await _userManager.CreateAsync(user, Input.Password);
+            
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+
+
+                if (Input.Email == null ||
+                    !(await _emailSender.Send(Input.Email, "На вашу почту была попытка создания учетной записи", "Создание учетной записи")))
+                {
+                    TempData["error"] = "Введена не корректная почта";
+                    _logger.LogWarning("Неудачная попытка создания аккаунта, этап проверки почты");
+                    ModelState.AddModelError("", "Введена не корректная почта");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -125,20 +132,8 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("FullName", Input.FullName));
+                   // _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("FullName", Input.FullName));
                     _logger.LogInformation("User created a new account with password.");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
