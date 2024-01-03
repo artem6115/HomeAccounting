@@ -52,6 +52,8 @@ namespace PresentationLayer
             builder.Services.AddTransient<AccountService>();
             builder.Services.AddTransient<InventoryService>();
             builder.Services.AddTransient<GeneratorEntitiesService>();
+            builder.Services.AddTransient<SettingsService>();
+
 
             builder.Services.AddAuthorization(options =>
             {

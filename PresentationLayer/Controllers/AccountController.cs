@@ -16,17 +16,15 @@ public class AccountController : Controller
 { 
     private readonly AccountService accountService;
     private readonly InventoryService inventoryService;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<AccountController> Log;
     private readonly IMapper _Mapper;
 
-    public AccountController(ILogger<AccountController> log, UserManager<ApplicationUser>  userManager, AccountService rep, IMapper mapper, InventoryService invService)
+    public AccountController(ILogger<AccountController> log,  AccountService rep, IMapper mapper, InventoryService invService)
     {
         accountService = rep;
         _Mapper = mapper;
         Log = log;
         inventoryService = invService;
-        _userManager = userManager;
     }
 
     public  bool CheckExistName(string name)=> accountService.CheckExistName(name);
@@ -56,7 +54,7 @@ public class AccountController : Controller
                     return RedirectToAction("EditPage",model.Id);
                 }
                 var account = _Mapper.Map<Account>(model);
-                account.UserId =_userManager.GetUserId(User);
+                account.UserId =UserContext.UserId;
                 account = await accountService.Add(account);
                 TempData["Message"] = "Новый счет добавлен";
                 await inventoryService.Add(

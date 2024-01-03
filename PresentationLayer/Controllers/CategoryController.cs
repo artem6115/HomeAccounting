@@ -13,13 +13,11 @@ namespace PresentationLayer.Controllers
         private readonly CategoryService categoryService;
         private readonly ILogger<CategoryController> Log;
         private readonly IMapper _Mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CategoryController(ILogger<CategoryController> log, CategoryService rep, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public CategoryController(ILogger<CategoryController> log, CategoryService rep, IMapper mapper)
         {
             categoryService = rep;
             _Mapper = mapper;
-            _userManager = userManager;
             Log = log;
         }
         public bool CheckExistName(string Name) => categoryService.CheckExistName(Name);
@@ -45,7 +43,7 @@ namespace PresentationLayer.Controllers
                     return RedirectToAction("Get");
                 }
                 var entity = _Mapper.Map<Category>(model.EditModel);
-                entity.UserId = _userManager.GetUserId(User);
+                entity.UserId = UserContext.UserId;
                 await categoryService.Add(entity);
             }
             return RedirectToAction("Get");

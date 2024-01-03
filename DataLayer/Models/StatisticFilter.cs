@@ -16,7 +16,7 @@ namespace DataLayer.Models
         [Range(1, 12)]
         public int Month { get; set; } = DateTime.Now.Month;
         public TypeTransaction TypeTransaction { get; set; }
-        public TypeGroup TypeGroup { get; set; }
+        public TimeGroup TypeGroup { get; set; }
         public long AccountId { get; set; }
 
         // Использовать все счета

@@ -38,7 +38,7 @@ namespace PresentationLayer.Controllers
             //    TypeTransaction = DataLayer.Enum.TypeTransaction.Expense,
             //    Month=11,
             //    Year=2023,
-            //    TypeGroup=DataLayer.Enum.TypeGroup.Day
+            //    TimeGroup=DataLayer.Enum.TimeGroup.Day
 
             //};
             _logger.LogDebug("Get запрос к api контроллеру, метод расчета категорий");

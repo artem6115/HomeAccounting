@@ -79,7 +79,7 @@ namespace DataLayer.Repositories
                 Query = Query.Where(x => !x.IsIncome);
 
             
-            if (filter.TypeGroup== TypeGroup.Day )
+            if (filter.TypeGroup== TimeGroup.Day )
             {
                 StartDate = new DateTime(filter.Year, filter.Month, 1);
                 FinishDate = StartDate.AddMonths(1);
@@ -112,10 +112,10 @@ namespace DataLayer.Repositories
         {
             var result = new List<StatisticData>();
 
-            DateTime StartDate = new DateTime(filter.Year,(filter.TypeGroup==TypeGroup.Day)?filter.Month:1,1);
+            DateTime StartDate = new DateTime(filter.Year,(filter.TypeGroup==TimeGroup.Day)?filter.Month:1,1);
             DateTime CurrentDate = StartDate;
-            TypeGroup GroupByDay = filter.TypeGroup;
-            bool IsGroupByDays = filter.TypeGroup == TypeGroup.Day;
+            TimeGroup GroupByDay = filter.TypeGroup;
+            bool IsGroupByDays = filter.TypeGroup == TimeGroup.Day;
             DateTime FinishDate = IsGroupByDays ? StartDate.AddMonths(1) : StartDate.AddYears(1);
 
             var queryInventories = Context.Inventories.Where(x => x.Date >= StartDate && x.Date < FinishDate && x.Account.UserId==UserContext.UserId);

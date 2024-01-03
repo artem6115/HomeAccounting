@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace DataLayer.Enum
 {
     //Как группировать транзакции и баланс
-    public enum TypeGroup
+    public enum TimeGroup
     {
         Day,
         Weeks,
         Month,
+        None
     }
 }
