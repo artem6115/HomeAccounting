@@ -29,7 +29,7 @@
                 </div>
                 <div>
                     <p>
-                        <a class="link" id="forgot-password" asp-page="./ForgotPassword">Востоновить пароль</a>
+                        <a class="link" id="forgot-password" asp-area="" asp-controller="UserManager" asp-action="ResetPassword">Востоновить пароль</a>
                     </p>
                     <p>
                         <a class="link" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Создать аккаунт</a>

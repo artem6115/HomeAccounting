@@ -11,19 +11,23 @@ namespace DataLayer.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AccountingDbContext _context;
-        public UserRepository(AccountingDbContext context)
+        private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+        public UserRepository(AccountingDbContext context,IPasswordHasher<ApplicationUser> passwordHasher)
         {
 
             _context = context;
+            _passwordHasher = passwordHasher;
 
         }
 
-        public async void AddSecretCode(string name)
+        public async Task<string> AddSecretCode(string name)
         {
             string NormalizerName = name.ToUpper();
             var user = await _context.ApplicationUsers.SingleAsync(x=>x.NormalizedEmail == NormalizerName);
-            user.SecurityStamp = GenerateCode();
+            string code = GenerateCode();
+            user.SecurityStamp = code;
             _context.SaveChangesAsync();
+            return code;
         }
 
         private string GenerateCode()
@@ -51,6 +55,24 @@ namespace DataLayer.Repositories
             var user = await _context.ApplicationUsers.SingleAsync(x => x.NormalizedEmail == NormalizerName);
             user.SecurityStamp = null;
             _context.SaveChangesAsync();
+        }
+
+        public async void ResetPassword(string name, string password)
+        {
+            string NormalizerName = name.ToUpper();
+            var user = await _context.ApplicationUsers.SingleAsync(x => x.NormalizedEmail == NormalizerName);
+            user.PasswordHash = _passwordHasher.HashPassword(user,password);
+            _context.SaveChangesAsync();
+            
+        }
+
+        public async void DeleteUser()
+        {
+            string NormalizerName = UserContext.UserName.ToUpper();
+            var user = await _context.ApplicationUsers.SingleAsync(x => x.NormalizedEmail == NormalizerName);
+            _context.ApplicationUsers.Remove(user);
+            
+
         }
     }
 }

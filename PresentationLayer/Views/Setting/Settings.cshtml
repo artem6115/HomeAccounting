@@ -8,13 +8,24 @@
             window.location.replace("@(Model.Url)/Identity/Account/Logout");
         }
     }
+    function deleteUser() {
+        if (confirm("Вы уверены что хотите удалить учетную запись?")) {
+            if (confirm("Все данные нельзя будеть востановить, удалить учетную запись?")) {
+
+                window.location.replace("@(Model.Url)/UserManager/DeleteUser");
+            }
+        }
+    }
+
 </script>
 <div class="row mt-2 justify-content-center">
     <div class="col-6 col-md-10">
         <h1>Аккаунт</h1>
         <hr />
-        <a asp-asp-controller="UserManager" asp-action="SetCode" asp-route-email="@UserContext.UserName" class="btn btn-info"> Сменить пароль</a>
-        <button class="btn btn-danger" onclick="exit()">Выйти из системы</button>
+        <a asp-controller="UserManager" asp-action="ResetPassword" asp-route-email="@UserContext.UserName" class="btn btn-info"> Сменить пароль</a>
+        <button class="btn btn-secondary" onclick="exit()">Выйти из системы</button>
+        <button class="btn btn-danger" onclick="deleteUser()">Удалить аккаунт</button>
+
     </div>
 </div>
 <form method="post" asp-action="Put" asp-controller="Setting">

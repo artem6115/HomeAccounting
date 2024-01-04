@@ -1,0 +1,22 @@
+﻿@{
+    string error = TempData["error"]?.ToString();
+    Layout = "/Areas/Identity/Pages/_layout.cshtml";
+    ViewData["Title"] = "Востоновление пароля";
+}
+@model ResetPasswordModel
+<div calss="row justify-content-center">
+    <div class="col-md-4 position-absolute top-50 start-50 translate-middle LoginWindow">
+        <form method="post" asp-controller="UserManager" asp-action="ResetPassword">
+            <div class="row justify-content-center mt-3 mb-3">
+                <div class="col-9">
+                    <h6 class="form-label">Введите почту к которой привязан аккаунт</h6>
+                    <input class="form-control" asp-for="Email" />
+                    <span asp-validation-for="Email" class="error_text"></span>
+                    <span class="error_text">@error</span>
+                    <br />
+                    <button type="submit" class="btn btn-success mt-2">Далее</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
