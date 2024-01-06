@@ -1,4 +1,5 @@
-﻿using DataLayer.Entities;
+﻿using DataLayer;
+using DataLayer.Entities;
 using DataLayer.Repositories;
 using DataLayer.Repository;
 using Microsoft.Extensions.Logging;
@@ -45,9 +46,9 @@ namespace BusinessLayer.Services
             
             //Создание счетов и категорий
             for(int i = 0;i< CountOfAccount; i++)
-                accounts.Add(_accountRep.Add(new Account() { Name = $"test_{i}" }).Result);
+                accounts.Add(_accountRep.Add(new Account() {UserId=UserContext.UserId, Name = $"test_{i}" }).Result);
             for (int i = 0; i < CountOfCategory; i++)
-                categories.Add(_categoryRep.Add(new Category() { Name = $"test_{i}" }).Result);
+                categories.Add(_categoryRep.Add(new Category() { UserId = UserContext.UserId, Name = $"test_{i}" }).Result);
             for (int m = 1; m <= 12; m++)
             {
                 // Добовление транзакций для каждого месяца
