@@ -2,12 +2,14 @@
 using BusinessLayer.Services;
 using DataLayer;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
 
 namespace PresentationLayer.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly CategoryService categoryService;

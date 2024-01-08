@@ -58,9 +58,10 @@ namespace PresentationLayer.Controllers
             return View("InputEmail", model);
         }
         [Authorize]
-        public async Task<IActionResult> DeleteUser()
+        public async Task<IActionResult> DeleteUser([FromServices] UserManager<ApplicationUser> userManager)
         {
-            _userRepository.DeleteUser();
+            var user =await userManager.GetUserAsync(User);
+            userManager.DeleteAsync(user);
             return RedirectToAction("Index", "Home");
         }
 

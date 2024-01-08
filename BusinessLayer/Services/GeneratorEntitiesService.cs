@@ -46,9 +46,9 @@ namespace BusinessLayer.Services
             
             //Создание счетов и категорий
             for(int i = 0;i< CountOfAccount; i++)
-                accounts.Add(_accountRep.Add(new Account() {UserId=UserContext.UserId, Name = $"test_{i}" }).Result);
+                accounts.Add(_accountRep.Add(new Account() {UserId=UserContext.UserId, Name = $"Счет_{i}" }).Result);
             for (int i = 0; i < CountOfCategory; i++)
-                categories.Add(_categoryRep.Add(new Category() { UserId = UserContext.UserId, Name = $"test_{i}" }).Result);
+                categories.Add(_categoryRep.Add(new Category() { UserId = UserContext.UserId, Name = $"Категория_{i}" }).Result);
             for (int m = 1; m <= 12; m++)
             {
                 // Добовление транзакций для каждого месяца
@@ -100,7 +100,7 @@ namespace BusinessLayer.Services
             var categories = _categoryRep.GetAll().Result;
             foreach (var category in categories)
             {
-                if(category.Name.Length>4 && category.Name.Substring(0,4) == "test")
+                if(category.Name.Length>4 && category.Name.Substring(0,4) == "Категория")
                 {
                     _categoryRep.Delete(category.Id);
                 }
@@ -108,7 +108,7 @@ namespace BusinessLayer.Services
             var accounts = _accountRep.GetAll().Result;
             foreach (var account in accounts)
             {
-                if (account.Name.Length > 4 && account.Name.Substring(0, 4) == "test")
+                if (account.Name.Length > 4 && account.Name.Substring(0, 4) == "Счет")
                 {
                     _accountRep.Delete(account.Id);
                 }

@@ -33,21 +33,13 @@ namespace PresentationLayer.Controllers
             
             return View("Settings", model);
         }
-        // $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+   
 
         [HttpPost]
         public async Task<IActionResult> Put(Settings settings) {
             var _newSettings = await _settingsService.Update(settings); 
             return RedirectToAction("Get");
         }
-        public IActionResult Send()
-        {
-            _sender.Send(UserContext.UserName, "This is good new!!!", "Hello");
-            return RedirectToAction("Get");
-
-        }
-
 
     }
 }

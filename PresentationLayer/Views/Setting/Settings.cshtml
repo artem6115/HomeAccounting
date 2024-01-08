@@ -22,6 +22,7 @@
     <div class="col-6 col-md-10">
         <h1>Аккаунт</h1>
         <hr />
+        <a asp-action="Generate" asp-controller="home" class="btn btn-success mb-2">Запустить генирацию</a>
         <a asp-controller="UserManager" asp-action="ResetPassword" asp-route-email="@UserContext.UserName" class="btn btn-info"> Сменить пароль</a>
         <button class="btn btn-secondary" onclick="exit()">Выйти из системы</button>
         <button class="btn btn-danger" onclick="deleteUser()">Удалить аккаунт</button>

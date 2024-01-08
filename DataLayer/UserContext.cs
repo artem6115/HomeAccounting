@@ -12,6 +12,7 @@ namespace DataLayer
         private UserContext() { }
         private string _userId;
         private string _userName;
+        private ApplicationUser _user;
 
         public static string? UserId
         {
@@ -29,6 +30,15 @@ namespace DataLayer
             {
                 CurrentUser.Value ??= new UserContext();
                 CurrentUser.Value._userName = value;
+            }
+        }
+        public static ApplicationUser? User
+        {
+            get => CurrentUser.Value?._user;
+            set
+            {
+                CurrentUser.Value ??= new UserContext();
+                CurrentUser.Value._user = value;
             }
         }
 
