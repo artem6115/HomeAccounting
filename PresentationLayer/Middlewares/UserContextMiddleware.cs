@@ -27,10 +27,6 @@ namespace PresentationLayer.Middlewares
                 UserContext.User = user;
                 logger.LogInformation($"User autentification, id = {userContext}");
             }
-            else
-            {
-                throw new Exception("Autorize error");
-            }
            
 
             await _next(context);

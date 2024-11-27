@@ -66,7 +66,7 @@ namespace PresentationLayer
                 policyBuilder => policyBuilder
                 .RequireClaim("Admin"));
             });
-
+            
             builder.Services.AddSession();
             builder.Services.AddCors();
             builder.Services.AddAutoMapper(typeof(MappintProfile));

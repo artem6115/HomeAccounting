@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using BusinessLayer.Services;
+using Microsoft.AspNetCore.Identity;
+using DataLayer;
+
 namespace PresentationLayer.Controllers
 {
     public class HomeController : Controller
@@ -15,9 +18,10 @@ namespace PresentationLayer.Controllers
             Generator = gen;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromServices] SignInManager<ApplicationUser> sign)
         {
-            HttpContext.Session.Set("oldUrl",new byte[0]);
+
+           // sign.SignOutAsync().Wait();
             return View();
         }
         public IActionResult Generate()
